@@ -4,6 +4,14 @@ import resourceData from '../data/resources.json';
 
 const data: ResourceData = resourceData;
 // Resources will be loaded via GitHub API on client-side
+const taxonomyLabels: Record<string, string> = {
+  access_model: 'Access Model',
+  origin: 'Origin',
+  publisher_type: 'Publisher Type',
+  domain: 'Domain',
+  content_type: 'Content Type',
+  topic: 'Topic',
+};
 ---
 
 <div class="search-section">
@@ -170,6 +178,57 @@ const data: ResourceData = resourceData;
     <button id="next-btn" class="pagination-btn" disabled>
       Next →
     </button>
+  </div>
+</div>
+
+<!-- Shared dropdown menu (portal, positioned fixed by JS to avoid overflow-x clipping) -->
+<div id="actionsDropdown" class="actions-dropdown-menu" style="display: none;">
+  <button id="dropdownEditBtn" class="dropdown-item">✏️ Edit</button>
+  <button id="dropdownDeleteBtn" class="dropdown-item dropdown-item-danger">🗑️ Delete</button>
+</div>
+
+<!-- Edit Resource Modal -->
+<div id="editResourceModal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="editModalTitle">Edit Resource</h2>
+      <button id="editModalClose" class="modal-close-btn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="editResourceForm">
+        <input type="hidden" id="editResourceId" />
+        <div class="modal-form-row">
+          <label for="editSource" class="modal-label">Source URL *</label>
+          <input type="url" id="editSource" name="source" required placeholder="https://..." class="modal-input" />
+        </div>
+        <div class="modal-form-row">
+          <label for="editComments" class="modal-label">Comments</label>
+          <textarea id="editComments" name="comments" rows="3" class="modal-textarea" placeholder="Notes about this resource..."></textarea>
+        </div>
+        <div class="modal-form-row">
+          <label for="editTrustLevel" class="modal-label">Trust Level (1-5) *</label>
+          <input type="number" id="editTrustLevel" name="trust_level" min="1" max="5" step="1" required value="3" class="modal-input modal-input-narrow" />
+        </div>
+        {Object.entries(data.taxonomies).map(([taxonomyName, values]) => (
+          <div class="modal-form-row">
+            <label class="modal-label">{taxonomyLabels[taxonomyName] ?? taxonomyName}</label>
+            <div class="modal-checkbox-group">
+              {values.map(value => (
+                <label class="modal-checkbox-label">
+                  <input type="checkbox" name={taxonomyName} value={value} />
+                  {value}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div class="modal-actions-row">
+          <button type="button" id="editModalCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+          <button type="submit" id="editModalSubmit" class="modal-btn modal-btn-save">Save Changes</button>
+        </div>
+      </form>
+      <div id="editErrorMsg" class="edit-status-msg" style="display: none;"></div>
+    </div>
   </div>
 </div>
 
@@ -442,6 +501,234 @@ const data: ResourceData = resourceData;
       justify-content: center;
     }
   }
+
+  /* ---- Actions dropdown (SSR element, positioned fixed via JS) ---- */
+  .actions-dropdown-menu {
+    position: fixed;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 500;
+    min-width: 130px;
+    overflow: hidden;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: transparent;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background: #f3f4f6;
+  }
+
+  .dropdown-item-danger {
+    color: #dc2626;
+  }
+
+  .dropdown-item-danger:hover {
+    background: #fef2f2;
+  }
+
+  /* ---- Edit Resource Modal ---- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+  }
+
+  .modal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+
+  .modal-close-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .modal-form-row {
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-label {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  .modal-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .modal-input-narrow {
+    max-width: 100px;
+  }
+
+  .modal-textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+
+  .modal-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .modal-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .modal-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: normal;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+  }
+
+  .modal-actions-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .modal-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+  }
+
+  .modal-btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .modal-btn-cancel:hover {
+    background: #d1d5db;
+  }
+
+  .modal-btn-save {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .modal-btn-save:hover {
+    background: #2563eb;
+  }
+
+  .modal-btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .edit-status-msg {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+
+  .edit-status-msg.is-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+
+  .edit-status-msg.is-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
 </style>
 
 <style is:global>
@@ -504,26 +791,22 @@ const data: ResourceData = resourceData;
     width: 3rem;
   }
 
-  .btn-delete-resource {
+  .btn-actions-menu {
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.25rem;
     line-height: 1;
     transition: all 0.15s ease;
     color: #6b7280;
   }
 
-  .btn-delete-resource:hover:not(:disabled) {
-    background: #fee2e2;
-    border-color: #fca5a5;
-  }
-
-  .btn-delete-resource:disabled {
-    cursor: wait;
-    opacity: 0.6;
+  .btn-actions-menu:hover {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #374151;
   }
 
   .page-number {
@@ -705,13 +988,17 @@ const data: ResourceData = resourceData;
 </style>
 
 <script>
-  import { getResourcesFromGitHub } from '../utils/github-api';
+  import { getResourcesFromGitHub, type Resource } from '../utils/github-api';
+
+  // All fetched resources kept in memory for the Edit modal pre-fill
+  let allResources: Resource[] = [];
 
   // Load resources from GitHub API and populate table
   async function loadResourcesFromGitHub() {
     try {
       console.log('Loading resources from GitHub API...');
       const resources = await getResourcesFromGitHub();
+      allResources = resources;
       const tbody = document.querySelector('.resource-table tbody');
 
       if (!tbody) {
@@ -740,7 +1027,7 @@ const data: ResourceData = resourceData;
           <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
           <td class="comments" data-label="Comments">${resource.comments || ''}</td>
           <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
-          <td class="actions-cell" data-label="Actions"><button class="btn-delete-resource" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="Delete this resource" title="Delete">🗑️</button></td>
+          <td class="actions-cell" data-label="Actions"><button class="btn-actions-menu" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="More actions" title="More actions">⋮</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1042,21 +1329,160 @@ const data: ResourceData = resourceData;
   renderPagination();
 
   // ------------------------------------------------------------------
-  // Delete a resource — wired via event delegation so it works for rows
-  // added after this script ran (the rows are rendered async from raw).
+  // Shared password key
   // ------------------------------------------------------------------
   const PASSWORD_STORAGE_KEY = 'ux_research_admin_password';
 
-  document.addEventListener('click', async (e) => {
-    const target = (e.target as HTMLElement)?.closest('.btn-delete-resource');
-    if (!target) return;
+  // ------------------------------------------------------------------
+  // Actions dropdown — portal element positioned fixed via JS
+  // ------------------------------------------------------------------
+  const actionsDropdown = document.getElementById('actionsDropdown')!;
+  let currentDropdownId: string | null = null;
+  let currentDropdownSource: string | null = null;
 
-    const id = (target as HTMLElement).dataset.id;
-    const source = (target as HTMLElement).dataset.source || id;
-    if (!id) return;
+  function openDropdown(triggerBtn: HTMLButtonElement) {
+    const rect = triggerBtn.getBoundingClientRect();
+    actionsDropdown.style.display = 'block';
+    // Position below the button, right-aligned
+    requestAnimationFrame(() => {
+      const ddWidth = actionsDropdown.offsetWidth;
+      let left = rect.right - ddWidth;
+      if (left < 8) left = 8;
+      actionsDropdown.style.top = `${rect.bottom + 4 + window.scrollY}px`;
+      actionsDropdown.style.left = `${left}px`;
+    });
+  }
 
-    if (!window.confirm(`Delete resource "${source}" ?\nThis cannot be undone.`)) {
+  function closeDropdown() {
+    actionsDropdown.style.display = 'none';
+    currentDropdownId = null;
+    currentDropdownSource = null;
+  }
+
+  // ⋮ button click — event delegation (rows are added async)
+  document.addEventListener('click', (e) => {
+    const menuBtn = (e.target as HTMLElement)?.closest('.btn-actions-menu') as HTMLButtonElement | null;
+    if (menuBtn) {
+      e.stopPropagation();
+      const id = menuBtn.dataset.id!;
+      // Toggle: clicking the same row's button closes the dropdown
+      if (currentDropdownId === id && actionsDropdown.style.display !== 'none') {
+        closeDropdown();
+        return;
+      }
+      currentDropdownId = id;
+      currentDropdownSource = menuBtn.dataset.source || id;
+      openDropdown(menuBtn);
       return;
+    }
+    // Click outside dropdown → close
+    if (!actionsDropdown.contains(e.target as Node)) {
+      closeDropdown();
+    }
+  });
+
+  // Dropdown — Edit button
+  document.getElementById('dropdownEditBtn')?.addEventListener('click', () => {
+    const id = currentDropdownId;
+    closeDropdown();
+    if (!id) return;
+    const resource = allResources.find((r) => r.id === id);
+    if (resource) openEditModal(resource);
+  });
+
+  // Dropdown — Delete button
+  document.getElementById('dropdownDeleteBtn')?.addEventListener('click', () => {
+    const id = currentDropdownId;
+    const source = currentDropdownSource || id || '';
+    closeDropdown();
+    if (id) deleteResource(id, source);
+  });
+
+  // ------------------------------------------------------------------
+  // Edit Resource modal
+  // ------------------------------------------------------------------
+  const editModal = document.getElementById('editResourceModal')!;
+  const editForm = document.getElementById('editResourceForm') as HTMLFormElement;
+  const editIdInput = document.getElementById('editResourceId') as HTMLInputElement;
+  const editSourceInput = document.getElementById('editSource') as HTMLInputElement;
+  const editCommentsTextarea = document.getElementById('editComments') as HTMLTextAreaElement;
+  const editTrustLevelInput = document.getElementById('editTrustLevel') as HTMLInputElement;
+  const editErrorMsg = document.getElementById('editErrorMsg')!;
+  const editModalSubmit = document.getElementById('editModalSubmit') as HTMLButtonElement;
+
+  const TAXONOMY_KEYS = [
+    'access_model', 'origin', 'publisher_type', 'domain', 'content_type', 'topic',
+  ] as const;
+
+  function openEditModal(resource: Resource) {
+    editIdInput.value = resource.id;
+    editSourceInput.value = resource.source || '';
+    editCommentsTextarea.value = resource.comments || '';
+    editTrustLevelInput.value = String(resource.trust_level ?? 3);
+
+    // Reset all checkboxes
+    editForm.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = false;
+    });
+    // Check current values for each taxonomy
+    for (const key of TAXONOMY_KEYS) {
+      const vals = (resource[key] as string[]) || [];
+      for (const val of vals) {
+        const cb = editForm.querySelector<HTMLInputElement>(
+          `input[name="${key}"][value="${CSS.escape(val)}"]`
+        );
+        // Fallback: linear search if CSS.escape produces no match
+        if (cb) {
+          cb.checked = true;
+        } else {
+          editForm.querySelectorAll<HTMLInputElement>(`input[name="${key}"]`).forEach((el) => {
+            if (el.value === val) el.checked = true;
+          });
+        }
+      }
+    }
+
+    editErrorMsg.style.display = 'none';
+    editErrorMsg.textContent = '';
+    editModalSubmit.textContent = 'Save Changes';
+    editModalSubmit.disabled = false;
+    (editModal as HTMLElement).style.display = 'flex';
+    editSourceInput.focus();
+  }
+
+  function closeEditModal() {
+    (editModal as HTMLElement).style.display = 'none';
+  }
+
+  document.getElementById('editModalClose')?.addEventListener('click', closeEditModal);
+  document.getElementById('editModalCancel')?.addEventListener('click', closeEditModal);
+  editModal.addEventListener('click', (e) => {
+    if (e.target === editModal) closeEditModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && (editModal as HTMLElement).style.display !== 'none') {
+      closeEditModal();
+    }
+  });
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = editIdInput.value;
+    const source = editSourceInput.value.trim();
+    const comments = editCommentsTextarea.value.trim();
+    const trustLevel = parseInt(editTrustLevelInput.value, 10);
+
+    if (!source) { showEditError('Source URL is required'); return; }
+    if (!Number.isInteger(trustLevel) || trustLevel < 1 || trustLevel > 5) {
+      showEditError('Trust level must be between 1 and 5'); return;
+    }
+
+    const taxonomyValues: Record<string, string[]> = {};
+    for (const key of TAXONOMY_KEYS) {
+      taxonomyValues[key] = Array.from(
+        editForm.querySelectorAll<HTMLInputElement>(`input[name="${key}"]:checked`)
+      ).map((cb) => cb.value);
     }
 
     let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
@@ -1065,42 +1491,91 @@ const data: ResourceData = resourceData;
       if (!password) return;
     }
 
-    (target as HTMLButtonElement).disabled = true;
-    (target as HTMLButtonElement).textContent = '⏳';
+    const updatedResource: Resource = {
+      id,
+      source,
+      comments,
+      trust_level: trustLevel,
+      last_updated: new Date().toISOString().split('T')[0],
+      ...taxonomyValues,
+    } as Resource;
+
+    editModalSubmit.textContent = '⏳ Saving...';
+    editModalSubmit.disabled = true;
+    editErrorMsg.style.display = 'none';
+
+    try {
+      const response = await fetch('/api/update-resource', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+        body: JSON.stringify({ id, resource: updatedResource }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem(PASSWORD_STORAGE_KEY);
+        showEditError('Wrong password. Try again.');
+        editModalSubmit.textContent = 'Save Changes';
+        editModalSubmit.disabled = false;
+        return;
+      }
+      if (!response.ok) {
+        const errText = await response.text();
+        showEditError(`Error ${response.status}: ${errText}`);
+        editModalSubmit.textContent = 'Save Changes';
+        editModalSubmit.disabled = false;
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+      closeEditModal();
+      window.location.reload();
+    } catch (error) {
+      showEditError(`Network error: ${(error as Error).message}`);
+      editModalSubmit.textContent = 'Save Changes';
+      editModalSubmit.disabled = false;
+    }
+  });
+
+  function showEditError(msg: string) {
+    editErrorMsg.textContent = `❌ ${msg}`;
+    editErrorMsg.className = 'edit-status-msg is-error';
+    editErrorMsg.style.display = 'block';
+  }
+
+  // ------------------------------------------------------------------
+  // Delete a resource — extracted function, called from dropdown
+  // ------------------------------------------------------------------
+  async function deleteResource(id: string, source: string) {
+    if (!window.confirm(`Delete resource "${source}"?\nThis cannot be undone.`)) return;
+
+    let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (!password) {
+      password = prompt('Admin password:');
+      if (!password) return;
+    }
 
     try {
       const response = await fetch('/api/delete-resource', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': password,
-        },
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
         body: JSON.stringify({ id }),
       });
 
       if (response.status === 401) {
         localStorage.removeItem(PASSWORD_STORAGE_KEY);
         alert('Wrong password. Try again.');
-        (target as HTMLButtonElement).disabled = false;
-        (target as HTMLButtonElement).textContent = '🗑️';
         return;
       }
-
       if (!response.ok) {
         const errText = await response.text();
         alert(`Failed to delete (${response.status}): ${errText}`);
-        (target as HTMLButtonElement).disabled = false;
-        (target as HTMLButtonElement).textContent = '🗑️';
         return;
       }
 
       localStorage.setItem(PASSWORD_STORAGE_KEY, password);
-      // Reload to refetch the table from raw (cache-buster makes it instant)
       window.location.reload();
     } catch (error) {
       alert(`Network error: ${(error as Error).message}`);
-      (target as HTMLButtonElement).disabled = false;
-      (target as HTMLButtonElement).textContent = '🗑️';
     }
-  });
+  }
 </script>
