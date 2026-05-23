@@ -1,79 +1,50 @@
 # UX Research Database
 
-A centralized, searchable database of curated UX research, design resources, frameworks, and tools. Built with Astro + GitHub Pages.
+A curated, searchable database of UX research, design resources, frameworks, and tools.
 
-## 🚀 Quick Start
-
-### Local Development
-
-```bash
-npm install
-npm run dev
-```
-
-Then open `http://localhost:3000` in your browser.
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-Output goes to `./dist/`.
-
-## 📁 Project Structure
-
-```
-src/
-  pages/          # Astro pages (becomes routes)
-  components/     # Reusable UI components
-  layouts/        # Page layouts
-  utils/          # Utility functions (GitHub API, filters, etc.)
-  styles/         # Global and component styles
-data/
-  resources.json  # Source of truth — all resources + taxonomies
-docs/
-  PRD-*.md        # Product requirements
-  CHANGELOG.md    # Version history
-.github/
-  workflows/      # GitHub Actions (auto-deploy)
-```
-
-## 🔄 Edit Flow
-
-### Via Web UI (when authenticated)
-1. Click "Mode édition" in header
-2. Paste your GitHub Personal Access Token (fine-grained, `contents:write` scope)
-3. Add/edit/delete resources via forms
-4. Changes auto-commit to GitHub
-
-### Direct GitHub Edit
-1. Edit `data/resources.json` on GitHub
-2. Commit to `main` branch
-3. Auto-deploy happens within ~30 seconds
-
-## 📚 Data Schema
-
-See `data/schema.json` for full validation schema.
-
-Each resource has:
-- `id`, `source`, `access_model`, `origin`, `publisher_type`
-- `domain`, `content_type`, `topic` (multi-valued)
-- `trust_level` (1-5), `comments`, `last_updated`
-
-Taxonomies are defined in `data/resources.json` under `taxonomies`.
-
-## 🔐 Authentication
-
-Read access is public. Write access requires a GitHub PAT stored in `localStorage` (browser-only, never committed).
-
-## 📖 Documentation
-
-- `docs/PRD-resource-database.md` — Full product requirements
-- `docs/CHANGELOG.md` — Version history
+Built with [Astro](https://astro.build/) — TypeScript, static output, no client-side framework.
 
 ---
 
-**Owner:** Judith Heckmann  
-**Built with:** Astro + GitHub Pages  
-**License:** MIT
+## Quick start
+
+```bash
+npm install
+npm run dev    # http://localhost:4321/ux-research-database/
+npm run build  # outputs to dist/
+```
+
+---
+
+## How it works
+
+- All resources and their taxonomies live in `src/data/resources.json` — single source of truth.
+- The page reads this JSON, renders a filterable, paginated table.
+- An "Add Resource" form lets the maintainer append entries (token-gated; see Phase 2B for the hosting model migration in progress).
+
+---
+
+## Where to look
+
+| Looking for... | Open... |
+|---|---|
+| Product requirements | [docs/PRD-resource-database.md](docs/PRD-resource-database.md) |
+| Data schema | [docs/schema.json](docs/schema.json) |
+| Roadmap (future features) | [docs/PHASE_2_ROADMAP.md](docs/PHASE_2_ROADMAP.md) |
+| Active migration: secure token | [PHASE_2B_TOKEN_MIGRATION.md](PHASE_2B_TOKEN_MIGRATION.md) |
+| AI/agent context | [CLAUDE.md](CLAUDE.md) |
+| Older logs (read-only) | [docs/archive/](docs/archive/) |
+
+---
+
+## Project status
+
+- **Phase 1** ✅ — UI, search, filters, pagination
+- **Phase 2A** ✅ — GitHub API integration for reads/writes
+- **Phase 2B** 🟡 — Migrate hosting to Netlify, move token server-side ([plan](PHASE_2B_TOKEN_MIGRATION.md))
+- **Phases 2C–2F** ⬜ — Edit/delete, import/export, advanced search, collections (see roadmap)
+
+---
+
+**Owner**: Judith Heckmann
+**License**: MIT
