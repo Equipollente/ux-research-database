@@ -1,10 +1,67 @@
 # 🎯 TEMPS 1 - MVP Add Resource: COMPLETION LOG
 
 **Status:** ✅ **COMPLETE & TESTED**  
-**Date:** 2026-05-23 19:39 UTC  
-**Duration:** ~25 minutes  
+**Date:** 2026-05-23 19:41 UTC  
+**Duration:** ~30 minutes (25 min MVP + 5 min UX enhancement)  
 **Build Status:** ✅ SUCCESS (0 errors)  
-**Git Commit:** `4a8715a` - Phase 2 Temps 1: MVP Add Resource Form with localStorage persistence
+**Git Commits:** 
+  - `4a8715a` - Phase 2 Temps 1: MVP Add Resource Form
+  - `252197e` - Add Temps 1 completion log
+  - `88764c2` - UX Enhancement: Move form to modal popup
+
+---
+
+## 🎨 MODIFICATION POST-MVP: Modal Popup (5 min)
+
+**Commit:** `88764c2` - UX Enhancement: Move Add Resource form to modal popup
+
+**Changements:**
+1. **Bouton visible:** Ajouté bouton "➕ Add Resource" en haut à droite
+2. **Modal structure:**
+   - Overlay semi-transparent (background: rgba(0,0,0,0.5))
+   - Modal centered avec animation slideUp
+   - Modal header avec titre + bouton close (✕)
+   - Modal body contient le formulaire
+3. **Interactions:**
+   - Clic bouton Add Resource → modal s'ouvre
+   - Clic X → modal se ferme
+   - Clic overlay → modal se ferme
+   - Appuyer ESC → modal se ferme
+4. **Responsive:** Modal 95% width sur mobile, scrollable
+5. **CSS:** Masque le titre h2 du formulaire (déjà dans modal header)
+
+**CSS Ajouté:**
+- .btn-add-resource: blue button avec hover effect
+- .modal: fixed position, full screen
+- .modal-overlay: click-to-close overlay
+- .modal-content: centered box avec animation
+- .modal-header: title + close button
+- .modal-body: formulaire sans titre dupliqué
+- @keyframes slideUp: animation d'ouverture
+- Media queries pour mobile
+
+**JavaScript Ajouté:**
+```javascript
+- Open modal: click openBtn
+- Close modal: click closeBtn / overlay / ESC key
+- Prevent scroll: document.body.overflow when modal open
+- Auto-close: modal se ferme automatiquement après reload
+```
+
+**UX Flow:**
+```
+Page chargée
+  ↓
+Utilisateur voit bouton "➕ Add Resource" en haut
+  ↓
+Clic bouton → Modal s'ouvre (animation slideUp)
+  ↓
+Utilisateur remplit formulaire
+  ↓
+Clic "Add Resource" → localStorage + page reload
+  ↓
+Modal se ferme (auto) → Page rafraîchie avec nouvelle resource
+```
 
 ---
 
