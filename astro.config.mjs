@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Hébergement GitHub Pages
-  site: 'https://equipollente.github.io/ux-research-database/',
-  base: '/ux-research-database/',
+  // Hosted on Netlify (root of the subdomain, no base path)
+  site: 'https://ux-research-database.netlify.app/',
 
   // Output statique
   output: 'static',

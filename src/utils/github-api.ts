@@ -95,13 +95,14 @@ export function clearAuthFromStorage(): void {
   localStorage.removeItem('gh_auth');
 }
 
-export async function getResourcesFromGitHub(): Promise<Resource[]> {
-  const owner = import.meta.env.PUBLIC_GITHUB_OWNER;
-  const repo = import.meta.env.PUBLIC_GITHUB_REPO;
-  const branch = import.meta.env.PUBLIC_GITHUB_BRANCH || 'main';
+// Hardcoded: these are public, invariant identifiers. Avoiding env vars here
+// means CI builds work even without .env.local (which is gitignored).
+const RAW_RESOURCES_URL =
+  'https://raw.githubusercontent.com/equipollente/ux-research-database/main/src/data/resources.json';
 
+export async function getResourcesFromGitHub(): Promise<Resource[]> {
   // Read via raw.githubusercontent.com: public, no token, no CORS issues, no base64.
-  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/src/data/resources.json`;
+  const url = RAW_RESOURCES_URL;
 
   try {
     const response = await fetch(url);
