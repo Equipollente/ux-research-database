@@ -185,6 +185,31 @@
       "trust_level": 4,
       "comments": "Comprehensive UX design and research tools, templates, and educational resources. Excellent library of design and research templates.",
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1779574520788",
+      "source": "https://www.cognitivepsychology.com/",
+      "comments": "",
+      "access_model": [
+        "Free"
+      ],
+      "origin": [
+        "Academic"
+      ],
+      "publisher_type": [
+        "Individual"
+      ],
+      "domain": [
+        "Psychology"
+      ],
+      "content_type": [
+        "Encyclopedic"
+      ],
+      "topic": [
+        "Cognition"
+      ],
+      "trust_level": 4,
+      "last_updated": "2026-05-23"
     }
   ]
 }
