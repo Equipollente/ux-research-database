@@ -14,8 +14,13 @@ const RAW_RESOURCES_URL =
   'https://raw.githubusercontent.com/equipollente/ux-research-database/main/src/data/resources.json';
 
 export async function getResourcesFromGitHub(): Promise<Resource[]> {
+  // Cache-buster: raw.githubusercontent.com sets Cache-Control max-age=300,
+  // which would otherwise hide new resources for ~5 min after a commit.
+  // The query string is ignored by GitHub's server but treated as a unique
+  // URL by browsers and CDN edge caches, forcing a fresh fetch every time.
+  const url = `${RAW_RESOURCES_URL}?t=${Date.now()}`;
   try {
-    const response = await fetch(RAW_RESOURCES_URL);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch resources: ${response.status} ${response.statusText}`);
     }
