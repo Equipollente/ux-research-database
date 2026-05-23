@@ -1,12 +1,9 @@
 ---
-import type { Resource, ResourceData } from '../utils/data-transform';
+import type { ResourceData } from '../utils/data-transform';
 import resourceData from '../data/resources.json';
 
 const data: ResourceData = resourceData;
-const resources = data.resources;
-
-// Pass initial resources to client script for localStorage merge
-const initialResources = JSON.stringify(resources);
+// Resources will be loaded via GitHub API on client-side
 ---
 
 <div class="search-section">
@@ -151,65 +148,8 @@ const initialResources = JSON.stringify(resources);
         <th>Last Updated</th>
       </tr>
     </thead>
-    <tbody>
-      {resources.map((resource) => (
-        <tr key={resource.id}>
-          <td class="source-cell" data-label="Source">
-            {resource.source.startsWith('http') ? (
-              <a href={resource.source} target="_blank" rel="noopener noreferrer">
-                {resource.source}
-              </a>
-            ) : (
-              <span>{resource.source}</span>
-            )}
-          </td>
-          <td data-label="Access Model">
-            <span class="tag-list">
-              {resource.access_model.map((am) => (
-                <span class="tag">{am}</span>
-              ))}
-            </span>
-          </td>
-          <td data-label="Origin">
-            <span class="tag-list">
-              {resource.origin.map((o) => (
-                <span class="tag">{o}</span>
-              ))}
-            </span>
-          </td>
-          <td data-label="Publisher Type">
-            <span class="tag-list">
-              {resource.publisher_type.map((pt) => (
-                <span class="tag">{pt}</span>
-              ))}
-            </span>
-          </td>
-          <td data-label="Domain">
-            <span class="tag-list">
-              {resource.domain.map((d) => (
-                <span class="tag">{d}</span>
-              ))}
-            </span>
-          </td>
-          <td data-label="Content Type">
-            <span class="tag-list">
-              {resource.content_type.map((ct) => (
-                <span class="tag">{ct}</span>
-              ))}
-            </span>
-          </td>
-          <td data-label="Topic">
-            <span class="tag-list">
-              {resource.topic.map((t) => (
-                <span class="tag">{t}</span>
-              ))}
-            </span>
-          </td>
-          <td class="trust-level" data-label="Trust Level">{resource.trust_level}/5</td>
-          <td class="comments" data-label="Comments">{resource.comments}</td>
-          <td data-label="Last Updated">{resource.last_updated}</td>
-        </tr>
-      ))}
+    <tbody id="resource-tbody">
+      <!-- Resources loaded from GitHub API -->
     </tbody>
   </table>
   </div>
@@ -681,64 +621,58 @@ const initialResources = JSON.stringify(resources);
   }
 </style>
 
-<script define:vars={{ initialResources }}>
-  // Load localStorage resources and add them to the table
-  function loadLocalStorageResources() {
-    const tbody = document.querySelector('.resource-table tbody') as HTMLTableSectionElement;
-    if (!tbody) return;
+<script>
+  import { getResourcesFromGitHub } from '../utils/github-api';
 
-    const localStorageData = JSON.parse(localStorage.getItem('uex-resources') || '[]');
+  // Load resources from GitHub API and populate table
+  async function loadResourcesFromGitHub() {
+    try {
+      console.log('Loading resources from GitHub API...');
+      const resources = await getResourcesFromGitHub();
+      const tbody = document.querySelector('.resource-table tbody');
 
-    localStorageData.forEach((resource: any) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="source-cell" data-label="Source">
-          ${
-            resource.source.startsWith('http')
-              ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
-              : `<span>${resource.source}</span>`
-          }
-        </td>
-        <td data-label="Access Model">
-          <span class="tag-list">
-            ${(resource.access_model || []).map((am: string) => `<span class="tag">${am}</span>`).join('')}
-          </span>
-        </td>
-        <td data-label="Origin">
-          <span class="tag-list">
-            ${(resource.origin || []).map((o: string) => `<span class="tag">${o}</span>`).join('')}
-          </span>
-        </td>
-        <td data-label="Publisher Type">
-          <span class="tag-list">
-            ${(resource.publisher_type || []).map((pt: string) => `<span class="tag">${pt}</span>`).join('')}
-          </span>
-        </td>
-        <td data-label="Domain">
-          <span class="tag-list">
-            ${(resource.domain || []).map((d: string) => `<span class="tag">${d}</span>`).join('')}
-          </span>
-        </td>
-        <td data-label="Content Type">
-          <span class="tag-list">
-            ${(resource.content_type || []).map((ct: string) => `<span class="tag">${ct}</span>`).join('')}
-          </span>
-        </td>
-        <td data-label="Topic">
-          <span class="tag-list">
-            ${(resource.topic || []).map((t: string) => `<span class="tag">${t}</span>`).join('')}
-          </span>
-        </td>
-        <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
-        <td class="comments" data-label="Comments">${resource.comments || ''}</td>
-        <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+      if (!tbody) {
+        console.error('Table tbody not found');
+        return;
+      }
+
+      // Clear existing server-side rows
+      tbody.innerHTML = '';
+
+      // Render each resource
+      resources.forEach((resource) => {
+        const tr = document.createElement('tr');
+        const sourceHTML = resource.source.startsWith('http')
+          ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
+          : `<span>${resource.source}</span>`;
+
+        tr.innerHTML = `
+          <td class="source-cell" data-label="Source">${sourceHTML}</td>
+          <td data-label="Access Model"><span class="tag-list">${(resource.access_model || []).map((am) => `<span class="tag">${am}</span>`).join('')}</span></td>
+          <td data-label="Origin"><span class="tag-list">${(resource.origin || []).map((o) => `<span class="tag">${o}</span>`).join('')}</span></td>
+          <td data-label="Publisher Type"><span class="tag-list">${(resource.publisher_type || []).map((pt) => `<span class="tag">${pt}</span>`).join('')}</span></td>
+          <td data-label="Domain"><span class="tag-list">${(resource.domain || []).map((d) => `<span class="tag">${d}</span>`).join('')}</span></td>
+          <td data-label="Content Type"><span class="tag-list">${(resource.content_type || []).map((ct) => `<span class="tag">${ct}</span>`).join('')}</span></td>
+          <td data-label="Topic"><span class="tag-list">${(resource.topic || []).map((t) => `<span class="tag">${t}</span>`).join('')}</span></td>
+          <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
+          <td class="comments" data-label="Comments">${resource.comments || ''}</td>
+          <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      console.log(`Loaded ${resources.length} resources from GitHub`);
+    } catch (error) {
+      console.error('Error loading resources from GitHub:', error);
+    }
   }
 
-  // Load localStorage resources on page load
-  loadLocalStorageResources();
+  // Load resources on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadResourcesFromGitHub);
+  } else {
+    loadResourcesFromGitHub();
+  }
 
   // Normalize search term: lowercase and remove accents
   function normalizeSearch(text: string): string {
@@ -760,14 +694,18 @@ const initialResources = JSON.stringify(resources);
   const ROWS_PER_PAGE = 20;
   let currentPage = 1;
 
+  // Get rows function (always gets current rows, including newly added ones)
+  function getTableRows() {
+    return document.querySelectorAll('.resource-table tbody tr');
+  }
+
   // Initialize on component mount
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  const pillButtons = document.querySelectorAll('.pill') as NodeListOf<HTMLButtonElement>;
-  const tableRows = document.querySelectorAll('.resource-table tbody tr');
-  const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
-  const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
-  const paginationPagesContainer = document.getElementById('pagination-pages') as HTMLElement;
-  const categoryButtons = document.querySelectorAll('.filter-category-btn') as NodeListOf<HTMLButtonElement>;
+  const searchInput = document.getElementById('search-input');
+  const pillButtons = document.querySelectorAll('.pill');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const paginationPagesContainer = document.getElementById('pagination-pages');
+  const categoryButtons = document.querySelectorAll('.filter-category-btn');
 
   // State for active filters
   const activeFilters: Record<string, Set<string>> = {
@@ -785,8 +723,8 @@ const initialResources = JSON.stringify(resources);
   // Attach click handlers to category buttons for accordion toggle
   categoryButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const category = btn.dataset.category as string;
-      const panel = document.getElementById(`panel-${category}`) as HTMLElement;
+      const category = btn.dataset.category;
+      const panel = document.getElementById(`panel-${category}`);
 
       if (!panel) return;
 
@@ -807,8 +745,8 @@ const initialResources = JSON.stringify(resources);
   // Attach click handlers to pills
   pillButtons.forEach((pill) => {
     pill.addEventListener('click', () => {
-      const filterType = pill.dataset.filterType as string;
-      const filterValue = pill.dataset.filterValue as string;
+      const filterType = pill.dataset.filterType;
+      const filterValue = pill.dataset.filterValue;
 
       // Toggle the filter
       if (activeFilters[filterType].has(filterValue)) {
@@ -863,7 +801,7 @@ const initialResources = JSON.stringify(resources);
   function getVisibleRows(): HTMLTableRowElement[] {
     const searchTerm = normalizeSearch((searchInput.value || '').trim());
 
-    return Array.from(tableRows).filter((row) => {
+    return Array.from(getTableRows()).filter((row) => {
       const sourceCellText = row.querySelector('.source-cell')?.textContent || '';
       const cellCount = row.querySelectorAll('td').length;
       const commentsCellText = row.querySelectorAll('td')[cellCount - 2]?.textContent || '';
@@ -875,7 +813,7 @@ const initialResources = JSON.stringify(resources);
         sourceNormalized.includes(searchTerm) || commentsNormalized.includes(searchTerm);
 
       // Check filter match
-      const matchesFilter = matchesFilters(row as HTMLTableRowElement);
+      const matchesFilter = matchesFilters(row);
 
       return matchesSearch && matchesFilter;
     });
@@ -887,7 +825,7 @@ const initialResources = JSON.stringify(resources);
     const totalPages = Math.ceil(visibleRows.length / ROWS_PER_PAGE);
 
     // Update all rows visibility based on current page
-    tableRows.forEach((row) => {
+    getTableRows().forEach((row) => {
       row.classList.add('hidden');
     });
 

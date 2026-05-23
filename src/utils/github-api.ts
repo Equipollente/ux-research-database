@@ -91,3 +91,35 @@ export function saveAuthToStorage(auth: GitHubAuthContext): void {
 export function clearAuthFromStorage(): void {
   localStorage.removeItem('gh_auth');
 }
+
+export interface Resource {
+  id: string;
+  source: string;
+  comments: string;
+  domain: string[];
+  content_type: string[];
+  topic: string[];
+  access_model: string[];
+  origin: string[];
+  publisher_type: string[];
+  trust_level: number;
+  last_updated: string;
+}
+
+export async function getResourcesFromGitHub(): Promise<Resource[]> {
+  const auth: GitHubAuthContext = {
+    token: import.meta.env.GITHUB_TOKEN,
+    owner: import.meta.env.GITHUB_OWNER,
+    repo: import.meta.env.GITHUB_REPO,
+    branch: import.meta.env.GITHUB_BRANCH,
+  };
+
+  try {
+    const { content } = await getFileContent(auth, 'src/data/resources.json');
+    const data = JSON.parse(content);
+    return data.resources || data || [];
+  } catch (error) {
+    console.error('Failed to fetch resources from GitHub:', error);
+    return [];
+  }
+}

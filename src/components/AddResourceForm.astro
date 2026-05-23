@@ -93,6 +93,9 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
   <div id="successMsg" class="success-message" style="display: none;">
     ✅ Resource added! Scroll down to see it in the table.
   </div>
+
+  <!-- Error message -->
+  <div id="errorMsg" class="error-message" style="display: none;"></div>
 </div>
 
 <style>
@@ -202,6 +205,15 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
     border: 1px solid #6ee7b7;
   }
 
+  .error-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 4px;
+    border: 1px solid #fca5a5;
+  }
+
   @media (max-width: 768px) {
     .add-resource-form {
       margin: 1rem;
@@ -219,21 +231,44 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
 </style>
 
 <script>
-  const form = document.getElementById('addResourceForm');
-  const exportBtn = document.getElementById('exportBtn');
-  const successMsg = document.getElementById('successMsg');
+  import { getFileContent, commitFile, type GitHubAuthContext } from '../utils/github-api';
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    addResource();
-  });
+  let form;
+  let submitBtn;
+  let successMsg;
+  let errorMsg;
 
-  exportBtn.addEventListener('click', () => {
-    exportToJSON();
-  });
+  const RESOURCES_FILE_PATH = 'src/data/resources.json';
+  const GITHUB_AUTH: GitHubAuthContext = {
+    token: import.meta.env.GITHUB_TOKEN,
+    owner: import.meta.env.GITHUB_OWNER,
+    repo: import.meta.env.GITHUB_REPO,
+    branch: import.meta.env.GITHUB_BRANCH,
+  };
 
-  function addResource() {
-    // Get form data
+  function initializeForm() {
+    console.log('AddResourceForm script initializing...');
+    form = document.getElementById('addResourceForm');
+    submitBtn = form?.querySelector('button[type="submit"]');
+    successMsg = document.getElementById('successMsg');
+    errorMsg = document.getElementById('errorMsg');
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        console.log('Form submit event fired');
+        e.preventDefault();
+        addResource();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeForm);
+  } else {
+    initializeForm();
+  }
+
+  async function addResource() {
     const source = document.getElementById('source').value;
     const comments = document.getElementById('comments').value;
 
@@ -244,7 +279,6 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
     const topicInputs = Array.from(document.querySelectorAll('input[name="topic"]:checked'))
       .map(el => el.value);
 
-    // Validation
     if (!source) {
       alert('❌ Source URL is required');
       return;
@@ -254,7 +288,6 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
       return;
     }
 
-    // Create resource object
     const newResource = {
       id: `r-${Date.now()}`,
       source,
@@ -269,41 +302,62 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
       last_updated: new Date().toISOString().split('T')[0],
     };
 
-    // Get existing resources from localStorage
-    const existing = JSON.parse(localStorage.getItem('uex-resources') || '[]');
-    existing.push(newResource);
-    localStorage.setItem('uex-resources', JSON.stringify(existing));
+    submitBtn.textContent = '⏳ Adding...';
+    submitBtn.disabled = true;
+    errorMsg.style.display = 'none';
 
-    // Show success message
-    successMsg.style.display = 'block';
-    form.reset();
+    try {
+      const { content: currentContent, sha } = await getFileContent(GITHUB_AUTH, RESOURCES_FILE_PATH);
+      const resources = JSON.parse(currentContent);
+      resources.push(newResource);
+      const updatedContent = JSON.stringify(resources, null, 2);
 
-    // Hide after 3 seconds
-    setTimeout(() => {
-      successMsg.style.display = 'none';
-    }, 3000);
+      await commitFile(GITHUB_AUTH, RESOURCES_FILE_PATH, updatedContent, `Add resource: ${source}`, sha);
 
-    // Reload page to show new resource in table
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+      successMsg.style.display = 'block';
+      form.reset();
+      submitBtn.textContent = 'Add Resource';
+      submitBtn.disabled = false;
+
+      setTimeout(() => {
+        console.log('Reloading page...');
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error('Error adding resource:', error);
+      errorMsg.textContent = `❌ Failed to add resource: ${error.message}`;
+      errorMsg.style.display = 'block';
+      submitBtn.textContent = 'Add Resource';
+      submitBtn.disabled = false;
+    }
   }
 
-  function exportToJSON() {
-    const resources = JSON.parse(localStorage.getItem('uex-resources') || '[]');
+  async function exportToJSON() {
+    try {
+      const { content } = await getFileContent(GITHUB_AUTH, RESOURCES_FILE_PATH);
+      const resources = JSON.parse(content);
 
-    if (resources.length === 0) {
-      alert('❌ No resources to export. Add some first!');
-      return;
+      if (resources.length === 0) {
+        alert('❌ No resources to export');
+        return;
+      }
+
+      const dataStr = JSON.stringify(resources, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'resources-export.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(`❌ Failed to export: ${error.message}`);
     }
+  }
 
-    const dataStr = JSON.stringify(resources, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'resources-export.json';
-    link.click();
-    URL.revokeObjectURL(url);
+  // Attach export button listener
+  const exportBtn = document.getElementById('exportBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportToJSON);
   }
 </script>
