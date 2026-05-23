@@ -18,18 +18,8 @@ export async function getFileContent(
 ): Promise<{ content: string; sha: string }> {
   const url = `${GITHUB_API_BASE}/repos/${auth.owner}/${auth.repo}/contents/${filePath}`;
 
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `token ${auth.token}`,
-      Accept: 'application/vnd.github.v3.raw',
-    },
-  });
+  console.log(`[getFileContent] Fetching from: ${url}`);
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${filePath}: ${response.statusText}`);
-  }
-
-  // Get SHA from response headers
   const fullResponse = await fetch(url, {
     headers: {
       Authorization: `token ${auth.token}`,
@@ -37,8 +27,28 @@ export async function getFileContent(
     },
   });
 
+  console.log(`[getFileContent] Response status: ${fullResponse.status} ${fullResponse.statusText}`);
+
+  if (!fullResponse.ok) {
+    const errorText = await fullResponse.text();
+    console.error(`[getFileContent] Error response body:`, errorText);
+    throw new Error(`Failed to fetch ${filePath}: ${fullResponse.statusText} - ${errorText}`);
+  }
+
   const data = await fullResponse.json();
-  const content = atob(data.content); // Decode base64
+  console.log(`[getFileContent] Response data keys:`, Object.keys(data));
+  console.log(`[getFileContent] data.content type:`, typeof data.content);
+  console.log(`[getFileContent] data.content length:`, data.content?.length);
+  console.log(`[getFileContent] data.content sample (first 50 chars):`, data.content?.substring(0, 50));
+
+  if (!data.content) {
+    throw new Error(`No content in GitHub API response for ${filePath}`);
+  }
+
+  // Strip whitespace from base64 string (GitHub returns newlines in base64)
+  const cleanBase64 = data.content.replace(/\s/g, '');
+  const content = atob(cleanBase64); // Decode base64
+  console.log(`[getFileContent] Successfully decoded content, length: ${content.length}`);
 
   return { content, sha: data.sha };
 }
