@@ -211,6 +211,31 @@
       ],
       "trust_level": 3,
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1779571570021",
+      "source": " https://test.example.com/",
+      "comments": "Test end-to-end Phase 2B",
+      "access_model": [
+        "Free"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Individual"
+      ],
+      "domain": [
+        "UX Research"
+      ],
+      "content_type": [
+        "Article"
+      ],
+      "topic": [
+        "Usability"
+      ],
+      "trust_level": 3,
+      "last_updated": "2026-05-23"
     }
   ]
 }
