@@ -28,13 +28,14 @@ npm run build  # outputs to dist/
 
 ---
 
-## Project structure (after audit 2026-05-23)
+## Project structure (after Phase 2C night run 2026-05-25)
 
 ```
 /
 ├── CLAUDE.md                          ← this file, AI context
+├── NIGHT_RUN_REPORT.md                ← Phase 2C session report (branch phase-2c-night-run)
 ├── PHASE_2B_TOKEN_MIGRATION.md        ← completed plan: secure the GitHub token (kept for reference)
-├── PHASE_2C_CRUD_AND_FILTERS.md       ← active plan: CRUD on resources/taxonomies + filter UX refinements
+├── PHASE_2C_CRUD_AND_FILTERS.md       ← Phase 2C plan + status table (Sprint 1 + 2 done)
 ├── README.md                          ← human-facing intro
 ├── astro.config.mjs                   ← site = Netlify URL, no base path
 ├── netlify.toml                       ← /api/* → /.netlify/functions/*, Node 20
@@ -43,15 +44,19 @@ npm run build  # outputs to dist/
 ├── .github/workflows/deploy.yml.disabled  ← old GitHub Pages workflow, kept for reference only
 ├── netlify/
 │   └── functions/
-│       ├── add-resource.ts            ← POST /api/add-resource (Phase 2B)
-│       └── delete-resource.ts         ← POST /api/delete-resource (Phase 2C partial, 2026-05-24)
+│       ├── _lib/
+│       │   └── github.ts              ← shared helpers: checkAdminPassword, fetchResourcesFile, commitResourcesFile
+│       ├── add-resource.ts            ← POST /api/add-resource
+│       ├── delete-resource.ts         ← POST /api/delete-resource, body {id}
+│       ├── update-resource.ts         ← POST /api/update-resource, body {id, resource} (Phase 2C)
+│       └── update-taxonomy.ts         ← POST /api/update-taxonomy, body {name, values, renames?} (Phase 2C)
 ├── src/
 │   ├── env.d.ts                       ← no project env vars exposed to client
 │   ├── pages/index.astro              ← single-page app entry
 │   ├── layouts/BaseLayout.astro       ← shared <head>, header, footer
 │   ├── components/
 │   │   ├── AddResourceForm.astro      ← form to add a resource (POST /api/add-resource)
-│   │   └── ResourceTable.astro        ← table + search + filters + pagination + 🗑️ delete
+│   │   └── ResourceTable.astro        ← table + search + filters + pagination + ⋮ menu (Edit/Delete) + Edit Taxonomy
 │   ├── data/
 │   │   └── resources.json             ← UNIQUE source of taxonomies + resources
 │   └── utils/
@@ -90,8 +95,10 @@ In [ResourceTable.astro](src/components/ResourceTable.astro), the table rows are
 
 **Writes** go through Netlify Functions:
 - `POST /api/add-resource` — append a new resource (used by AddResourceForm)
-- `POST /api/delete-resource` — body `{id}`, removes the resource (used by the 🗑️ button in the table)
-- Both routes go through `netlify.toml` redirect (`/api/* → /.netlify/functions/*`)
+- `POST /api/delete-resource` — body `{id}`, removes the resource (used by the ⋮ menu → Delete)
+- `POST /api/update-resource` — body `{id, resource}`, replaces a resource in-place (used by Edit Resource modal)
+- `POST /api/update-taxonomy` — body `{name, values, renames?}`, renames values + propagates atomically (used by Edit Taxonomy modal)
+- All routes go through `netlify.toml` redirect (`/api/* → /.netlify/functions/*`)
 - Auth: `x-admin-password` header validated against `ADMIN_PASSWORD` env var
 - The Functions hold `GITHUB_TOKEN` (server-side env var, never exposed)
 - On success: commit pushed to `src/data/resources.json`, raw mirror reflects the change immediately thanks to the cache-buster
