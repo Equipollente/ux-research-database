@@ -12,9 +12,9 @@ export interface Taxonomies {
 export interface Resource {
   id: string;
   source: string;
-  access_model: string;
-  origin: string;
-  publisher_type: string;
+  access_model: string[];
+  origin: string[];
+  publisher_type: string[];
   domain: string[];
   content_type: string[];
   topic: string[];

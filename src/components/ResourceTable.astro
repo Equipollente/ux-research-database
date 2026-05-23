@@ -1,0 +1,894 @@
+---
+import type { Resource, ResourceData } from '../utils/data-transform';
+import resourceData from '../data/resources.json';
+
+const data: ResourceData = resourceData;
+const resources = data.resources;
+---
+
+<div class="search-section">
+  <input
+    type="text"
+    id="search-input"
+    class="search-input"
+    placeholder="Search by source or comments..."
+    aria-label="Search resources"
+  />
+</div>
+
+<div class="filters-section">
+  <div class="filter-bar">
+    <button class="filter-category-btn" data-category="access_model">
+      Access Model
+    </button>
+    <button class="filter-category-btn" data-category="origin">
+      Origin
+    </button>
+    <button class="filter-category-btn" data-category="publisher_type">
+      Publisher Type
+    </button>
+    <button class="filter-category-btn" data-category="domain">
+      Domain
+    </button>
+    <button class="filter-category-btn" data-category="content_type">
+      Content Type
+    </button>
+    <button class="filter-category-btn" data-category="topic">
+      Topic
+    </button>
+  </div>
+
+  <div class="filter-panel-container">
+    <div class="filter-panel" id="panel-access_model" data-category="access_model" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.access_model.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="access_model"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-panel" id="panel-origin" data-category="origin" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.origin.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="origin"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-panel" id="panel-publisher_type" data-category="publisher_type" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.publisher_type.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="publisher_type"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-panel" id="panel-domain" data-category="domain" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.domain.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="domain"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-panel" id="panel-content_type" data-category="content_type" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.content_type.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="content_type"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="filter-panel" id="panel-topic" data-category="topic" style="display: none;">
+      <div class="pills-container">
+        {data.taxonomies.topic.map((value) => (
+          <button
+            class="pill"
+            data-filter-type="topic"
+            data-filter-value={value}
+            aria-pressed="false"
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-pagination-wrapper">
+  <div class="resource-table-wrapper">
+    <table class="resource-table">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Access Model</th>
+        <th>Origin</th>
+        <th>Publisher Type</th>
+        <th>Domain</th>
+        <th>Content Type</th>
+        <th>Topic</th>
+        <th>Trust Level</th>
+        <th>Comments</th>
+        <th>Last Updated</th>
+      </tr>
+    </thead>
+    <tbody>
+      {resources.map((resource) => (
+        <tr key={resource.id}>
+          <td class="source-cell" data-label="Source">
+            {resource.source.startsWith('http') ? (
+              <a href={resource.source} target="_blank" rel="noopener noreferrer">
+                {resource.source}
+              </a>
+            ) : (
+              <span>{resource.source}</span>
+            )}
+          </td>
+          <td data-label="Access Model">
+            <span class="tag-list">
+              {resource.access_model.map((am) => (
+                <span class="tag">{am}</span>
+              ))}
+            </span>
+          </td>
+          <td data-label="Origin">
+            <span class="tag-list">
+              {resource.origin.map((o) => (
+                <span class="tag">{o}</span>
+              ))}
+            </span>
+          </td>
+          <td data-label="Publisher Type">
+            <span class="tag-list">
+              {resource.publisher_type.map((pt) => (
+                <span class="tag">{pt}</span>
+              ))}
+            </span>
+          </td>
+          <td data-label="Domain">
+            <span class="tag-list">
+              {resource.domain.map((d) => (
+                <span class="tag">{d}</span>
+              ))}
+            </span>
+          </td>
+          <td data-label="Content Type">
+            <span class="tag-list">
+              {resource.content_type.map((ct) => (
+                <span class="tag">{ct}</span>
+              ))}
+            </span>
+          </td>
+          <td data-label="Topic">
+            <span class="tag-list">
+              {resource.topic.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </span>
+          </td>
+          <td class="trust-level" data-label="Trust Level">{resource.trust_level}/5</td>
+          <td class="comments" data-label="Comments">{resource.comments}</td>
+          <td data-label="Last Updated">{resource.last_updated}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  </div>
+
+  <div class="pagination-controls">
+    <button id="prev-btn" class="pagination-btn" disabled>
+      ← Previous
+    </button>
+
+    <div class="pagination-pages" id="pagination-pages">
+      <!-- Page numbers will be inserted here -->
+    </div>
+
+    <button id="next-btn" class="pagination-btn" disabled>
+      Next →
+    </button>
+  </div>
+</div>
+
+<style>
+  .search-section {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: white;
+    color: #1f2937;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+  }
+
+  .search-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .filters-section {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-category-btn {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-category-btn:hover {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .filter-category-btn[data-active="true"] {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .filter-panel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-panel {
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .pill[aria-pressed="true"] {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .resource-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .resource-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .resource-table thead {
+    background-color: #f3f4f6;
+    position: sticky;
+    top: 0;
+  }
+
+  .resource-table th {
+    padding: var(--spacing-sm);
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .resource-table td {
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+
+  .resource-table tbody tr:hover {
+    background-color: #f9fafb;
+  }
+
+  .source-cell a {
+    color: var(--color-primary);
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  .source-cell a:hover {
+    text-decoration: underline;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background-color: #e0e7ff;
+    color: #3730a3;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .trust-level {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .comments {
+    max-width: 300px;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .resource-table-wrapper {
+      border: none;
+      border-radius: 0;
+    }
+
+    .resource-table {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-collapse: separate;
+      font-size: 0.875rem;
+    }
+
+    .resource-table thead {
+      display: none;
+    }
+
+    .resource-table tbody {
+      display: contents;
+    }
+
+    .resource-table tbody tr {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1rem;
+      background-color: white;
+    }
+
+    .resource-table tbody tr:hover {
+      background-color: white;
+    }
+
+    .resource-table td {
+      padding: 0;
+      border-bottom: none;
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
+    }
+
+    .resource-table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Reorganize order on mobile */
+    .source-cell {
+      order: 1 !important;
+    }
+
+    .resource-table td[data-label="Comments"] {
+      order: 2 !important;
+    }
+
+    .resource-table td[data-label="Trust Level"] {
+      order: 3 !important;
+    }
+
+    .resource-table td[data-label="Last Updated"] {
+      order: 4 !important;
+      width: 100%;
+      flex-direction: column !important;
+    }
+
+    .resource-table td[data-label="Access Model"],
+    .resource-table td[data-label="Origin"],
+    .resource-table td[data-label="Publisher Type"],
+    .resource-table td[data-label="Domain"],
+    .resource-table td[data-label="Content Type"],
+    .resource-table td[data-label="Topic"] {
+      order: 5 !important;
+    }
+
+    /* Hide labels for tag cells on mobile - pills display in line */
+    .resource-table td[data-label="Access Model"]::before,
+    .resource-table td[data-label="Origin"]::before,
+    .resource-table td[data-label="Publisher Type"]::before,
+    .resource-table td[data-label="Domain"]::before,
+    .resource-table td[data-label="Content Type"]::before,
+    .resource-table td[data-label="Topic"]::before {
+      display: none;
+    }
+
+    .resource-table td[data-label="Access Model"],
+    .resource-table td[data-label="Origin"],
+    .resource-table td[data-label="Publisher Type"],
+    .resource-table td[data-label="Domain"],
+    .resource-table td[data-label="Content Type"],
+    .resource-table td[data-label="Topic"] {
+      flex-direction: row;
+      margin: 0;
+      padding: 0;
+    }
+
+    .resource-table td[data-label="Access Model"] .tag-list,
+    .resource-table td[data-label="Origin"] .tag-list,
+    .resource-table td[data-label="Publisher Type"] .tag-list,
+    .resource-table td[data-label="Domain"] .tag-list,
+    .resource-table td[data-label="Content Type"] .tag-list,
+    .resource-table td[data-label="Topic"] .tag-list {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .source-cell {
+      width: 100%;
+      order: 1 !important;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      flex-direction: column !important;
+    }
+
+    .source-cell a {
+      word-break: break-all;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .resource-table td[data-label="Comments"] {
+      width: 100%;
+      order: 2 !important;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      flex-direction: column !important;
+      max-width: 100%;
+    }
+
+    .resource-table td[data-label="Trust Level"] {
+      width: 100%;
+      order: 3 !important;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+      flex-direction: column !important;
+    }
+
+    .resource-table td[data-label="Last Updated"] {
+      width: 100%;
+      order: 4 !important;
+      flex-direction: column !important;
+    }
+
+    .search-input {
+      max-width: 100%;
+    }
+
+    .pagination-controls {
+      border-radius: 0;
+      position: static;
+      margin-top: var(--spacing-lg);
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .table-pagination-wrapper {
+    position: relative;
+  }
+
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: var(--spacing-md);
+    background-color: white;
+    border-top: 1px solid var(--color-border);
+    border-radius: 0 0 8px 8px;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .pagination-btn {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pagination-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pagination-pages {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .page-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.25rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .page-number:hover {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .page-number[data-active="true"] {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .pagination-controls {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pagination-pages {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .page-number {
+      min-width: 1.75rem;
+      height: 1.75rem;
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  // Normalize search term: lowercase and remove accents
+  function normalizeSearch(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '');
+  }
+
+  // Normalize search term: lowercase and remove accents
+  function normalizeForComparison(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '');
+  }
+
+  // Pagination config
+  const ROWS_PER_PAGE = 20;
+  let currentPage = 1;
+
+  // Initialize on component mount
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const pillButtons = document.querySelectorAll('.pill') as NodeListOf<HTMLButtonElement>;
+  const tableRows = document.querySelectorAll('.resource-table tbody tr');
+  const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
+  const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+  const paginationPagesContainer = document.getElementById('pagination-pages') as HTMLElement;
+  const categoryButtons = document.querySelectorAll('.filter-category-btn') as NodeListOf<HTMLButtonElement>;
+
+  // State for active filters
+  const activeFilters: Record<string, Set<string>> = {
+    access_model: new Set(),
+    origin: new Set(),
+    publisher_type: new Set(),
+    domain: new Set(),
+    content_type: new Set(),
+    topic: new Set(),
+  };
+
+  // Track which panels are open
+  const openPanels: Set<string> = new Set();
+
+  // Attach click handlers to category buttons for accordion toggle
+  categoryButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category as string;
+      const panel = document.getElementById(`panel-${category}`) as HTMLElement;
+
+      if (!panel) return;
+
+      if (openPanels.has(category)) {
+        // Close the panel
+        openPanels.delete(category);
+        panel.style.display = 'none';
+        btn.setAttribute('data-active', 'false');
+      } else {
+        // Open the panel
+        openPanels.add(category);
+        panel.style.display = 'block';
+        btn.setAttribute('data-active', 'true');
+      }
+    });
+  });
+
+  // Attach click handlers to pills
+  pillButtons.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const filterType = pill.dataset.filterType as string;
+      const filterValue = pill.dataset.filterValue as string;
+
+      // Toggle the filter
+      if (activeFilters[filterType].has(filterValue)) {
+        activeFilters[filterType].delete(filterValue);
+        pill.setAttribute('aria-pressed', 'false');
+      } else {
+        activeFilters[filterType].add(filterValue);
+        pill.setAttribute('aria-pressed', 'true');
+      }
+
+      // Refilter table
+      applyFiltersAndSearch();
+    });
+  });
+
+  // Function to check if resource matches filters (AND between taxonomies, OR within)
+  function matchesFilters(row: HTMLTableRowElement): boolean {
+    const cells = row.querySelectorAll('td');
+
+    // Column order: source, access_model, origin, publisher_type, domain, content_type, topic, ...
+    const getTagsFromCell = (cellIndex: number): string[] => {
+      const tags = cells[cellIndex]?.querySelectorAll('.tag');
+      return Array.from(tags || []).map((tag) => tag.textContent?.trim() || '');
+    };
+
+    const taxonomies = [
+      { index: 1, key: 'access_model' },
+      { index: 2, key: 'origin' },
+      { index: 3, key: 'publisher_type' },
+      { index: 4, key: 'domain' },
+      { index: 5, key: 'content_type' },
+      { index: 6, key: 'topic' },
+    ];
+
+    // Check each taxonomy: if filters exist, at least one must match (OR)
+    for (const { index, key } of taxonomies) {
+      const selectedFilters = activeFilters[key];
+      if (selectedFilters.size === 0) continue; // No filter for this taxonomy
+
+      const cellTags = getTagsFromCell(index);
+      const hasMatch = cellTags.some((tag) => selectedFilters.has(tag));
+
+      if (!hasMatch) {
+        return false; // This taxonomy didn't match, so fail (AND between taxonomies)
+      }
+    }
+
+    return true; // All active filters matched
+  }
+
+  // Function to get visible rows (matching search and filters)
+  function getVisibleRows(): HTMLTableRowElement[] {
+    const searchTerm = normalizeSearch((searchInput.value || '').trim());
+
+    return Array.from(tableRows).filter((row) => {
+      const sourceCellText = row.querySelector('.source-cell')?.textContent || '';
+      const cellCount = row.querySelectorAll('td').length;
+      const commentsCellText = row.querySelectorAll('td')[cellCount - 2]?.textContent || '';
+
+      // Check search match
+      const sourceNormalized = normalizeForComparison(sourceCellText);
+      const commentsNormalized = normalizeForComparison(commentsCellText);
+      const matchesSearch =
+        sourceNormalized.includes(searchTerm) || commentsNormalized.includes(searchTerm);
+
+      // Check filter match
+      const matchesFilter = matchesFilters(row as HTMLTableRowElement);
+
+      return matchesSearch && matchesFilter;
+    });
+  }
+
+  // Function to render pagination
+  function renderPagination() {
+    const visibleRows = getVisibleRows();
+    const totalPages = Math.ceil(visibleRows.length / ROWS_PER_PAGE);
+
+    // Update all rows visibility based on current page
+    tableRows.forEach((row) => {
+      row.classList.add('hidden');
+    });
+
+    const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+    const endIndex = startIndex + ROWS_PER_PAGE;
+
+    visibleRows.slice(startIndex, endIndex).forEach((row) => {
+      row.classList.remove('hidden');
+    });
+
+    // Render page numbers
+    paginationPagesContainer.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = 'page-number';
+      pageBtn.textContent = String(i);
+      pageBtn.dataset.page = String(i);
+
+      if (i === currentPage) {
+        pageBtn.setAttribute('data-active', 'true');
+      }
+
+      pageBtn.addEventListener('click', () => {
+        currentPage = i;
+        renderPagination();
+      });
+
+      paginationPagesContainer.appendChild(pageBtn);
+    }
+
+    // Update button states
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+    // Update button listeners
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPagination();
+      }
+    };
+
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPagination();
+      }
+    };
+  }
+
+  // Function to apply both search and filters
+  function applyFiltersAndSearch() {
+    currentPage = 1; // Reset to first page when search/filter changes
+    renderPagination();
+  }
+
+  // Attach search listener
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFiltersAndSearch);
+  }
+
+  // Initialize pagination on load
+  renderPagination();
+</script>

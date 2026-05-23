@@ -60,16 +60,28 @@
             "description": "URL or resource name"
           },
           "access_model": {
-            "type": "string",
-            "enum": ["Free", "Freemium", "Paid", "Institutional"]
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Free", "Freemium", "Paid", "Institutional"]
+            },
+            "minItems": 1
           },
           "origin": {
-            "type": "string",
-            "enum": ["Academic", "Industry", "Independent", "Community", "Institutional"]
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Academic", "Industry", "Independent", "Community", "Institutional"]
+            },
+            "minItems": 1
           },
           "publisher_type": {
-            "type": "string",
-            "enum": ["Individual", "Collective", "Organization"]
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Individual", "Collective", "Organization"]
+            },
+            "minItems": 1
           },
           "domain": {
             "type": "array",

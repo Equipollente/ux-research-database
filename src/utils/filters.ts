@@ -32,27 +32,49 @@ export function matchesSearch(resource: Resource, query: string): boolean {
 }
 
 export function matchesFilters(resource: Resource, filters: FilterState): boolean {
-  // Mono-value filters: OR logic (Free OR Freemium)
-  if (filters.access_model.length > 0 && !filters.access_model.includes(resource.access_model)) {
-    return false;
-  }
-  if (filters.origin.length > 0 && !filters.origin.includes(resource.origin)) {
-    return false;
-  }
-  if (filters.publisher_type.length > 0 && !filters.publisher_type.includes(resource.publisher_type)) {
-    return false;
+  // All taxonomy fields now use OR logic within the same taxonomy
+  // (e.g., Free OR Freemium, or Academic OR Industry)
+
+  // Access Model: if filter selected, resource must have at least one matching value
+  if (filters.access_model.length > 0) {
+    if (!filters.access_model.some((am) => resource.access_model.includes(am))) {
+      return false;
+    }
   }
 
-  // Multi-value filters: AND logic (superset matching)
-  // Resource must contain ALL selected values
+  // Origin: if filter selected, resource must have at least one matching value
+  if (filters.origin.length > 0) {
+    if (!filters.origin.some((o) => resource.origin.includes(o))) {
+      return false;
+    }
+  }
+
+  // Publisher Type: if filter selected, resource must have at least one matching value
+  if (filters.publisher_type.length > 0) {
+    if (!filters.publisher_type.some((pt) => resource.publisher_type.includes(pt))) {
+      return false;
+    }
+  }
+
+  // Domain: if filter selected, resource must have at least one matching value
   if (filters.domain.length > 0) {
-    if (!filters.domain.every((d) => resource.domain.includes(d))) return false;
+    if (!filters.domain.some((d) => resource.domain.includes(d))) {
+      return false;
+    }
   }
+
+  // Content Type: if filter selected, resource must have at least one matching value
   if (filters.content_type.length > 0) {
-    if (!filters.content_type.every((ct) => resource.content_type.includes(ct))) return false;
+    if (!filters.content_type.some((ct) => resource.content_type.includes(ct))) {
+      return false;
+    }
   }
+
+  // Topic: if filter selected, resource must have at least one matching value
   if (filters.topic.length > 0) {
-    if (!filters.topic.every((t) => resource.topic.includes(t))) return false;
+    if (!filters.topic.some((t) => resource.topic.includes(t))) {
+      return false;
+    }
   }
 
   return true;

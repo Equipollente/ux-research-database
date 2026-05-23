@@ -1,18 +1,36 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ResourceTable from '../components/ResourceTable.astro';
 
-// TODO: Load resources.json and render table
 const title = "UX Research Database";
 const description = "Curated collection of UX research, design resources, and frameworks";
 ---
 
 <BaseLayout title={title} description={description}>
   <section id="app">
-    <p>Loading resource database...</p>
+    <h2>Resource Database</h2>
+    <p class="intro">Browse curated UX research, design tools, frameworks, and more.</p>
+
+    <div id="table-container">
+      <ResourceTable />
+    </div>
   </section>
 
-  <script>
-    // Phase 1: Load and display resources
-    // TODO: Implement resource table, search, filters
-  </script>
+  <style>
+    h2 {
+      margin-bottom: var(--spacing-md);
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    .intro {
+      margin-bottom: var(--spacing-lg);
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    #table-container {
+      margin-top: var(--spacing-lg);
+    }
+  </style>
 </BaseLayout>
