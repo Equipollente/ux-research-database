@@ -36,6 +36,9 @@ const data: ResourceData = resourceData;
     <button class="filter-category-btn" data-category="topic">
       Topic
     </button>
+    <button id="clearFiltersBtn" class="clear-filters-btn" style="display: none;">
+      Effacer les filtres
+    </button>
   </div>
 
   <div class="filter-panel-container">
@@ -225,10 +228,43 @@ const data: ResourceData = resourceData;
     background-color: #f0f4ff;
   }
 
-  .filter-category-btn[data-active="true"] {
+  /* N≥1, tiroir fermé */
+  .filter-category-btn[data-state="has-filters"] {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    border-color: var(--color-border);
+  }
+
+  /* Tiroir ouvert (prioritaire sur has-filters) */
+  .filter-category-btn[data-state="open"] {
     background-color: var(--color-primary);
     color: white;
     border-color: var(--color-primary);
+  }
+
+  .filter-category-btn[data-state="open"]:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .clear-filters-btn {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #6b7280;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .clear-filters-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
   }
 
   .filter-panel-container {
@@ -765,47 +801,114 @@ const data: ResourceData = resourceData;
     topic: new Set(),
   };
 
-  // Track which panels are open
-  const openPanels: Set<string> = new Set();
+  // Exclusive accordion: at most one panel open at a time
+  let openPanel: string | null = null;
 
-  // Attach click handlers to category buttons for accordion toggle
+  // Map data-category → original button label (captured once at startup)
+  const categoryLabels: Record<string, string> = {};
+  categoryButtons.forEach((btn) => {
+    const cat = (btn as HTMLButtonElement).dataset.category!;
+    categoryLabels[cat] = btn.textContent?.trim() || cat;
+  });
+
+  // --- Panel open/close helpers ---
+
+  function closePanelFor(category: string) {
+    const panel = document.getElementById(`panel-${category}`);
+    if (panel) panel.style.display = 'none';
+    if (openPanel === category) openPanel = null;
+    updateCategoryButtonState(category);
+  }
+
+  function openPanelFor(category: string) {
+    if (openPanel && openPanel !== category) {
+      closePanelFor(openPanel);
+    }
+    const panel = document.getElementById(`panel-${category}`);
+    if (panel) panel.style.display = 'block';
+    openPanel = category;
+    updateCategoryButtonState(category);
+  }
+
+  // --- Button state updater ---
+
+  function updateCategoryButtonState(category: string) {
+    const btn = document.querySelector<HTMLButtonElement>(
+      `.filter-category-btn[data-category="${category}"]`
+    );
+    if (!btn) return;
+    const count = activeFilters[category].size;
+    const label = categoryLabels[category] || category;
+    btn.textContent = count > 0 ? `${label} (${count})` : label;
+
+    if (openPanel === category) {
+      btn.setAttribute('data-state', 'open');
+    } else if (count > 0) {
+      btn.setAttribute('data-state', 'has-filters');
+    } else {
+      btn.removeAttribute('data-state');
+    }
+  }
+
+  function updateAllButtonStates() {
+    Object.keys(activeFilters).forEach(updateCategoryButtonState);
+  }
+
+  // --- Clear filters button ---
+
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  function updateClearButtonVisibility() {
+    if (!clearFiltersBtn) return;
+    const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
+    (clearFiltersBtn as HTMLElement).style.display = hasAny ? 'inline-flex' : 'none';
+  }
+
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', () => {
+      Object.keys(activeFilters).forEach((key) => activeFilters[key].clear());
+      pillButtons.forEach((pill) => pill.setAttribute('aria-pressed', 'false'));
+      if (openPanel) closePanelFor(openPanel);
+      updateAllButtonStates();
+      updateClearButtonVisibility();
+      applyFiltersAndSearch();
+    });
+  }
+
+  // --- Category button click handlers (exclusive accordion) ---
+
   categoryButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const category = btn.dataset.category;
-      const panel = document.getElementById(`panel-${category}`);
-
-      if (!panel) return;
-
-      if (openPanels.has(category)) {
-        // Close the panel
-        openPanels.delete(category);
-        panel.style.display = 'none';
-        btn.setAttribute('data-active', 'false');
+      const category = (btn as HTMLButtonElement).dataset.category!;
+      if (openPanel === category) {
+        closePanelFor(category);
       } else {
-        // Open the panel
-        openPanels.add(category);
-        panel.style.display = 'block';
-        btn.setAttribute('data-active', 'true');
+        openPanelFor(category);
       }
     });
   });
 
-  // Attach click handlers to pills
+  // --- Pill click handlers ---
+
   pillButtons.forEach((pill) => {
     pill.addEventListener('click', () => {
-      const filterType = pill.dataset.filterType;
-      const filterValue = pill.dataset.filterValue;
+      const filterType = (pill as HTMLButtonElement).dataset.filterType!;
+      const filterValue = (pill as HTMLButtonElement).dataset.filterValue!;
 
-      // Toggle the filter
       if (activeFilters[filterType].has(filterValue)) {
         activeFilters[filterType].delete(filterValue);
         pill.setAttribute('aria-pressed', 'false');
+        // Auto-close: last pill in the open panel was deselected
+        if (activeFilters[filterType].size === 0 && openPanel === filterType) {
+          closePanelFor(filterType);
+        }
       } else {
         activeFilters[filterType].add(filterValue);
         pill.setAttribute('aria-pressed', 'true');
       }
 
-      // Refilter table
+      updateCategoryButtonState(filterType);
+      updateClearButtonVisibility();
       applyFiltersAndSearch();
     });
   });
