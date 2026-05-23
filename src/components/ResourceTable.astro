@@ -146,6 +146,7 @@ const data: ResourceData = resourceData;
         <th>Trust Level</th>
         <th>Comments</th>
         <th>Last Updated</th>
+        <th class="actions-th" aria-label="Actions"></th>
       </tr>
     </thead>
     <tbody id="resource-tbody">
@@ -311,6 +312,10 @@ const data: ResourceData = resourceData;
     white-space: nowrap;
   }
 
+  .actions-th {
+    width: 3rem;
+  }
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .resource-table-wrapper {
@@ -458,6 +463,33 @@ const data: ResourceData = resourceData;
     display: none;
   }
 
+  .actions-cell {
+    text-align: center;
+    width: 3rem;
+  }
+
+  .btn-delete-resource {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: all 0.15s ease;
+    color: #6b7280;
+  }
+
+  .btn-delete-resource:hover:not(:disabled) {
+    background: #fee2e2;
+    border-color: #fca5a5;
+  }
+
+  .btn-delete-resource:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
   .page-number {
     display: inline-flex;
     align-items: center;
@@ -554,8 +586,15 @@ const data: ResourceData = resourceData;
     .resource-table td[data-label="Publisher Type"]::before,
     .resource-table td[data-label="Domain"]::before,
     .resource-table td[data-label="Content Type"]::before,
-    .resource-table td[data-label="Topic"]::before {
+    .resource-table td[data-label="Topic"]::before,
+    .resource-table td[data-label="Actions"]::before {
       display: none;
+    }
+
+    .actions-cell {
+      align-self: flex-end;
+      order: 0;
+      width: auto;
     }
 
     .resource-table td[data-label="Access Model"],
@@ -665,6 +704,7 @@ const data: ResourceData = resourceData;
           <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
           <td class="comments" data-label="Comments">${resource.comments || ''}</td>
           <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
+          <td class="actions-cell" data-label="Actions"><button class="btn-delete-resource" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="Delete this resource" title="Delete">🗑️</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -811,8 +851,7 @@ const data: ResourceData = resourceData;
 
     return Array.from(getTableRows()).filter((row) => {
       const sourceCellText = row.querySelector('.source-cell')?.textContent || '';
-      const cellCount = row.querySelectorAll('td').length;
-      const commentsCellText = row.querySelectorAll('td')[cellCount - 2]?.textContent || '';
+      const commentsCellText = row.querySelector('td.comments')?.textContent || '';
 
       // Check search match
       const sourceNormalized = normalizeForComparison(sourceCellText);
@@ -898,4 +937,67 @@ const data: ResourceData = resourceData;
 
   // Initialize pagination on load
   renderPagination();
+
+  // ------------------------------------------------------------------
+  // Delete a resource — wired via event delegation so it works for rows
+  // added after this script ran (the rows are rendered async from raw).
+  // ------------------------------------------------------------------
+  const PASSWORD_STORAGE_KEY = 'ux_research_admin_password';
+
+  document.addEventListener('click', async (e) => {
+    const target = (e.target as HTMLElement)?.closest('.btn-delete-resource');
+    if (!target) return;
+
+    const id = (target as HTMLElement).dataset.id;
+    const source = (target as HTMLElement).dataset.source || id;
+    if (!id) return;
+
+    if (!window.confirm(`Delete resource "${source}" ?\nThis cannot be undone.`)) {
+      return;
+    }
+
+    let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (!password) {
+      password = prompt('Admin password:');
+      if (!password) return;
+    }
+
+    (target as HTMLButtonElement).disabled = true;
+    (target as HTMLButtonElement).textContent = '⏳';
+
+    try {
+      const response = await fetch('/api/delete-resource', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': password,
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem(PASSWORD_STORAGE_KEY);
+        alert('Wrong password. Try again.');
+        (target as HTMLButtonElement).disabled = false;
+        (target as HTMLButtonElement).textContent = '🗑️';
+        return;
+      }
+
+      if (!response.ok) {
+        const errText = await response.text();
+        alert(`Failed to delete (${response.status}): ${errText}`);
+        (target as HTMLButtonElement).disabled = false;
+        (target as HTMLButtonElement).textContent = '🗑️';
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+      // Reload to refetch the table from raw (cache-buster makes it instant)
+      window.location.reload();
+    } catch (error) {
+      alert(`Network error: ${(error as Error).message}`);
+      (target as HTMLButtonElement).disabled = false;
+      (target as HTMLButtonElement).textContent = '🗑️';
+    }
+  });
 </script>
