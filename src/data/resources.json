@@ -71,6 +71,9 @@
     {
       "id": "r-001",
       "source": "https://www.nngroup.com/articles/ten-usability-heuristics/",
+      "comments": "Nielsen Norman Group - Absolute reference for usability heuristics evaluation. Essential reading for anyone doing UX work.",
+      "trust_level": 5,
+      "last_updated": "2026-05-23",
       "access_model": [
         "Free"
       ],
@@ -78,23 +81,26 @@
         "Industry"
       ],
       "publisher_type": [
+        "Collective",
         "Organization"
       ],
       "domain": [
         "UX Design",
-        "UX Research"
+        "UX Research",
+        "Digital Product"
       ],
       "content_type": [
         "Article",
-        "Framework"
+        "Case Study",
+        "Tool",
+        "Template",
+        "Framework",
+        "Benchmark"
       ],
       "topic": [
         "Usability",
         "Design Process"
-      ],
-      "trust_level": 5,
-      "comments": "Nielsen Norman Group - Absolute reference for usability heuristics evaluation. Essential reading for anyone doing UX work.",
-      "last_updated": "2026-05-23"
+      ]
     },
     {
       "id": "r-002",
