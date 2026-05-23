@@ -240,6 +240,33 @@
       ],
       "trust_level": 3,
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1779574804055",
+      "source": "https://uxcel.com/courses",
+      "comments": "",
+      "access_model": [
+        "Paid"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Collective"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research"
+      ],
+      "content_type": [
+        "Course"
+      ],
+      "topic": [
+        "Research Practice",
+        "Design Process"
+      ],
+      "trust_level": 3,
+      "last_updated": "2026-05-23"
     }
   ]
 }
