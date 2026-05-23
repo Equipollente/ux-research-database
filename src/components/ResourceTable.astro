@@ -51,6 +51,9 @@ const taxonomyLabels: Record<string, string> = {
 
   <div class="filter-panel-container">
     <div class="filter-panel" id="panel-access_model" data-category="access_model" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="access_model">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.access_model.map((value) => (
           <button
@@ -66,6 +69,9 @@ const taxonomyLabels: Record<string, string> = {
     </div>
 
     <div class="filter-panel" id="panel-origin" data-category="origin" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="origin">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.origin.map((value) => (
           <button
@@ -81,6 +87,9 @@ const taxonomyLabels: Record<string, string> = {
     </div>
 
     <div class="filter-panel" id="panel-publisher_type" data-category="publisher_type" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="publisher_type">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.publisher_type.map((value) => (
           <button
@@ -96,6 +105,9 @@ const taxonomyLabels: Record<string, string> = {
     </div>
 
     <div class="filter-panel" id="panel-domain" data-category="domain" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="domain">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.domain.map((value) => (
           <button
@@ -111,6 +123,9 @@ const taxonomyLabels: Record<string, string> = {
     </div>
 
     <div class="filter-panel" id="panel-content_type" data-category="content_type" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="content_type">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.content_type.map((value) => (
           <button
@@ -126,6 +141,9 @@ const taxonomyLabels: Record<string, string> = {
     </div>
 
     <div class="filter-panel" id="panel-topic" data-category="topic" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="topic">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.topic.map((value) => (
           <button
@@ -228,6 +246,29 @@ const taxonomyLabels: Record<string, string> = {
         </div>
       </form>
       <div id="editErrorMsg" class="edit-status-msg" style="display: none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Taxonomy Modal -->
+<!-- TODO: validate UX choice — spec says button in filter-bar; implemented as header inside filter panel for simplicity -->
+<div id="editTaxonomyModal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editTaxonomyTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="editTaxonomyTitle">Edit Taxonomy</h2>
+      <button id="editTaxonomyClose" class="modal-close-btn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="taxonomy-edit-hint">Rename values. Changes propagate to all resources automatically.<br/>Values cannot be deleted (to avoid orphaned resources).</p>
+      <div id="taxonomyValuesList" class="taxonomy-values-list">
+        <!-- Populated by JS -->
+      </div>
+      <button type="button" id="addTaxonomyValueBtn" class="add-value-btn">+ Add value</button>
+      <div class="modal-actions-row">
+        <button type="button" id="editTaxonomyCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button type="button" id="editTaxonomySave" class="modal-btn modal-btn-save">Save</button>
+      </div>
+      <div id="editTaxonomyErrorMsg" class="edit-status-msg" style="display: none;"></div>
     </div>
   </div>
 </div>
@@ -500,6 +541,68 @@ const taxonomyLabels: Record<string, string> = {
       width: 100%;
       justify-content: center;
     }
+  }
+
+  /* ---- Filter panel header (Edit values button) ---- */
+  .filter-panel-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-edit-taxonomy {
+    padding: 0.3rem 0.75rem;
+    background: white;
+    color: #6b7280;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-edit-taxonomy:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: #f0f4ff;
+  }
+
+  /* ---- Edit Taxonomy modal specifics ---- */
+  .taxonomy-edit-hint {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+  }
+
+  .taxonomy-values-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .add-value-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    background: white;
+    color: var(--color-primary);
+    border: 1px dashed var(--color-primary);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 1rem;
+  }
+
+  .add-value-btn:hover {
+    background: #f0f4ff;
   }
 
   /* ---- Actions dropdown (SSR element, positioned fixed via JS) ---- */
@@ -789,6 +892,33 @@ const taxonomyLabels: Record<string, string> = {
   .actions-cell {
     text-align: center;
     width: 3rem;
+  }
+
+  /* Taxonomy value rows created dynamically inside the edit taxonomy modal */
+  .taxonomy-value-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .taxonomy-value-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+  }
+
+  .taxonomy-value-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .taxonomy-value-input[data-renamed="true"] {
+    border-color: #f59e0b;
+    background: #fffbeb;
   }
 
   .btn-actions-menu {
@@ -1540,6 +1670,152 @@ const taxonomyLabels: Record<string, string> = {
     editErrorMsg.textContent = `❌ ${msg}`;
     editErrorMsg.className = 'edit-status-msg is-error';
     editErrorMsg.style.display = 'block';
+  }
+
+  // ------------------------------------------------------------------
+  // Edit Taxonomy modal
+  // ------------------------------------------------------------------
+  const editTaxonomyModal = document.getElementById('editTaxonomyModal')!;
+  const editTaxonomyTitle = document.getElementById('editTaxonomyTitle')!;
+  const taxonomyValuesList = document.getElementById('taxonomyValuesList')!;
+  const editTaxonomySave = document.getElementById('editTaxonomySave') as HTMLButtonElement;
+  const editTaxonomyErrorMsg = document.getElementById('editTaxonomyErrorMsg')!;
+
+  let currentTaxonomyName: string | null = null;
+
+  // "Edit values" button — event delegation on filter panels (SSR elements)
+  document.querySelectorAll<HTMLButtonElement>('.btn-edit-taxonomy').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      openTaxonomyModal(btn.dataset.taxonomy!);
+    });
+  });
+
+  function openTaxonomyModal(taxonomyName: string) {
+    currentTaxonomyName = taxonomyName;
+    const label = categoryLabels[taxonomyName] || taxonomyName;
+    editTaxonomyTitle.textContent = `Edit ${label}`;
+
+    // Read current values from the SSR-rendered pills
+    const panel = document.getElementById(`panel-${taxonomyName}`)!;
+    const pills = panel.querySelectorAll<HTMLButtonElement>('.pill[data-filter-value]');
+    const currentValues = Array.from(pills).map((p) => p.dataset.filterValue || '').filter(Boolean);
+
+    taxonomyValuesList.innerHTML = '';
+    currentValues.forEach((v) => addTaxonomyValueRow(v));
+
+    editTaxonomyErrorMsg.style.display = 'none';
+    editTaxonomySave.textContent = 'Save';
+    editTaxonomySave.disabled = false;
+    (editTaxonomyModal as HTMLElement).style.display = 'flex';
+  }
+
+  function addTaxonomyValueRow(value: string) {
+    const row = document.createElement('div');
+    row.className = 'taxonomy-value-row';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'taxonomy-value-input';
+    input.value = value;
+    input.dataset.original = value;
+    input.placeholder = 'Value name...';
+    // Highlight renamed values
+    input.addEventListener('input', () => {
+      input.dataset.renamed = input.value !== input.dataset.original ? 'true' : 'false';
+    });
+    row.appendChild(input);
+    taxonomyValuesList.appendChild(row);
+  }
+
+  document.getElementById('addTaxonomyValueBtn')?.addEventListener('click', () => {
+    addTaxonomyValueRow('');
+    const inputs = taxonomyValuesList.querySelectorAll<HTMLInputElement>('.taxonomy-value-input');
+    inputs[inputs.length - 1]?.focus();
+  });
+
+  function closeTaxonomyModal() {
+    (editTaxonomyModal as HTMLElement).style.display = 'none';
+    currentTaxonomyName = null;
+  }
+
+  document.getElementById('editTaxonomyClose')?.addEventListener('click', closeTaxonomyModal);
+  document.getElementById('editTaxonomyCancel')?.addEventListener('click', closeTaxonomyModal);
+  editTaxonomyModal.addEventListener('click', (e) => {
+    if (e.target === editTaxonomyModal) closeTaxonomyModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && (editTaxonomyModal as HTMLElement).style.display !== 'none') {
+      closeTaxonomyModal();
+    }
+  });
+
+  editTaxonomySave?.addEventListener('click', async () => {
+    if (!currentTaxonomyName) return;
+
+    const inputs = taxonomyValuesList.querySelectorAll<HTMLInputElement>('.taxonomy-value-input');
+    const values: string[] = [];
+    const renames: Record<string, string> = {};
+
+    for (const input of inputs) {
+      const newVal = input.value.trim();
+      const origVal = input.dataset.original || '';
+      if (!newVal) continue; // Skip empty
+      values.push(newVal);
+      if (origVal && origVal !== newVal) {
+        renames[origVal] = newVal;
+      }
+    }
+
+    if (values.length === 0) {
+      showTaxonomyError('At least one value is required.');
+      return;
+    }
+
+    let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (!password) {
+      password = prompt('Admin password:');
+      if (!password) return;
+    }
+
+    editTaxonomySave.textContent = '⏳ Saving...';
+    editTaxonomySave.disabled = true;
+    editTaxonomyErrorMsg.style.display = 'none';
+
+    try {
+      const response = await fetch('/api/update-taxonomy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+        body: JSON.stringify({ name: currentTaxonomyName, values, renames }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem(PASSWORD_STORAGE_KEY);
+        showTaxonomyError('Wrong password. Try again.');
+        editTaxonomySave.textContent = 'Save';
+        editTaxonomySave.disabled = false;
+        return;
+      }
+      if (!response.ok) {
+        const errText = await response.text();
+        showTaxonomyError(`Error ${response.status}: ${errText}`);
+        editTaxonomySave.textContent = 'Save';
+        editTaxonomySave.disabled = false;
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+      closeTaxonomyModal();
+      window.location.reload();
+    } catch (error) {
+      showTaxonomyError(`Network error: ${(error as Error).message}`);
+      editTaxonomySave.textContent = 'Save';
+      editTaxonomySave.disabled = false;
+    }
+  });
+
+  function showTaxonomyError(msg: string) {
+    editTaxonomyErrorMsg.textContent = `❌ ${msg}`;
+    editTaxonomyErrorMsg.className = 'edit-status-msg is-error';
+    editTaxonomyErrorMsg.style.display = 'block';
   }
 
   // ------------------------------------------------------------------
