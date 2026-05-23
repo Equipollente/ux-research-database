@@ -10,7 +10,7 @@
 - **Owner**: Judith Heckmann (sole maintainer)
 - **Stack**: Astro 5 (`output: 'static'`), TypeScript, vanilla JS in `<script>` tags (no React/Vue)
 - **Data**: single source = `src/data/resources.json` (taxonomies + array of resources)
-- **Hosting**: currently GitHub Pages (`equipollente.github.io/ux-research-database/`), **migration to Netlify in progress** — see Phase 2B below
+- **Hosting**: Netlify (`https://ux-research-database.netlify.app`), GitHub Pages workflow disabled. Auto-deploys on push to `main`.
 - **Working directory**: `C:\Users\judit\Documents\UX-Research\RessourcesDatabase`
 - **Repo**: `equipollente/ux-research-database` (branch `main`)
 
@@ -76,27 +76,28 @@ In [ResourceTable.astro](src/components/ResourceTable.astro), the table rows are
 
 ---
 
-## In-flight: Phase 2B — Secure the GitHub token
+## Architecture — reads vs writes
 
-**Status**: planned but not started (as of 2026-05-23).
+**Reads** are unauthenticated:
+- Client fetches `src/data/resources.json` from `raw.githubusercontent.com` (hardcoded URL in [src/utils/github-api.ts](src/utils/github-api.ts))
+- No token, no CORS issues, no env vars at build time
 
-**The problem**: `PUBLIC_GITHUB_TOKEN` is injected into the client JS bundle by Astro. In production on GitHub Pages, any visitor can read the token in DevTools and destroy the repo (token has `repo` scope).
+**Writes** go through a Netlify Function:
+- Endpoint: `POST /api/add-resource` (redirected by netlify.toml to `/.netlify/functions/add-resource`)
+- Auth: `x-admin-password` header validated against `ADMIN_PASSWORD` env var
+- The Function holds `GITHUB_TOKEN` (server-side env var, never exposed)
+- On success: commit appended to `src/data/resources.json`, raw mirror updates within ~minutes
 
-**The plan (validated by Judith)**:
-1. Migrate hosting from GitHub Pages to **Netlify** (free tier)
-2. Reads → `raw.githubusercontent.com` (no token, repo is public)
-3. Writes → **Netlify Function** holding the token server-side, gated by a shared admin password
+**No GitHub token exists in client code anywhere.** The previous `PUBLIC_GITHUB_TOKEN` approach was retired in Phase 2B (2026-05-23).
 
-**Full step-by-step plan with code samples is in [PHASE_2B_TOKEN_MIGRATION.md](PHASE_2B_TOKEN_MIGRATION.md)** at the repo root. Read it before touching `github-api.ts` or the deployment setup.
-
-⚠️ **Naming conflict**: `docs/PHASE_2_ROADMAP.md` uses "Phase 2B" to mean "Full Resource Form" (a future feature). `PHASE_2B_TOKEN_MIGRATION.md` uses "Phase 2B" for the Netlify migration. These are **different things**. When Judith says "Phase 2B", clarify if unsure.
+⚠️ **Naming note**: `docs/PHASE_2_ROADMAP.md` uses "Phase 2B" to mean "Full Resource Form" (mostly done as side-effect of the security work). `PHASE_2B_TOKEN_MIGRATION.md` documents what was actually done.
 
 ---
 
 ## Known technical debt
 
-### Form is incomplete (MVP carryover)
-[AddResourceForm.astro](src/components/AddResourceForm.astro) only renders **3 of the 6 taxonomies** (Domains, Content Types, Topics). The 3 missing — `access_model`, `origin`, `publisher_type` — exist in `resources.json` and are displayed in the table, but the form has no way to set them yet. **This is intentional MVP scope** ("TEMPS 1" in `docs/PHASE_2_ROADMAP.md`), not a bug Claude introduced. Will be completed when the form is reworked for the Netlify auth flow (Phase 2B step 3).
+### Form completed (Phase 2B, 2026-05-23)
+[AddResourceForm.astro](src/components/AddResourceForm.astro) now covers all 6 taxonomies plus a `trust_level` field (1-5). The MVP-era partial form (3/6 categories) was completed at the same time as the Netlify Function refactor. No more debt here.
 
 ### Type duplication has been fixed (2026-05-23)
 `Resource` interface used to live in both `data-transform.ts` and `github-api.ts`. Now canonical in `data-transform.ts`; `github-api.ts` re-exports it. **Do not re-introduce a duplicate.**
@@ -121,16 +122,19 @@ The function `loadResources()` in `data-transform.ts` used to fetch from `/data/
 
 ## Environment variables
 
-Declared in [src/env.d.ts](src/env.d.ts). Values live in `.env.local` (gitignored).
+**Client-side (`PUBLIC_*` in `.env.local`)**: none. The file no longer exists. The reads URL is hardcoded; there are no client-side secrets.
 
-| Var | Status | Notes |
-|---|---|---|
-| `PUBLIC_GITHUB_OWNER` | Active | Safe (public repo identifier) |
-| `PUBLIC_GITHUB_REPO` | Active | Safe |
-| `PUBLIC_GITHUB_BRANCH` | Active | Safe |
-| `PUBLIC_GITHUB_TOKEN` | ⚠️ Deprecated, leaking to client | Removed in Phase 2B |
+**Server-side (Netlify env vars)**: set in Netlify dashboard, never bundled into the client:
 
-After Phase 2B, the token moves into Netlify env vars (server-side only, no `PUBLIC_` prefix), and a new `ADMIN_PASSWORD` env var is added in Netlify for the Function auth.
+| Var | Purpose |
+|---|---|
+| `GITHUB_TOKEN` | Fine-grained PAT with `contents:write` scope on this repo only |
+| `GITHUB_OWNER` | Repo owner — `Equipollente` |
+| `GITHUB_REPO` | `ux-research-database` |
+| `GITHUB_BRANCH` | `main` |
+| `ADMIN_PASSWORD` | Shared password for the `Add Resource` form |
+
+To rotate the token: revoke the existing PAT on GitHub, generate a new fine-grained one with the same scope, update `GITHUB_TOKEN` in Netlify dashboard, trigger a redeploy.
 
 ---
 

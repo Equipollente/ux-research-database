@@ -185,57 +185,6 @@
       "trust_level": 4,
       "comments": "Comprehensive UX design and research tools, templates, and educational resources. Excellent library of design and research templates.",
       "last_updated": "2026-05-23"
-    },
-    {
-      "id": "r-1779571442610",
-      "source": "https://test.example.com/",
-      "comments": "Test end-to-end Phase 2B",
-      "access_model": [
-        "Free"
-      ],
-      "origin": [
-        "Industry"
-      ],
-      "publisher_type": [
-        "Individual"
-      ],
-      "domain": [
-        "UX Research"
-      ],
-      "content_type": [
-        "Article",
-        "Blog Post"
-      ],
-      "topic": [
-        "Usability"
-      ],
-      "trust_level": 3,
-      "last_updated": "2026-05-23"
-    },
-    {
-      "id": "r-1779571570021",
-      "source": " https://test.example.com/",
-      "comments": "Test end-to-end Phase 2B",
-      "access_model": [
-        "Free"
-      ],
-      "origin": [
-        "Industry"
-      ],
-      "publisher_type": [
-        "Individual"
-      ],
-      "domain": [
-        "UX Research"
-      ],
-      "content_type": [
-        "Article"
-      ],
-      "topic": [
-        "Usability"
-      ],
-      "trust_level": 3,
-      "last_updated": "2026-05-23"
     }
   ]
 }

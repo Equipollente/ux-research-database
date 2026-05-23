@@ -4,13 +4,16 @@
 
 **Date de rédaction** : 2026-05-23
 **Auteur** : Session Claude précédente, validé par Judith
-**Statut** : Étape 1 exécutée ✅, étapes 2-7 en attente
+**Statut** : ✅ TOUTES ÉTAPES COMPLÈTES — Phase 2B terminée le 2026-05-23
 
-**Compte Netlify déjà créé** (2026-05-23) :
+**Production** :
 - Site name : `ux-research-database`
 - URL publique : `https://ux-research-database.netlify.app`
 - Repo GitHub connecté : `equipollente/ux-research-database`
-- Variables d'env Netlify : pas encore configurées (étape 6)
+- Variables d'env Netlify : configurées (GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, ADMIN_PASSWORD)
+- Token : nouveau PAT fine-grained avec scope contents:write uniquement
+- Anciens PAT : révoqués
+- Test end-to-end : passé (ajout d'une ressource depuis le site déployé → commit GitHub OK → tableau actualisé)
 
 ---
 
@@ -545,12 +548,12 @@ Les variables côté client (pour la lecture via raw) restent dans `.env.local` 
 
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
-| 1 — Lecture via raw | ✅ Done | 2026-05-23 | Code modifié dans github-api.ts getResourcesFromGitHub() |
-| 2 — Netlify Function | ⬜ Pas commencée | — | — |
-| 3 — Adapter le form | ⬜ Pas commencée | — | Inclut compléter le form (3 → 6 taxonomies) |
-| 4 — netlify.toml | ⬜ Pas commencée | — | Retirer base path Astro |
-| 5 — Déploiement | 🟡 Partiel | 2026-05-23 | Compte Netlify créé, site `ux-research-database.netlify.app`, repo connecté. Pas encore de premier deploy effectif. |
-| 6 — Env vars | ⬜ Pas commencée | — | Manuel par Judith dans Netlify dashboard |
-| 7 — Cleanup & sécu | 🟡 Partiel | 2026-05-23 | PAT révoqué ✅. Reste : retirer PUBLIC_GITHUB_TOKEN de .env.local + nettoyer github-api.ts (commitFile, getFileContent inutilisés après step 3) |
+| 1 — Lecture via raw | ✅ Done | 2026-05-23 | getResourcesFromGitHub() utilise raw.githubusercontent.com (URL hardcodée, pas de token) |
+| 2 — Netlify Function | ✅ Done | 2026-05-23 | netlify/functions/add-resource.ts — auth par x-admin-password header, commit via GitHub API avec token serveur |
+| 3 — Adapter le form | ✅ Done | 2026-05-23 | Form complet (6 taxonomies), trust_level field, fetch /api/add-resource avec password localStorage |
+| 4 — netlify.toml | ✅ Done | 2026-05-23 | redirect /api/* → /.netlify/functions/*, Node 20 |
+| 5 — Déploiement | ✅ Done | 2026-05-23 | Site live sur ux-research-database.netlify.app, auto-deploy à chaque push |
+| 6 — Env vars | ✅ Done | 2026-05-23 | 5 variables configurées dans Netlify (GITHUB_TOKEN, GITHUB_OWNER/REPO/BRANCH, ADMIN_PASSWORD) |
+| 7 — Cleanup & sécu | ✅ Done | 2026-05-23 | Ancien PAT révoqué, .env.local supprimé, github-api.ts dégraissé (commitFile/getFileContent/loadAuth/saveAuth/clearAuth retirés), env.d.ts vidé des PUBLIC_GITHUB_* |
 
 **Mettre à jour ce tableau au fur et à mesure de l'exécution.**
