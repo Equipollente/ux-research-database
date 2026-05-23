@@ -240,10 +240,10 @@ import { domains, contentTypes, topics } from '../data/taxonomies';
 
   const RESOURCES_FILE_PATH = 'src/data/resources.json';
   const GITHUB_AUTH: GitHubAuthContext = {
-    token: import.meta.env.GITHUB_TOKEN,
-    owner: import.meta.env.GITHUB_OWNER,
-    repo: import.meta.env.GITHUB_REPO,
-    branch: import.meta.env.GITHUB_BRANCH,
+    token: import.meta.env.PUBLIC_GITHUB_TOKEN,
+    owner: import.meta.env.PUBLIC_GITHUB_OWNER,
+    repo: import.meta.env.PUBLIC_GITHUB_REPO,
+    branch: import.meta.env.PUBLIC_GITHUB_BRANCH,
   };
 
   function initializeForm() {

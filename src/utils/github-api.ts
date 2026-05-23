@@ -108,10 +108,10 @@ export interface Resource {
 
 export async function getResourcesFromGitHub(): Promise<Resource[]> {
   const auth: GitHubAuthContext = {
-    token: import.meta.env.GITHUB_TOKEN,
-    owner: import.meta.env.GITHUB_OWNER,
-    repo: import.meta.env.GITHUB_REPO,
-    branch: import.meta.env.GITHUB_BRANCH,
+    token: import.meta.env.PUBLIC_GITHUB_TOKEN,
+    owner: import.meta.env.PUBLIC_GITHUB_OWNER,
+    repo: import.meta.env.PUBLIC_GITHUB_REPO,
+    branch: import.meta.env.PUBLIC_GITHUB_BRANCH,
   };
 
   try {
