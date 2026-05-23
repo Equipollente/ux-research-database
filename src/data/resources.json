@@ -237,6 +237,36 @@
       ],
       "trust_level": 3,
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1779576576165",
+      "source": "https://app.uxcel.com/courses/ux-design-psychology",
+      "comments": "User Psychology\nLearn the psychological principles behind user behavior and decision-making. Master core concepts in user psychology to help you design more engaging products.\n\n1. **Common Laws of the Human Brain**\n2. **Human Memory & Mental Models**\n3. **Human Perception & Trust**",
+      "access_model": [
+        "Paid"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Collective"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research",
+        "Psychology"
+      ],
+      "content_type": [
+        "Course"
+      ],
+      "topic": [
+        "Cognition",
+        "Emotion & Affect",
+        "Memory",
+        "Trust"
+      ],
+      "trust_level": 3,
+      "last_updated": "2026-05-23"
     }
   ]
 }
