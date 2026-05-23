@@ -28,17 +28,6 @@ export interface ResourceData {
   resources: Resource[];
 }
 
-export async function loadResources(): Promise<ResourceData> {
-  try {
-    const response = await fetch('/data/resources.json');
-    if (!response.ok) throw new Error(`Failed to load resources: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error loading resources:', error);
-    throw error;
-  }
-}
-
 export function isValidUrl(str: string): boolean {
   try {
     new URL(str);

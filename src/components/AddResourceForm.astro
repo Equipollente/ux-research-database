@@ -1,5 +1,9 @@
 ---
-import { domains, contentTypes, topics } from '../data/taxonomies';
+import resourceData from '../data/resources.json';
+
+const domains = resourceData.taxonomies.domain;
+const contentTypes = resourceData.taxonomies.content_type;
+const topics = resourceData.taxonomies.topic;
 ---
 
 <div class="add-resource-form">

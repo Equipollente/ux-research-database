@@ -1,5 +1,8 @@
 // GitHub API integration for authenticated edits
 
+import type { Resource } from './data-transform';
+export type { Resource };
+
 export interface GitHubAuthContext {
   token: string;
   owner: string;
@@ -92,34 +95,23 @@ export function clearAuthFromStorage(): void {
   localStorage.removeItem('gh_auth');
 }
 
-export interface Resource {
-  id: string;
-  source: string;
-  comments: string;
-  domain: string[];
-  content_type: string[];
-  topic: string[];
-  access_model: string[];
-  origin: string[];
-  publisher_type: string[];
-  trust_level: number;
-  last_updated: string;
-}
-
 export async function getResourcesFromGitHub(): Promise<Resource[]> {
-  const auth: GitHubAuthContext = {
-    token: import.meta.env.PUBLIC_GITHUB_TOKEN,
-    owner: import.meta.env.PUBLIC_GITHUB_OWNER,
-    repo: import.meta.env.PUBLIC_GITHUB_REPO,
-    branch: import.meta.env.PUBLIC_GITHUB_BRANCH,
-  };
+  const owner = import.meta.env.PUBLIC_GITHUB_OWNER;
+  const repo = import.meta.env.PUBLIC_GITHUB_REPO;
+  const branch = import.meta.env.PUBLIC_GITHUB_BRANCH || 'main';
+
+  // Read via raw.githubusercontent.com: public, no token, no CORS issues, no base64.
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/src/data/resources.json`;
 
   try {
-    const { content } = await getFileContent(auth, 'src/data/resources.json');
-    const data = JSON.parse(content);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch resources: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
     return data.resources || data || [];
   } catch (error) {
-    console.error('Failed to fetch resources from GitHub:', error);
+    console.error('Failed to fetch resources from raw GitHub:', error);
     return [];
   }
 }
