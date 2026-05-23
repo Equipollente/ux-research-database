@@ -36,24 +36,28 @@ npm run build  # outputs to dist/
 ├── PHASE_2B_TOKEN_MIGRATION.md        ← completed plan: secure the GitHub token (kept for reference)
 ├── PHASE_2C_CRUD_AND_FILTERS.md       ← active plan: CRUD on resources/taxonomies + filter UX refinements
 ├── README.md                          ← human-facing intro
-├── astro.config.mjs
+├── astro.config.mjs                   ← site = Netlify URL, no base path
+├── netlify.toml                       ← /api/* → /.netlify/functions/*, Node 20
 ├── package.json
 ├── tsconfig.json
-├── .env.local                         ← GitHub token + env vars (gitignored)
-├── .github/workflows/deploy.yml       ← will become obsolete after Netlify migration
+├── .github/workflows/deploy.yml.disabled  ← old GitHub Pages workflow, kept for reference only
+├── netlify/
+│   └── functions/
+│       ├── add-resource.ts            ← POST /api/add-resource (Phase 2B)
+│       └── delete-resource.ts         ← POST /api/delete-resource (Phase 2C partial, 2026-05-24)
 ├── src/
-│   ├── env.d.ts                       ← TypeScript env var declarations
+│   ├── env.d.ts                       ← no project env vars exposed to client
 │   ├── pages/index.astro              ← single-page app entry
 │   ├── layouts/BaseLayout.astro       ← shared <head>, header, footer
 │   ├── components/
-│   │   ├── AddResourceForm.astro      ← form to add a resource
-│   │   └── ResourceTable.astro        ← table + search + filters + pagination
+│   │   ├── AddResourceForm.astro      ← form to add a resource (POST /api/add-resource)
+│   │   └── ResourceTable.astro        ← table + search + filters + pagination + 🗑️ delete
 │   ├── data/
 │   │   └── resources.json             ← UNIQUE source of taxonomies + resources
 │   └── utils/
 │       ├── data-transform.ts          ← canonical Resource & Taxonomies types
 │       ├── filters.ts                 ← filter/search logic
-│       └── github-api.ts              ← GitHub REST API calls (will be refactored in Phase 2B)
+│       └── github-api.ts              ← client-side reads from raw.githubusercontent.com
 └── docs/
     ├── CHANGELOG.md
     ├── PHASE_2_ROADMAP.md             ← original plan (Phase 2C/D/E/F still pending)
@@ -82,12 +86,15 @@ In [ResourceTable.astro](src/components/ResourceTable.astro), the table rows are
 **Reads** are unauthenticated:
 - Client fetches `src/data/resources.json` from `raw.githubusercontent.com` (hardcoded URL in [src/utils/github-api.ts](src/utils/github-api.ts))
 - No token, no CORS issues, no env vars at build time
+- Cache-buster `?t=${Date.now()}` appended to defeat the 5-min CDN cache so newly committed resources show up instantly
 
-**Writes** go through a Netlify Function:
-- Endpoint: `POST /api/add-resource` (redirected by netlify.toml to `/.netlify/functions/add-resource`)
+**Writes** go through Netlify Functions:
+- `POST /api/add-resource` — append a new resource (used by AddResourceForm)
+- `POST /api/delete-resource` — body `{id}`, removes the resource (used by the 🗑️ button in the table)
+- Both routes go through `netlify.toml` redirect (`/api/* → /.netlify/functions/*`)
 - Auth: `x-admin-password` header validated against `ADMIN_PASSWORD` env var
-- The Function holds `GITHUB_TOKEN` (server-side env var, never exposed)
-- On success: commit appended to `src/data/resources.json`, raw mirror updates within ~minutes
+- The Functions hold `GITHUB_TOKEN` (server-side env var, never exposed)
+- On success: commit pushed to `src/data/resources.json`, raw mirror reflects the change immediately thanks to the cache-buster
 
 **No GitHub token exists in client code anywhere.** The previous `PUBLIC_GITHUB_TOKEN` approach was retired in Phase 2B (2026-05-23).
 

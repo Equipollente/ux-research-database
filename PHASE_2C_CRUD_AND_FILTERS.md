@@ -3,8 +3,16 @@
 > **Pour l'agent IA qui reprend** : ce document est autonome. Lis-le en entier avant d'agir. Vérifie l'état actuel des fichiers (les choses peuvent avoir changé). Le code à écrire est décrit, pas calqué — adapte aux conventions présentes dans `CLAUDE.md`. **Confirme avec Judith avant chaque étape**, c'est sa préférence.
 
 **Date de rédaction** : 2026-05-24
-**Statut** : Spécifications validées, exécution non commencée
+**Statut** : Spécifications validées. Delete livré en avance (slice de Sprint 1). Reste du Sprint 1 + Sprint 2 à faire.
 **Pré-requis** : Phase 2B terminée (voir `PHASE_2B_TOKEN_MIGRATION.md`)
+
+**Déjà livré (2026-05-24, slice anticipée)** :
+- Function `netlify/functions/delete-resource.ts` opérationnelle
+- Colonne "Actions" à droite du tableau avec bouton `🗑️` par ressource
+- `window.confirm()` natif pour la confirmation
+- Password lu depuis localStorage, re-prompt sur 401
+- Reload après succès (cache-buster sur raw rend la suppression instantanée)
+- **Pas encore fait** : menu ⋮ avec Edit + Delete (le bouton 🗑️ direct sera remplacé par ce menu quand Edit sera livré)
 
 ---
 
@@ -270,15 +278,15 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 ### Sprint 1 — CRUD
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
-| 1.1 — Colonne Actions + dropdown ⋮ | ⬜ | — | — |
+| 1.1 — Colonne Actions (bouton direct 🗑️ — pas encore le menu ⋮) | 🟡 Partiel | 2026-05-24 | Bouton 🗑️ direct livré. À transformer en menu ⋮ quand Edit sera fait. |
 | 1.2 — Modale Edit Resource | ⬜ | — | Réutiliser AddResourceForm en mode edit |
-| 1.3 — Confirm Delete | ⬜ | — | `confirm()` natif ou modal custom |
+| 1.3 — Confirm Delete | ✅ | 2026-05-24 | `window.confirm()` natif |
 | 1.4 — Modale Edit Taxonomy | ⬜ | — | Nouveau composant |
 | 1.5 — Function `update-resource.ts` | ⬜ | — | — |
-| 1.6 — Function `delete-resource.ts` | ⬜ | — | — |
+| 1.6 — Function `delete-resource.ts` | ✅ | 2026-05-24 | Endpoint `/api/delete-resource`, body `{id}` |
 | 1.7 — Function `update-taxonomy.ts` | ⬜ | — | Plus complexe (propagation renames) |
-| 1.8 — Refactor `_lib/github.ts` (optionnel) | ⬜ | — | Décider après avoir écrit les 3 Functions |
-| 1.9 — Test end-to-end | ⬜ | — | — |
+| 1.8 — Refactor `_lib/github.ts` (optionnel) | ⬜ | — | Maintenant qu'on a 2 Functions très similaires (add + delete), le refactor commence à valoir le coup. À considérer en début de prochaine session. |
+| 1.9 — Test end-to-end | 🟡 Partiel | 2026-05-24 | Delete testable. Add déjà testé en Phase 2B. Edit / update-taxonomy à tester quand livrés. |
 
 ### Sprint 2 — UX filtres
 | Étape | Statut | Date | Notes |
