@@ -1,0 +1,48 @@
+export const domains = [
+  "UX Design",
+  "UX Research",
+  "Digital Product",
+  "Behavioral Science",
+  "Sociology",
+  "Psychology",
+  "Multidisciplinary",
+];
+
+export const contentTypes = [
+  "Article",
+  "Blog Post",
+  "Case Study",
+  "Research Paper",
+  "Tool",
+  "Template",
+  "Framework",
+  "Study",
+  "Benchmark",
+  "Audit",
+  "Dataset",
+  "Trend Report",
+  "Encyclopedic",
+];
+
+export const topics = [
+  "Cognition",
+  "Emotion & Affect",
+  "Social Behavior",
+  "Culture & Identity",
+  "Communication",
+  "Ethics & Values",
+  "Perception",
+  "Attention",
+  "Memory",
+  "Decision Making",
+  "Problem Solving",
+  "Creativity",
+  "Reasoning",
+  "Motivation & Engagement",
+  "Trust",
+  "Technology & Society",
+  "Interaction",
+  "Usability",
+  "Research Practice",
+  "Design Process",
+];

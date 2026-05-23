@@ -1,0 +1,309 @@
+---
+import { domains, contentTypes, topics } from '../data/taxonomies';
+---
+
+<div class="add-resource-form">
+  <h2>Add New Resource</h2>
+  <form id="addResourceForm">
+    <!-- Source URL (required) -->
+    <div class="form-group">
+      <label for="source">Source URL *</label>
+      <input
+        type="url"
+        id="source"
+        name="source"
+        required
+        placeholder="https://..."
+      />
+    </div>
+
+    <!-- Comments (optional) -->
+    <div class="form-group">
+      <label for="comments">Comments</label>
+      <textarea
+        id="comments"
+        name="comments"
+        rows="3"
+        placeholder="Notes about this resource..."
+      ></textarea>
+    </div>
+
+    <!-- Domain (multiples - checkboxes) -->
+    <div class="form-group">
+      <label>Domains *</label>
+      <div class="checkbox-group">
+        {domains.map(domain => (
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="domain"
+              value={domain}
+            />
+            {domain}
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Content Type (multiples - checkboxes) -->
+    <div class="form-group">
+      <label>Content Types *</label>
+      <div class="checkbox-group">
+        {contentTypes.map(type => (
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="content_type"
+              value={type}
+            />
+            {type}
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Topic (multiples - checkboxes) -->
+    <div class="form-group">
+      <label>Topics *</label>
+      <div class="checkbox-group">
+        {topics.map(topic => (
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="topic"
+              value={topic}
+            />
+            {topic}
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Add Resource</button>
+      <button type="reset" class="btn btn-secondary">Clear</button>
+      <button type="button" id="exportBtn" class="btn btn-secondary">
+        💾 Export to JSON
+      </button>
+    </div>
+  </form>
+
+  <!-- Success message -->
+  <div id="successMsg" class="success-message" style="display: none;">
+    ✅ Resource added! Scroll down to see it in the table.
+  </div>
+</div>
+
+<style>
+  .add-resource-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  h2 {
+    margin-top: 0;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="url"],
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  input[type="url"]:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: normal;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #2563eb;
+  }
+
+  .btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .btn-secondary:hover {
+    background: #d1d5db;
+  }
+
+  .success-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #d1fae5;
+    color: #065f46;
+    border-radius: 4px;
+    border: 1px solid #6ee7b7;
+  }
+
+  @media (max-width: 768px) {
+    .add-resource-form {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+
+    .checkbox-group {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('addResourceForm');
+  const exportBtn = document.getElementById('exportBtn');
+  const successMsg = document.getElementById('successMsg');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    addResource();
+  });
+
+  exportBtn.addEventListener('click', () => {
+    exportToJSON();
+  });
+
+  function addResource() {
+    // Get form data
+    const source = document.getElementById('source').value;
+    const comments = document.getElementById('comments').value;
+
+    const domainInputs = Array.from(document.querySelectorAll('input[name="domain"]:checked'))
+      .map(el => el.value);
+    const contentTypeInputs = Array.from(document.querySelectorAll('input[name="content_type"]:checked'))
+      .map(el => el.value);
+    const topicInputs = Array.from(document.querySelectorAll('input[name="topic"]:checked'))
+      .map(el => el.value);
+
+    // Validation
+    if (!source) {
+      alert('❌ Source URL is required');
+      return;
+    }
+    if (domainInputs.length === 0 || contentTypeInputs.length === 0 || topicInputs.length === 0) {
+      alert('❌ Please select at least one Domain, Content Type, and Topic');
+      return;
+    }
+
+    // Create resource object
+    const newResource = {
+      id: `r-${Date.now()}`,
+      source,
+      comments: comments || '',
+      domain: domainInputs,
+      content_type: contentTypeInputs,
+      topic: topicInputs,
+      access_model: [],
+      origin: [],
+      publisher_type: [],
+      trust_level: 50,
+      last_updated: new Date().toISOString().split('T')[0],
+    };
+
+    // Get existing resources from localStorage
+    const existing = JSON.parse(localStorage.getItem('uex-resources') || '[]');
+    existing.push(newResource);
+    localStorage.setItem('uex-resources', JSON.stringify(existing));
+
+    // Show success message
+    successMsg.style.display = 'block';
+    form.reset();
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+      successMsg.style.display = 'none';
+    }, 3000);
+
+    // Reload page to show new resource in table
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  }
+
+  function exportToJSON() {
+    const resources = JSON.parse(localStorage.getItem('uex-resources') || '[]');
+
+    if (resources.length === 0) {
+      alert('❌ No resources to export. Add some first!');
+      return;
+    }
+
+    const dataStr = JSON.stringify(resources, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'resources-export.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+</script>

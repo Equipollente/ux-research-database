@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AddResourceForm from '../components/AddResourceForm.astro';
 import ResourceTable from '../components/ResourceTable.astro';
 
 const title = "UX Research Database";
@@ -10,6 +11,10 @@ const description = "Curated collection of UX research, design resources, and fr
   <section id="app">
     <h2>Resource Database</h2>
     <p class="intro">Browse curated UX research, design tools, frameworks, and more.</p>
+
+    <AddResourceForm />
+
+    <hr style="margin: 3rem 0; border: none; border-top: 2px solid #e5e7eb;" />
 
     <div id="table-container">
       <ResourceTable />
