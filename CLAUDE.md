@@ -33,7 +33,8 @@ npm run build  # outputs to dist/
 ```
 /
 ├── CLAUDE.md                          ← this file, AI context
-├── PHASE_2B_TOKEN_MIGRATION.md        ← active plan: secure the GitHub token
+├── PHASE_2B_TOKEN_MIGRATION.md        ← completed plan: secure the GitHub token (kept for reference)
+├── PHASE_2C_CRUD_AND_FILTERS.md       ← active plan: CRUD on resources/taxonomies + filter UX refinements
 ├── README.md                          ← human-facing intro
 ├── astro.config.mjs
 ├── package.json
@@ -148,5 +149,6 @@ To rotate the token: revoke the existing PAT on GitHub, generate a new fine-grai
 | Change form fields | `src/components/AddResourceForm.astro` |
 | Style a dynamic element | `<style is:global>` block in `ResourceTable.astro` (see scoping gotcha above) |
 | Understand the data shape | `docs/schema.json` (JSON Schema) or `src/utils/data-transform.ts` (TS types) |
-| Plan future features | `docs/PHASE_2_ROADMAP.md` (Phases 2C–2F still TBD) |
-| Migrate the token | `PHASE_2B_TOKEN_MIGRATION.md` (step-by-step plan) |
+| Plan future features | `docs/PHASE_2_ROADMAP.md` (high-level), `PHASE_2C_CRUD_AND_FILTERS.md` (next sprint detailed) |
+| Migrate the token | `PHASE_2B_TOKEN_MIGRATION.md` (done, kept for reference) |
+| Implement Edit/Delete + filter UX | `PHASE_2C_CRUD_AND_FILTERS.md` (next sprint) |
