@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UX Research Database Schema",
+  "type": "object",
+  "required": ["taxonomies", "resources"],
+  "properties": {
+    "taxonomies": {
+      "type": "object",
+      "required": ["access_model", "origin", "publisher_type", "domain", "content_type", "topic"],
+      "properties": {
+        "access_model": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "origin": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "publisher_type": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "domain": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "content_type": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "topic": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "access_model",
+          "origin",
+          "publisher_type",
+          "domain",
+          "content_type",
+          "topic",
+          "trust_level",
+          "last_updated"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier (UUID or short code)"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL or resource name"
+          },
+          "access_model": {
+            "type": "string",
+            "enum": ["Free", "Freemium", "Paid", "Institutional"]
+          },
+          "origin": {
+            "type": "string",
+            "enum": ["Academic", "Industry", "Independent", "Community", "Institutional"]
+          },
+          "publisher_type": {
+            "type": "string",
+            "enum": ["Individual", "Collective", "Organization"]
+          },
+          "domain": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "content_type": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "topic": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "trust_level": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comments": {
+            "type": "string",
+            "description": "Optional personal notes"
+          },
+          "last_updated": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "ISO date format (YYYY-MM-DD)"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "taxonomies": {
+    "access_model": [
+      "Free",
+      "Freemium",
+      "Paid",
+      "Institutional"
+    ],
+    "origin": [
+      "Academic",
+      "Industry",
+      "Independent",
+      "Community",
+      "Institutional"
+    ],
+    "publisher_type": [
+      "Individual",
+      "Collective",
+      "Organization"
+    ],
+    "domain": [
+      "UX Design",
+      "UX Research",
+      "Digital Product",
+      "Behavioral Science",
+      "Sociology",
+      "Psychology",
+      "Multidisciplinary"
+    ],
+    "content_type": [
+      "Article",
+      "Blog Post",
+      "Case Study",
+      "Research Paper",
+      "Tool",
+      "Framework",
+      "Study",
+      "Benchmark",
+      "Audit",
+      "Dataset",
+      "Trend Report",
+      "Encyclopedic"
+    ],
+    "topic": [
+      "Cognition",
+      "Emotion & Affect",
+      "Social Behavior",
+      "Culture & Identity",
+      "Communication",
+      "Ethics & Values",
+      "Perception",
+      "Attention",
+      "Memory",
+      "Decision Making",
+      "Problem Solving",
+      "Creativity",
+      "Reasoning",
+      "Motivation & Engagement",
+      "Trust",
+      "Technology & Society",
+      "Interaction",
+      "Usability",
+      "Research Practice",
+      "Design Process"
+    ]
+  },
+  "resources": [
+    {
+      "id": "r-001",
+      "source": "https://www.nngroup.com/articles/ten-usability-heuristics/",
+      "access_model": "Free",
+      "origin": "Industry",
+      "publisher_type": "Organization",
+      "domain": ["UX Design", "UX Research"],
+      "content_type": ["Article", "Framework"],
+      "topic": ["Usability", "Design Process"],
+      "trust_level": 5,
+      "comments": "Absolute reference for usability heuristics evaluation. Essential reading for anyone doing UX work.",
+      "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-002",
+      "source": "https://www.interaction-design.org/",
+      "access_model": "Freemium",
+      "origin": "Organization",
+      "publisher_type": "Organization",
+      "domain": ["UX Design", "Digital Product"],
+      "content_type": ["Course", "Encyclopedia", "Article"],
+      "topic": ["Design Process", "Usability", "Research Practice"],
+      "trust_level": 4,
+      "comments": "Great educational resource with free and premium content on UX fundamentals.",
+      "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-003",
+      "source": "Thinking, Fast and Slow - Daniel Kahneman",
+      "access_model": "Paid",
+      "origin": "Academic",
+      "publisher_type": "Individual",
+      "domain": ["Psychology", "Behavioral Science"],
+      "content_type": ["Book"],
+      "topic": ["Decision Making", "Cognition", "Reasoning"],
+      "trust_level": 5,
+      "comments": "Foundational work on behavioral economics and cognitive biases. Every UX researcher should read this.",
+      "last_updated": "2026-05-23"
+    }
+  ]
+}
