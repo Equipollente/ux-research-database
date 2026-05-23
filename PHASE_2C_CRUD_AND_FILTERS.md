@@ -278,25 +278,25 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 ### Sprint 1 — CRUD
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
-| 1.1 — Colonne Actions (bouton direct 🗑️ — pas encore le menu ⋮) | 🟡 Partiel | 2026-05-24 | Bouton 🗑️ direct livré. À transformer en menu ⋮ quand Edit sera fait. |
-| 1.2 — Modale Edit Resource | ⬜ | — | Réutiliser AddResourceForm en mode edit |
-| 1.3 — Confirm Delete | ✅ | 2026-05-24 | `window.confirm()` natif |
-| 1.4 — Modale Edit Taxonomy | ⬜ | — | Nouveau composant |
-| 1.5 — Function `update-resource.ts` | ⬜ | — | — |
+| 1.1 — Colonne Actions + menu ⋮ | ✅ | 2026-05-25 | Menu ⋮ dropdown (portal fixe via JS) avec Edit et Delete |
+| 1.2 — Modale Edit Resource | ✅ | 2026-05-25 | Pré-remplie depuis allResources[], submit vers /api/update-resource |
+| 1.3 — Confirm Delete | ✅ | 2026-05-24 | `window.confirm()` natif (via dropdown Delete) |
+| 1.4 — Modale Edit Taxonomy | ✅ | 2026-05-25 | Inputs éditables, suivi des renames, + Add value, /api/update-taxonomy |
+| 1.5 — Function `update-resource.ts` | ✅ | 2026-05-25 | Endpoint `/api/update-resource`, body `{id, resource}` |
 | 1.6 — Function `delete-resource.ts` | ✅ | 2026-05-24 | Endpoint `/api/delete-resource`, body `{id}` |
-| 1.7 — Function `update-taxonomy.ts` | ⬜ | — | Plus complexe (propagation renames) |
-| 1.8 — Refactor `_lib/github.ts` (optionnel) | ⬜ | — | Maintenant qu'on a 2 Functions très similaires (add + delete), le refactor commence à valoir le coup. À considérer en début de prochaine session. |
-| 1.9 — Test end-to-end | 🟡 Partiel | 2026-05-24 | Delete testable. Add déjà testé en Phase 2B. Edit / update-taxonomy à tester quand livrés. |
+| 1.7 — Function `update-taxonomy.ts` | ✅ | 2026-05-25 | Propagation atomique des renames + validation valeurs orphelines |
+| 1.8 — Refactor `_lib/github.ts` | ✅ | 2026-05-25 | Extrait dans `netlify/functions/_lib/github.ts` ; add-resource et delete-resource refactorisés |
+| 1.9 — Test end-to-end | 🟡 Partiel | 2026-05-25 | À tester par Judith demain sur la branche phase-2c-night-run |
 
 ### Sprint 2 — UX filtres
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
-| 2.1 — Accordéon exclusif (refactor state) | ⬜ | — | — |
-| 2.2 — Auto-fermeture sur 0 sélection | ⬜ | — | Avec exception "ouverture manuelle" |
-| 2.3 — Compteur `(N)` sur les boutons | ⬜ | — | — |
-| 2.4 — 3 états visuels boutons | ⬜ | — | Tokens CSS dans le `<style>` scoped |
-| 2.5 — Bouton "Effacer les filtres" | ⬜ | — | — |
-| 2.6 — Tests visuels desktop + mobile | ⬜ | — | — |
+| 2.1 — Accordéon exclusif (refactor state) | ✅ | 2026-05-25 | `openPanel: string \| null` remplace `openPanels: Set<string>` |
+| 2.2 — Auto-fermeture sur 0 sélection | ✅ | 2026-05-25 | Exception "ouverture manuelle" respectée |
+| 2.3 — Compteur `(N)` sur les boutons | ✅ | 2026-05-25 | Texte mis à jour dynamiquement via `updateCategoryButtonState()` |
+| 2.4 — 3 états visuels boutons | ✅ | 2026-05-25 | idle / has-filters / open via `data-state` |
+| 2.5 — Bouton "Effacer les filtres" | ✅ | 2026-05-25 | Visible seulement si ≥1 filtre actif |
+| 2.6 — Tests visuels desktop + mobile | ⬜ | — | À valider par Judith demain |
 
 **À mettre à jour au fur et à mesure de l'exécution.**
 
