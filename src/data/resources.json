@@ -273,6 +273,38 @@
       ],
       "trust_level": 3,
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1780616687874",
+      "source": "https://thedecisionlab.com/biases-index",
+      "comments": "Lis of cognitive biases",
+      "access_model": [
+        "Free"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Organization"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research",
+        "Digital Product",
+        "Behavioral Science",
+        "Psychology"
+      ],
+      "content_type": [
+        "Case Study",
+        "Tool",
+        "Encyclopedic"
+      ],
+      "topic": [
+        "Cognition",
+        "Ethics & Values"
+      ],
+      "trust_level": 5,
+      "last_updated": "2026-06-04"
     }
   ]
 }
