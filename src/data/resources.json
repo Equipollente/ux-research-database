@@ -305,6 +305,36 @@
       ],
       "trust_level": 5,
       "last_updated": "2026-06-04"
+    },
+    {
+      "id": "r-1780617498518",
+      "source": "https://apparences-trompeuses.beta.cnil.fr/html/accueil.html",
+      "comments": "Ressource institutionnelle de référence (CNIL/LINC) très fiable et pédagogique sur les dark patterns, adossée aux lignes directrices du CEPD. Idéale comme outil de sensibilisation, mais à visée informative et non juridique.",
+      "access_model": [
+        "Free"
+      ],
+      "origin": [
+        "Institutional"
+      ],
+      "publisher_type": [
+        "Organization"
+      ],
+      "domain": [
+        "UX Design",
+        "Behavioral Science",
+        "Psychology"
+      ],
+      "content_type": [
+        "Article",
+        "Tool"
+      ],
+      "topic": [
+        "Decision Making",
+        "Trust",
+        "Technology & Society"
+      ],
+      "trust_level": 5,
+      "last_updated": "2026-06-04"
     }
   ]
 }
