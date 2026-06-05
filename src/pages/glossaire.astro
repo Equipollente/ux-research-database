@@ -24,13 +24,13 @@ import '../styles/tokens.css';
       <p class="nav-title">UX Design &amp; Research</p>
     </header>
 
-    <!-- ── Hero : titre + sous-titre ── -->
+    <!-- ── Hero ── -->
     <section class="hero">
       <h1 class="hero-title">Cognitive psychologie et design d'experience</h1>
       <h2 class="hero-subtitle">Glossaire</h2>
     </section>
 
-    <!-- ── Barre de sessions (sticky #2, sous le nav-header) ── -->
+    <!-- ── Barre de sessions (sticky #2) ── -->
     <nav class="session-nav" aria-label="Sessions du glossaire">
       <div class="session-chips">
         <a href="#session-1" class="chip chip--active" data-session="session-1">Session 1</a>
@@ -43,10 +43,13 @@ import '../styles/tokens.css';
     <!-- ── Contenu ── -->
     <main class="content-wrapper">
 
-      <!-- Session 1 -->
+      <!-- ═══════════════════════════════════════════════════════════
+           Session 1 — Ce que le cerveau voit, groupe, rate et comprend
+           ═══════════════════════════════════════════════════════════ -->
       <article id="session-1" class="session-card">
         <p class="session-label">Session 1 — Ce que le cerveau voit, groupe, rate et comprend</p>
 
+        <!-- Théorie de la Gestalt -->
         <p class="subsection-label">Théorie de la Gestalt</p>
         <ul class="glossary-list">
           <li class="glossary-entry">
@@ -93,6 +96,7 @@ import '../styles/tokens.css';
           </li>
         </ul>
 
+        <!-- Traitement préattentif -->
         <p class="subsection-label">Traitement préattentif</p>
         <ul class="glossary-list">
           <li class="glossary-entry">
@@ -105,29 +109,442 @@ import '../styles/tokens.css';
           <li class="glossary-entry">
             <span class="entry-term">Feature Integration Theory (théorie de l'intégration des attributs)</span>
             <span class="entry-body">
-              Théorie de l'attention visuelle en deux étapes. 1 : les attributs simples sont enregistrés automatiquement, en parallèle, sur des cartes séparées (feature maps). 2 : l'attention focalisée est nécessaire pour lier les attributs en objets. Sans attention, le cerveau peut même recombiner les attributs à tort (conjonctions illusoires).
+              Théorie de l'attention visuelle en deux étapes. 1 : les attributs simples sont enregistrés automatiquement, en parallèle, sur des cartes séparées (<em>feature maps</em>). 2 : l'attention focalisée est nécessaire pour <em>lier</em> les attributs en objets. Sans attention, le cerveau peut même recombiner les attributs à tort (conjonctions illusoires).
               <span class="entry-source">→ Treisman, A. M., &amp; Gelade, G. (1980). « A feature-integration theory of attention ». <em>Cognitive Psychology</em>, 12(1), 97–136.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Feature maps (cartes d'attributs)</span>
+            <span class="entry-body">
+              Les calques du traitement préattentif. Chacun est dédié à une dimension visuelle : un calque couleur, un calque taille, un calque orientation. Actifs en permanence, avant toute décision consciente.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Effet pop-out</span>
+            <span class="entry-body">
+              Quand une cible se distingue par un seul attribut unique, elle « saute aux yeux » : le temps de détection reste constant, peu importe le nombre de distracteurs. Un point rouge parmi des points gris : détection immédiate, recherche parallèle.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Conjonction</span>
+            <span class="entry-body">
+              Quand la cible se définit par une combinaison d'attributs (rouge ET carré), le pop-out disparaît. Le cerveau passe en recherche sérielle : le temps de détection grandit avec chaque élément ajouté. Accumuler les attributs n'accélère pas la détection — ça alourdit le décodage.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Attributs préattentifs (4 familles)</span>
+            <span class="entry-body">
+              Couleur (teinte, luminosité), forme (taille, orientation, contour), position spatiale (position 2D, profondeur), mouvement (clignotement, direction). Le mouvement est l'attribut le plus puissant pour capturer l'attention — et le plus risqué.
+              <span class="entry-source">→ Lecture UX : IxDF, <a href="https://www.interaction-design.org/literature/article/preattentive-visual-properties-and-how-to-use-them-in-information-visualization" target="_blank" rel="noopener">Preattentive Visual Properties</a>.</span>
+            </span>
+          </li>
+        </ul>
+
+        <!-- Cécités visuelles -->
+        <p class="subsection-label">Cécités visuelles</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Cécité d'inattention (cécité inattentionnelle)</span>
+            <span class="entry-body">
+              L'échec à percevoir consciemment un objet parfaitement visible mais inattendu, quand l'attention est mobilisée ailleurs. Le terme et la définition viennent de Mack &amp; Rock : « pas de perception consciente sans attention ». Simons &amp; Chabris l'ont démontrée sur des scènes dynamiques : ~50 % des observateurs qui comptent des passes de basket ne voient pas le gorille traverser l'écran.
+              <span class="entry-source">→ Mack, A., &amp; Rock, I. (1998). <em>Inattentional Blindness</em>. MIT Press. — Simons, D. J., &amp; Chabris, C. F. (1999). « Gorillas in our midst ». <em>Perception</em>, 28(9), 1059–1074.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Cécité au changement</span>
+            <span class="entry-body">
+              L'échec à détecter un changement important dans une scène, quand il coïncide avec une interruption visuelle (flicker, saccade, occlusion) qui masque le signal de mouvement. Un bouton « Add to Cart » qui devient « Out of Stock » au même endroit, dans le même style : aucun signal de différence, personne ne le remarque.
+              <span class="entry-source">→ Rensink, R. A., O'Regan, J. K., &amp; Clark, J. J. (1997). « To see or not to see ». <em>Psychological Science</em>, 8(5), 368–373. — Simons, D. J., &amp; Levin, D. T. (1998). « Failure to detect changes to people during a real-world interaction ». <em>Psychonomic Bulletin &amp; Review</em>, 5(4), 644–649 (Door Study). Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/change-blindness-definition/" target="_blank" rel="noopener">Change Blindness in UX</a>.</span>
+            </span>
+          </li>
+        </ul>
+
+        <!-- Affordances et signifiants -->
+        <p class="subsection-label">Affordances et signifiants</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Affordance (réelle)</span>
+            <span class="entry-body">
+              « Ce que l'environnement offre à l'animal, ce qu'il fournit, en bien ou en mal » (Gibson). Une relation entre les propriétés de l'environnement et les capacités d'action de quelqu'un. Elle existe qu'on la perçoive ou non : une chaise permet de s'asseoir, même si personne ne la regarde.
+              <span class="entry-source">→ Gibson, J. J. (1979). <em>The Ecological Approach to Visual Perception</em>. Houghton Mifflin, ch. 8 « The Theory of Affordances ».</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Affordance perçue</span>
+            <span class="entry-body">
+              Ce que l'utilisateur perçoit comme possible — qui peut différer de ce qui est réellement possible. C'est elle qui compte en design : si personne ne perçoit qu'un bouton se clique, l'affordance réelle n'existe pas pour lui.
+              <span class="entry-source">→ Norman, D. A. (1988). <em>The Psychology of Everyday Things</em>. Basic Books. Précisé dans Norman (1999), « Affordance, conventions, and design ». <em>interactions</em>, 6(3), 38–43.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Signifiant</span>
+            <span class="entry-body">
+              Tout indice perceptible — marque, son, signal — qui communique le comportement approprié : l'ombre portée, la flèche, le hover. Norman introduit le terme en 2013 pour corriger 25 ans de confusion : ce que les designers appelaient « affordances » étaient presque toujours des signifiants.
+              <span class="entry-source">→ Norman, D. A. (2013). <em>The Design of Everyday Things: Revised and Expanded Edition</em>. Basic Books, ch. 1. Lecture UX : IxDF, <a href="https://www.interaction-design.org/literature/topics/signifiers" target="_blank" rel="noopener">Signifiers</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Types d'affordances</span>
+            <span class="entry-body">
+              Explicite (bouton avec libellé clair), cachée (menu qui apparaît au survol), pattern (texte souligné = lien), métaphorique (icône panier), fausse (texte souligné qui n'est pas un lien), négative (bouton grisé).
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Norman Door</span>
+            <span class="entry-body">
+              L'exemple canonique de l'affordance qui ment : une barre horizontale sur une porte signale « pousser ». Si la porte se tire, l'utilisateur se trompe à chaque fois. Ce n'est pas une erreur d'utilisateur — c'est un signifiant qui ment.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Crise des affordances (flat design)</span>
+            <span class="entry-body">
+              Entre 2013 et 2016, le flat design supprime ombres, dégradés et reliefs. Sans contraste détectable, les feature maps ne distinguent plus un bouton d'un label. L'affordance perçue s'effondre faute de signifiant.
             </span>
           </li>
         </ul>
       </article>
 
-      <!-- Session 2 -->
-      <article id="session-2" class="session-card session-card--empty">
-        <p class="session-label">Session 2</p>
-        <p class="empty-notice">Contenu à venir</p>
+      <!-- ═══════════════════════════════════════════════════════════
+           Session 2 — Comment je traite les informations que je vois
+           ═══════════════════════════════════════════════════════════ -->
+      <article id="session-2" class="session-card">
+        <p class="session-label">Session 2 — Comment je traite les informations que je vois</p>
+
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Modèle modal de la mémoire</span>
+            <span class="entry-body">
+              L'information traverse trois structures : un registre sensoriel (très bref), un stockage à court terme (capacité limitée, quelques secondes sans répétition), un stockage à long terme (vaste, durable). Le modèle distingue ces structures fixes des « processus de contrôle » que la personne pilote : répéter, coder, récupérer.
+              <span class="entry-source">→ Atkinson, R. C., &amp; Shiffrin, R. M. (1968). « Human memory: A proposed system and its control processes ». <em>The Psychology of Learning and Motivation</em>, vol. 2, 89–195. Academic Press.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Mémoire sensorielle</span>
+            <span class="entry-body">
+              Retient les stimuli bruts juste après leur disparition, le temps de sélectionner ce qui compte. La trace visuelle (mémoire iconique) dure 100 à 500 ms ; la trace auditive, quelques secondes. Le son d'une vidéo qui se lance, la couleur d'un label promo.
+              <span class="entry-source">→ Sperling, G. (1960). « The information available in brief visual presentations ». <em>Psychological Monographs</em>, 74(11), 1–29.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Mémoire à court terme</span>
+            <span class="entry-body">
+              Stockage à capacité limitée, qui retient l'information quelques secondes. Sans répétition mentale, même trois consonnes s'effacent presque totalement en 18 secondes. Le code promo que je garde en tête le temps de scroller.
+              <span class="entry-source">→ Peterson, L. R., &amp; Peterson, M. J. (1959). « Short-term retention of individual verbal items ». <em>Journal of Experimental Psychology</em>, 58(3), 193–198.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Mémoire à long terme</span>
+            <span class="entry-body">
+              Stockage durable — de quelques minutes à toute une vie — à capacité quasi illimitée. C'est elle qui me fait reconnaître un label promo sur une page que je n'ai jamais vue.
+              <span class="entry-source">→ Atkinson &amp; Shiffrin (1968), op. cit.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de Miller (7 ± 2)</span>
+            <span class="entry-body">
+              L'empan de la mémoire immédiate est limité à environ sept <em>chunks</em> — et cette limite ne dépend presque pas de la richesse de chaque chunk. D'où la solution : recoder l'information en blocs plus riches. À savoir : la recherche moderne a révisé le chiffre — la capacité pure, quand on bloque le chunking et la répétition, est plutôt de 4 chunks (3 à 5).
+              <span class="entry-source">→ Miller, G. A. (1956). « The magical number seven, plus or minus two ». <em>Psychological Review</em>, 63(2), 81–97. — Révision : Cowan, N. (2001). « The magical number 4 in short-term memory ». <em>Behavioral and Brain Sciences</em>, 24(1), 87–185.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Chunking (regroupement)</span>
+            <span class="entry-body">
+              Recoder plusieurs unités d'information en une seule unité plus large et significative. La mémoire immédiate est constante en chunks, pas en bits : regrouper augmente donc ce qu'on peut retenir. 16047559385 = 11 éléments. 1 (604) 755-9385 = 4 blocs.
+              <span class="entry-source">→ Miller (1956), op. cit. — le terme naît dans ce papier. Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/chunking/" target="_blank" rel="noopener">How Chunking Helps Content Processing</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Mémoire de travail</span>
+            <span class="entry-body">
+              Remplace le stockage à court terme passif par un système actif : un <strong>administrateur central</strong> (contrôleur attentionnel) supervise deux sous-systèmes — la <strong>boucle phonologique</strong> et le <strong>calepin visuospatial</strong>. La mémoire de travail ne stocke pas seulement : elle manipule l'information pour résoudre le problème en cours.
+              <span class="entry-source">→ Baddeley, A. D., &amp; Hitch, G. (1974). « Working memory ». <em>The Psychology of Learning and Motivation</em>, vol. 8, 47–89. Academic Press.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Administrateur central</span>
+            <span class="entry-body">
+              Le contrôleur attentionnel de la mémoire de travail. Il dirige l'attention et décide quoi traiter en priorité.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Boucle phonologique</span>
+            <span class="entry-body">
+              La voix intérieure : retient le matériel verbal et sonore, rafraîchi par répétition subvocale. Je répète mentalement un code promo pour le garder le temps de scroller. Un seul élément phonologique à la fois.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Calepin visuospatial</span>
+            <span class="entry-body">
+              L'œil intérieur : retient le matériel visuel et spatial. Je mémorise un t-shirt pour le comparer à un autre. Un seul élément visuospatial à la fois, lui aussi.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Buffer épisodique</span>
+            <span class="entry-body">
+              Ajouté au modèle en 2000 : un stockage multimodal à capacité limitée, qui lie les informations des sous-systèmes et de la mémoire à long terme en représentations unifiées.
+              <span class="entry-source">→ Baddeley, A. D. (2000). « The episodic buffer: a new component of working memory? ». <em>Trends in Cognitive Sciences</em>, 4(11), 417–423.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Charge cognitive</span>
+            <span class="entry-body">
+              La demande qu'une tâche impose à la mémoire de travail. Sweller montre qu'un problème mal présenté consomme tant de capacité qu'il n'en reste plus pour apprendre. Notre travail de designer : couper la part de charge que l'interface impose inutilement. Le bon design est un design invisible.
+              <span class="entry-source">→ Sweller, J. (1988). « Cognitive load during problem solving ». <em>Cognitive Science</em>, 12(2), 257–285. Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/minimize-cognitive-load/" target="_blank" rel="noopener">Minimize Cognitive Load</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Récupération par rappel</span>
+            <span class="entry-body">
+              Retrouver une information en mémoire avec peu ou pas d'indices. « Quel est le numéro de référence de mon vélo ? » Effort important, résultat peu fiable.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Récupération par reconnaissance</span>
+            <span class="entry-body">
+              Identifier une information comme familière quand elle est sous nos yeux : les options visibles servent d'indices de récupération. « Est-ce que je vois mon vélo dans cette liste ? » Effort faible, résultat fiable. C'est l'heuristique d'utilisabilité n°6 de Nielsen : « recognition rather than recall ». Menus = reconnaissance ; ligne de commande et mots de passe = rappel. (Ne pas confondre avec le besoin de reconnaissance de la Session 4.)
+              <span class="entry-source">→ Nielsen, J. (1994, màj). <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener">10 Usability Heuristics</a>. — Budiu, R. <a href="https://www.nngroup.com/articles/recognition-and-recall/" target="_blank" rel="noopener">Memory Recognition and Recall in User Interfaces</a>. NN/g.</span>
+            </span>
+          </li>
+        </ul>
       </article>
 
-      <!-- Session 3 -->
-      <article id="session-3" class="session-card session-card--empty">
-        <p class="session-label">Session 3</p>
-        <p class="empty-notice">Contenu à venir</p>
+      <!-- ═══════════════════════════════════════════════════════════
+           Session 3 — Ce que j'interprète avant d'interagir
+           ═══════════════════════════════════════════════════════════ -->
+      <article id="session-3" class="session-card">
+        <p class="session-label">Session 3 — Ce que j'interprète avant d'interagir</p>
+
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Modèle mental</span>
+            <span class="entry-body">
+              L'esprit construit des « modèles réduits » de la réalité, avec la même structure de relations que ce qu'ils représentent, et les utilise pour anticiper, raisonner et agir (Craik). En UX : « ce que l'utilisateur croit savoir du système » — basé sur des croyances, pas des faits ; différent pour chaque utilisateur ; doté d'une forte inertie.
+              <span class="entry-source">→ Craik, K. J. W. (1943). <em>The Nature of Explanation</em>. Cambridge University Press. — Johnson-Laird, P. N. (1983). <em>Mental Models</em>. Cambridge University Press. Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/mental-models/" target="_blank" rel="noopener">Mental Models</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Modèle conceptuel</span>
+            <span class="entry-body">
+              La manière dont le produit fonctionne réellement, telle que l'équipe l'a conçue et présentée. Norman distingue trois niveaux : le modèle du designer, l'image du système (ce que le produit montre), et le modèle de l'utilisateur — construit uniquement à partir de l'image du système. Le designer ne parle jamais directement à l'utilisateur : tout passe par l'interface.
+              <span class="entry-source">→ Norman, D. A. (1988/2013). <em>The Design of Everyday Things</em>. Basic Books.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Alignement (modèle mental / modèle conceptuel)</span>
+            <span class="entry-body">
+              Plus le modèle mental de l'utilisateur s'écarte du fonctionnement réel, plus la frustration monte. La friction ou la satisfaction se joue là.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Analogie</span>
+            <span class="entry-body">
+              Les utilisateurs attendent d'un produit qu'il fonctionne comme ceux qu'ils connaissent déjà. Ils transportent leurs attentes d'un système à l'autre (cf. loi de Jakob, NN/g).
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Inertie cognitive</span>
+            <span class="entry-body">
+              Faire évoluer un modèle mental coûte un effort. Les utilisateurs ne changent que s'ils voient un bénéfice clair. Sinon, ils résistent.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Ancre cognitive</span>
+            <span class="entry-body">
+              Un élément visuel si fort qu'il représente toute l'application dans la mémoire. 80 % des participants dessinent le logo YouTube, le header et le fil vidéo de mémoire.
+              <span class="entry-source">→ Schirra, S., Narasimha, S., Volkov, S., &amp; Owens, J. (2022). « Understanding User Mental Models Through App Sketches from Memory ».</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Tri de cartes</span>
+            <span class="entry-body">
+              Méthode UX research : les participants classent des cartes en groupes qui ont du sens pour eux. Révèle les modèles mentaux derrière l'organisation de l'information. Méthode de découverte — pour évaluer une structure déjà proposée, on utilise le tree testing.
+              <span class="entry-source">→ NN/g, <a href="https://www.nngroup.com/articles/card-sorting-definition/" target="_blank" rel="noopener">Card Sorting</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Think aloud (test à voix haute)</span>
+            <span class="entry-body">
+              L'utilisateur verbalise en continu ce qu'il pense pendant qu'il utilise le système. Révèle les idées fausses et les modèles mentaux. Fondement méthodologique : les verbalisations concurrentes sont des données valides, à condition de ne pas demander d'explications ni d'introspection.
+              <span class="entry-source">→ Ericsson, K. A., &amp; Simon, H. A. (1984/1993). <em>Protocol Analysis: Verbal Reports as Data</em>. MIT Press. — Nielsen, J. <a href="https://www.nngroup.com/articles/thinking-aloud-the-1-usability-tool/" target="_blank" rel="noopener">Thinking Aloud: The #1 Usability Tool</a>. NN/g.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Dessin de mémoire</span>
+            <span class="entry-body">
+              Méthode UX research : dessiner une interface de mémoire. Ce qui apparaît (et ce qui manque) révèle le modèle mental — pas la réalité du produit.
+            </span>
+          </li>
+        </ul>
       </article>
 
-      <!-- Session 4 -->
-      <article id="session-4" class="session-card session-card--empty">
-        <p class="session-label">Session 4</p>
-        <p class="empty-notice">Contenu à venir</p>
+      <!-- ═══════════════════════════════════════════════════════════
+           Session 4 — Ce qui me motive et ce qui m'influence
+           ═══════════════════════════════════════════════════════════ -->
+      <article id="session-4" class="session-card">
+        <p class="session-label">Session 4 — Ce qui me motive et ce qui m'influence</p>
+
+        <!-- Motivation -->
+        <p class="subsection-label">Motivation</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Théorie de l'auto-détermination (TAD)</span>
+            <span class="entry-body">
+              Théorie de la motivation humaine : la motivation, la croissance et le bien-être dépendent de la satisfaction de trois besoins psychologiques fondamentaux — l'autonomie, la compétence, et le lien aux autres (<em>relatedness</em>). Satisfaits, ils renforcent l'engagement ; contrariés, ils l'érodent.
+              <span class="entry-source">→ Deci, E. L., &amp; Ryan, R. M. (1985). <em>Intrinsic Motivation and Self-Determination in Human Behavior</em>. Plenum Press. — Ryan, R. M., &amp; Deci, E. L. (2000). « Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being ». <em>American Psychologist</em>, 55(1), 68–78.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Motivation intrinsèque</span>
+            <span class="entry-body">
+              Agir pour les satisfactions inhérentes à l'activité — l'intérêt, le plaisir — et non pour une conséquence séparable. « J'ai pris le compte Pro parce que j'adore Figma. » Engagement choisi : solide et durable.
+              <span class="entry-source">→ Ryan, R. M., &amp; Deci, E. L. (2000). « Intrinsic and extrinsic motivations: Classic definitions and new directions ». <em>Contemporary Educational Psychology</em>, 25(1), 54–67.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Motivation extrinsèque</span>
+            <span class="entry-body">
+              Agir pour obtenir un résultat séparable de l'activité : récompense, approbation, contrainte. « J'ai créé ce compte parce que c'est obligatoire pour avoir ce pull. » Engagement forcé : temporaire et aléatoire. La TAD la place sur un continuum d'internalisation — une motivation extrinsèque identifiée à ses propres objectifs peut soutenir un engagement solide.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Amotivation</span>
+            <span class="entry-body">
+              L'absence de toute intention d'agir : la personne ne voit ni valeur, ni effet attendu, ni raison. Aucun engagement.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Autonomie (besoin d')</span>
+            <span class="entry-body">
+              Le sentiment que ses actions sont choisies et assumées, en accord avec ses valeurs. En design : paramètres personnalisables, annuler/rétablir, plusieurs chemins d'accès.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Compétence (besoin de)</span>
+            <span class="entry-body">
+              Le sentiment d'être efficace et capable de produire les résultats qu'on vise. En design : progression graduelle, aide contextuelle, messages d'erreur qui guident vers la solution.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Reconnaissance (besoin de lien aux autres / <em>relatedness</em>)</span>
+            <span class="entry-body">
+              Le sentiment d'être connecté aux autres et compté comme quelqu'un — pas un segment. Terme original : <em>relatedness</em>, le lien social. En design : profil personnalisable, fonctionnalités de partage, communication au bon moment. (Ne pas confondre avec la récupération par reconnaissance de la Session 2.)
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Effet de surjustification</span>
+            <span class="entry-body">
+              Annoncer une récompense avant une activité déjà plaisante remplace le plaisir par la récompense. Les enfants récompensés comme convenu pour dessiner dessinent moins ensuite — ceux récompensés par surprise, ou pas du tout, continuent. L'effet ne vaut que pour les récompenses <em>attendues</em> sur des activités <em>déjà intrinsèquement motivantes</em>.
+              <span class="entry-source">→ Lepper, M. R., Greene, D., &amp; Nisbett, R. E. (1973). « Undermining children's intrinsic interest with extrinsic reward ». <em>Journal of Personality and Social Psychology</em>, 28(1), 129–137.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Framework METUX</span>
+            <span class="entry-body">
+              « Motivation, Engagement and Thriving in User Experience » : applique les besoins de la TAD au design produit, à travers des sphères d'expérience emboîtées. Le cours travaille sur quatre : l'interface (les composants), l'action/tâche (les parcours), le comportement (les objectifs), la vie (les valeurs). Le modèle complet en compte six : adoption, interface, tâche, comportement, vie — le tout dans une sixième sphère, la société.
+              <span class="entry-source">→ Peters, D., Calvo, R. A., &amp; Ryan, R. M. (2018). « Designing for Motivation, Engagement and Wellbeing in Digital Experience ». <em>Frontiers in Psychology</em>, 9:797.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de Hick (Hick-Hyman)</span>
+            <span class="entry-body">
+              Le temps de décision croît avec le logarithme du nombre de choix équiprobables : RT = a + b·log₂(n). En design : mettre en avant les options recommandées, découper les tâches complexes. À savoir : la loi décrit des choix simples et appris — elle ne prédit pas directement la recherche dans un menu, qui implique lecture et balayage.
+              <span class="entry-source">→ Hick, W. E. (1952). « On the rate of gain of information ». <em>Quarterly Journal of Experimental Psychology</em>, 4(1), 11–26. — Hyman, R. (1953). « Stimulus information as a determinant of reaction time ». <em>Journal of Experimental Psychology</em>, 45(3), 188–196.</span>
+            </span>
+          </li>
+        </ul>
+
+        <!-- Heuristiques et biais -->
+        <p class="subsection-label">Heuristiques et biais</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Dual Process Theory (théorie des deux systèmes)</span>
+            <span class="entry-body">
+              La cognition mobilise deux types de processus. Système 1 : rapide, automatique, sans effort, difficile à contrôler (2+2). Système 2 : lent, sériel, délibéré, gouverné par des règles (17×24). Les termes « Système 1 / Système 2 » viennent de Stanovich &amp; West ; Kahneman les a popularisés en les créditant.
+              <span class="entry-source">→ Stanovich, K. E., &amp; West, R. F. (2000). « Individual differences in reasoning ». <em>Behavioral and Brain Sciences</em>, 23(5), 645–726. — Kahneman, D. (2011). <em>Thinking, Fast and Slow</em>. Farrar, Straus and Giroux.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Heuristique</span>
+            <span class="entry-body">
+              Un raccourci mental qui réduit un jugement complexe (probabilité, prédiction) à une opération plus simple. « Très utiles, mais parfois sources d'erreurs sévères et systématiques » (Tversky &amp; Kahneman). Le prix de la rapidité.
+              <span class="entry-source">→ Tversky, A., &amp; Kahneman, D. (1974). « Judgment under uncertainty: Heuristics and biases ». <em>Science</em>, 185(4157), 1124–1131.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Heuristique de disponibilité</span>
+            <span class="entry-body">
+              Juger la fréquence ou la probabilité d'un événement par la facilité avec laquelle des exemples viennent en tête. Les crashs d'avion spectaculaires restent en mémoire — alors on prend la voiture, pourtant plus dangereuse.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Heuristique de représentativité</span>
+            <span class="entry-body">
+              Juger la probabilité qu'une chose appartienne à une catégorie selon sa ressemblance avec le cas typique de cette catégorie.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Heuristique d'ancrage et d'ajustement</span>
+            <span class="entry-body">
+              Estimer en partant d'une valeur initiale (l'ancre) puis en ajustant — et l'ajustement est presque toujours insuffisant. Même une ancre arbitraire (un chiffre tiré au hasard) biaise l'estimation finale.
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Biais cognitif</span>
+            <span class="entry-body">
+              L'erreur systématique et directionnelle que produit une heuristique : pas une erreur aléatoire, mais une déviation prévisible, qui touche tout le monde dans les mêmes conditions. Et donc : contournable par le design.
+              <span class="entry-source">→ Tversky &amp; Kahneman (1974), op. cit.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Aversion à la perte</span>
+            <span class="entry-body">
+              « Les pertes pèsent plus lourd que les gains » : la douleur de perdre une somme dépasse le plaisir de gagner la même. Le coefficient célèbre (~2×) a été mesuré en 1992. Cœur de la prospect theory : on évalue les résultats comme des gains ou des pertes par rapport à un point de référence, pas en absolu.
+              <span class="entry-source">→ Kahneman, D., &amp; Tversky, A. (1979). « Prospect theory: An analysis of decision under risk ». <em>Econometrica</em>, 47(2), 263–291. — Coefficient : Tversky &amp; Kahneman (1992). <em>Journal of Risk and Uncertainty</em>, 5, 297–323.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Biais d'ancrage</span>
+            <span class="entry-body">
+              La première information reçue sert de référence pour juger tout le reste. 75 € paraît une bonne affaire juste après avoir vu 100 €.
+              <span class="entry-source">→ Tversky &amp; Kahneman (1974), op. cit.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Effet de halo</span>
+            <span class="entry-body">
+              Une impression globale contamine le jugement de qualités pourtant indépendantes. Thorndike observe que des officiers notant leurs soldats sur des traits distincts (physique, intelligence, leadership) produisent des corrélations « trop fortes et trop régulières » : ils jugent la personne en général, pas les traits. Variante UX : l'effet esthétique-utilisabilité — un site joli paraît plus utilisable, et on lui pardonne ses défauts.
+              <span class="entry-source">→ Thorndike, E. L. (1920). « A constant error in psychological ratings ». <em>Journal of Applied Psychology</em>, 4(1), 25–29. — Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/aesthetic-usability-effect/" target="_blank" rel="noopener">Aesthetic-Usability Effect</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Effet de leurre (dominance asymétrique)</span>
+            <span class="entry-body">
+              Ajouter une option dominée par une seule des deux alternatives (le leurre) augmente la part de choix de l'alternative qui la domine — en violation de la rationalité (ajouter une option ne devrait jamais en favoriser une autre). Le pot de pop-corn « medium » n'existe que pour faire vendre le grand.
+              <span class="entry-source">→ Huber, J., Payne, J. W., &amp; Puto, C. (1982). « Adding asymmetrically dominated alternatives ». <em>Journal of Consumer Research</em>, 9(1), 90–98.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Preuve sociale</span>
+            <span class="entry-body">
+              On juge un comportement d'autant plus correct qu'on voit les autres l'adopter — surtout en situation incertaine. La théorie distingue les <em>normes descriptives</em> (ce que les gens <em>font</em>) des <em>normes injonctives</em> (ce que les gens <em>approuvent</em>) : elles n'influencent que si elles sont rendues saillantes. En design : avis, notes, badge « le plus populaire ».
+              <span class="entry-source">→ Cialdini, R. B. (1984). <em>Influence: The Psychology of Persuasion</em>. William Morrow. — Cialdini, R. B., Reno, R. R., &amp; Kallgren, C. A. (1990). « A focus theory of normative conduct ». <em>Journal of Personality and Social Psychology</em>, 58(6), 1015–1026. Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/social-proof-ux/" target="_blank" rel="noopener">Social Proof in the UX</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Effet de défaut</span>
+            <span class="entry-body">
+              On garde massivement l'option présélectionnée. Démonstration : les pays au don d'organes par défaut (opt-out) atteignent 85–99 % de consentement effectif, contre 4–27 % dans les pays opt-in comparables. C'est le défaut qui décide, pas la préférence.
+              <span class="entry-source">→ Johnson, E. J., &amp; Goldstein, D. (2003). « Do defaults save lives? ». <em>Science</em>, 302(5649), 1338–1339.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Bright pattern / Dark pattern (deceptive pattern)</span>
+            <span class="entry-body">
+              Le même biais est un levier neutre. Bright pattern : on l'utilise pour réduire la friction et aider l'utilisateur à bien choisir. Dark pattern : « des astuces qui vous font faire des choses que vous ne vouliez pas faire » (Brignull, qui a forgé le terme en 2010 — et le remplace aujourd'hui par <em>deceptive patterns</em>). Définition académique : des designs où la valeur pour l'utilisateur est sacrifiée au profit de l'actionnaire.
+              <span class="entry-source">→ Brignull, H. (2023). <em>Deceptive Patterns</em>. Testimonium Ltd. (<a href="https://www.deceptive.design/" target="_blank" rel="noopener">deceptive.design</a>). — Gray, C. M., et al. (2018). « The dark (patterns) side of UX design ». <em>Proceedings of CHI 2018</em>, Paper 534.</span>
+            </span>
+          </li>
+        </ul>
       </article>
 
     </main>
@@ -135,7 +552,6 @@ import '../styles/tokens.css';
 </html>
 
 <style>
-  /* ── Reset ─────────────────────────────────────────────────────── */
   *,
   *::before,
   *::after {
@@ -155,14 +571,12 @@ import '../styles/tokens.css';
     min-height: 100vh;
   }
 
-  /* ── Sticky heights (shared between CSS and JS via var) ─────────── */
   :root {
     --nav-h      : 56px;
     --session-h  : 56px;
     --scroll-offset: calc(var(--nav-h) + var(--session-h) + 24px);
   }
 
-  /* ── Nav header ─────────────────────────────────────────────────── */
   .nav-header {
     background-color: var(--bg-default);
     border-bottom: 1px solid var(--hairline);
@@ -184,7 +598,6 @@ import '../styles/tokens.css';
     white-space: nowrap;
   }
 
-  /* ── Hero ───────────────────────────────────────────────────────── */
   .hero {
     padding: 30px var(--spacing-8) 20px;
     display: flex;
@@ -208,7 +621,6 @@ import '../styles/tokens.css';
     line-height: normal;
   }
 
-  /* ── Session nav (sticky #2) ────────────────────────────────────── */
   .session-nav {
     background-color: var(--lavender-mist);
     border-bottom: 1px solid var(--hairline);
@@ -230,11 +642,8 @@ import '../styles/tokens.css';
     scrollbar-width: none;
   }
 
-  .session-chips::-webkit-scrollbar {
-    display: none;
-  }
+  .session-chips::-webkit-scrollbar { display: none; }
 
-  /* ── Chip ───────────────────────────────────────────────────────── */
   .chip {
     display: inline-flex;
     align-items: center;
@@ -262,7 +671,6 @@ import '../styles/tokens.css';
     font-weight: var(--weight-semibold);
   }
 
-  /* ── Content wrapper ────────────────────────────────────────────── */
   .content-wrapper {
     padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
     display: flex;
@@ -270,7 +678,6 @@ import '../styles/tokens.css';
     gap: var(--spacing-6);
   }
 
-  /* ── Session card ───────────────────────────────────────────────── */
   .session-card {
     background-color: var(--surface-card);
     border: 1px solid var(--border-card);
@@ -280,15 +687,9 @@ import '../styles/tokens.css';
     display: flex;
     flex-direction: column;
     gap: var(--spacing-4);
-    /* Offset l'ancre sous les deux barres sticky */
     scroll-margin-top: var(--scroll-offset);
   }
 
-  .session-card--empty {
-    padding: var(--spacing-8);
-  }
-
-  /* ── Session label (titre de session, indigo) ───────────────────── */
   .session-label {
     font-family: var(--font-display);
     font-weight: var(--weight-semibold);
@@ -297,17 +698,15 @@ import '../styles/tokens.css';
     line-height: normal;
   }
 
-  /* ── Sous-section label ─────────────────────────────────────────── */
   .subsection-label {
     font-family: var(--font-display);
     font-weight: var(--weight-semibold);
     font-size: var(--t-label);
     color: var(--fg-1);
     line-height: normal;
-    margin-top: var(--spacing-1);
+    margin-top: var(--spacing-2);
   }
 
-  /* ── Liste de définitions ───────────────────────────────────────── */
   .glossary-list {
     list-style: disc;
     padding-left: var(--spacing-4);
@@ -316,7 +715,6 @@ import '../styles/tokens.css';
     gap: var(--spacing-4);
   }
 
-  /* ── Entrée de glossaire ────────────────────────────────────────── */
   .glossary-entry {
     display: flex;
     flex-direction: column;
@@ -339,6 +737,11 @@ import '../styles/tokens.css';
     line-height: var(--lh-body);
   }
 
+  .entry-body strong {
+    font-weight: var(--weight-bold);
+    color: var(--fg-1);
+  }
+
   .entry-source {
     display: block;
     margin-top: 4px;
@@ -347,67 +750,43 @@ import '../styles/tokens.css';
     line-height: var(--lh-body);
   }
 
-  .entry-source a {
+  .entry-source a,
+  .entry-body a {
     color: var(--fg-accent);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
-  .entry-source a:hover {
+  .entry-source a:hover,
+  .entry-body a:hover {
     color: var(--indigo-700);
   }
 
-  .entry-body em {
-    font-style: italic;
-  }
+  .entry-body em,
+  .entry-source em { font-style: italic; }
 
-  /* ── Placeholder sessions ───────────────────────────────────────── */
-  .empty-notice {
-    font-family: var(--font-body);
-    font-size: var(--t-body);
-    color: var(--fg-2);
-    font-style: italic;
-  }
-
-  /* ── Responsive ─────────────────────────────────────────────────── */
   @media (max-width: 600px) {
-    .hero {
-      padding: var(--spacing-6) var(--spacing-4) var(--spacing-4);
-    }
-
-    .hero-title {
-      font-size: var(--t-h1);
-    }
-
-    .session-nav {
-      padding: 0 var(--spacing-4);
-    }
-
-    .content-wrapper {
-      padding: var(--spacing-4);
-    }
-
-    .session-card {
-      padding: var(--spacing-6);
-    }
+    .hero { padding: var(--spacing-6) var(--spacing-4) var(--spacing-4); }
+    .hero-title { font-size: var(--t-h1); }
+    .session-nav { padding: 0 var(--spacing-4); }
+    .content-wrapper { padding: var(--spacing-4); }
+    .session-card { padding: var(--spacing-6); }
   }
 </style>
 
 <script>
-  // ── Active chip au scroll ────────────────────────────────────────
   const chips    = Array.from(document.querySelectorAll('.chip'));
   const sections = Array.from(document.querySelectorAll('.session-card'));
 
-  const root       = document.documentElement;
-  const navH       = parseInt(getComputedStyle(root).getPropertyValue('--nav-h'))     || 56;
-  const sessionH   = parseInt(getComputedStyle(root).getPropertyValue('--session-h')) || 56;
-  const threshold  = navH + sessionH + 32;
+  const root     = document.documentElement;
+  const navH     = parseInt(getComputedStyle(root).getPropertyValue('--nav-h'))     || 56;
+  const sessionH = parseInt(getComputedStyle(root).getPropertyValue('--session-h')) || 56;
+  const threshold = navH + sessionH + 32;
 
   function setActive(id) {
     chips.forEach(c => c.classList.toggle('chip--active', c.dataset.session === id));
   }
 
-  // Détermine quelle section est active en comparant offsetTop au scroll
   function updateActive() {
     const scrollY = window.scrollY + threshold;
     let activeId  = sections[0].id;
@@ -420,7 +799,6 @@ import '../styles/tokens.css';
   window.addEventListener('scroll', updateActive, { passive: true });
   updateActive();
 
-  // Scroll fluide sur clic (sans modifier l'URL)
   chips.forEach(chip => {
     chip.addEventListener('click', (e) => {
       e.preventDefault();
