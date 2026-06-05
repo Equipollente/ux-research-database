@@ -1,7 +1,7 @@
 {
   "taxonomies": {
     "access_model": [
-      "Free",
+      "Gratuit",
       "Freemium",
       "Paid",
       "Institutional"
@@ -163,7 +163,7 @@
       "source": "https://www.cognitivepsychology.com/",
       "comments": "",
       "access_model": [
-        "Free"
+        "Gratuit"
       ],
       "origin": [
         "Academic"
@@ -245,7 +245,7 @@
       "source": "https://thedecisionlab.com/biases-index",
       "comments": "Lis of cognitive biases",
       "access_model": [
-        "Free"
+        "Gratuit"
       ],
       "origin": [
         "Industry"
@@ -277,7 +277,7 @@
       "source": "https://apparences-trompeuses.beta.cnil.fr/html/accueil.html",
       "comments": "Ressource institutionnelle de référence (CNIL/LINC) très fiable et pédagogique sur les dark patterns, adossée aux lignes directrices du CEPD. Idéale comme outil de sensibilisation, mais à visée informative et non juridique.",
       "access_model": [
-        "Free"
+        "Gratuit"
       ],
       "origin": [
         "Institutional"
