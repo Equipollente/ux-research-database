@@ -77,11 +77,10 @@
       "trust_level": 4,
       "last_updated": "2026-06-05",
       "access_model": [
-        "Freemium",
         "Institutional"
       ],
       "origin": [
-        "Industry"
+        "Community"
       ],
       "publisher_type": [
         "Organization"
