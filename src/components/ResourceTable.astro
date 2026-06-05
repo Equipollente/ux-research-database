@@ -1473,12 +1473,18 @@ const taxonomyLabels: Record<string, string> = {
   function openDropdown(triggerBtn: HTMLButtonElement) {
     const rect = triggerBtn.getBoundingClientRect();
     actionsDropdown.style.display = 'block';
-    // Position below the button, right-aligned
+    // position:fixed → viewport coords from getBoundingClientRect, no scrollY needed
     requestAnimationFrame(() => {
       const ddWidth = actionsDropdown.offsetWidth;
+      const ddHeight = actionsDropdown.offsetHeight;
       let left = rect.right - ddWidth;
       if (left < 8) left = 8;
-      actionsDropdown.style.top = `${rect.bottom + 4 + window.scrollY}px`;
+      // Flip above if dropdown would overflow the viewport bottom
+      let top = rect.bottom + 4;
+      if (top + ddHeight > window.innerHeight - 8) {
+        top = rect.top - ddHeight - 4;
+      }
+      actionsDropdown.style.top = `${top}px`;
       actionsDropdown.style.left = `${left}px`;
     });
   }
