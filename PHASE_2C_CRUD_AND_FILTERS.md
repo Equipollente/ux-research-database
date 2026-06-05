@@ -3,7 +3,7 @@
 > **Pour l'agent IA qui reprend** : ce document est autonome. Lis-le en entier avant d'agir. Vérifie l'état actuel des fichiers (les choses peuvent avoir changé). Le code à écrire est décrit, pas calqué — adapte aux conventions présentes dans `CLAUDE.md`. **Confirme avec Judith avant chaque étape**, c'est sa préférence.
 
 **Date de rédaction** : 2026-05-24
-**Statut** : Spécifications validées. Delete livré en avance (slice de Sprint 1). Reste du Sprint 1 + Sprint 2 à faire.
+**Statut** : ✅ Phase 2C complète — mergée sur `main` le 2026-06-05.
 **Pré-requis** : Phase 2B terminée (voir `PHASE_2B_TOKEN_MIGRATION.md`)
 
 **Déjà livré (2026-05-24, slice anticipée)** :
@@ -279,14 +279,17 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
 | 1.1 — Colonne Actions + menu ⋮ | ✅ | 2026-05-25 | Menu ⋮ dropdown (portal fixe via JS) avec Edit et Delete |
-| 1.2 — Modale Edit Resource | ⚠️ Bug | 2026-05-25 | Ouverture et pré-remplissage OK — mais seul `source` est sauvegardé (voir Bug A) |
+| 1.2 — Modale Edit Resource | ✅ | 2026-06-05 | Bug A corrigé : FormData + update optimiste (pas de reload CDN) |
 | 1.3 — Confirm Delete | ✅ | 2026-05-24 | `window.confirm()` natif (via dropdown Delete) |
-| 1.4 — Modale Edit Taxonomy | ⚠️ Bug | 2026-05-25 | Ouverture OK — mais renames non envoyés + état corrompu entre sessions (voir Bug B + C) |
+| 1.4 — Modale Edit Taxonomy | ✅ | 2026-06-05 | Bugs B+C corrigés : `localTaxonomyValues` + `rebuildPillsForTaxonomy` |
 | 1.5 — Function `update-resource.ts` | ✅ | 2026-05-25 | Endpoint `/api/update-resource`, body `{id, resource}` — backend correct |
 | 1.6 — Function `delete-resource.ts` | ✅ | 2026-05-24 | Endpoint `/api/delete-resource`, body `{id}` |
 | 1.7 — Function `update-taxonomy.ts` | ✅ | 2026-05-25 | Propagation atomique des renames + validation valeurs orphelines — backend correct |
 | 1.8 — Refactor `_lib/github.ts` | ✅ | 2026-05-25 | Extrait dans `netlify/functions/_lib/github.ts` ; add-resource et delete-resource refactorisés |
-| 1.9 — Test end-to-end | ❌ Partiel | 2026-06-05 | Testé par Judith sur deploy-preview-1. Delete ✅, menu ✅, password ✅ — 3 bugs frontend (voir section 9) |
+| 1.9 — Test end-to-end | ✅ | 2026-06-05 | Tous bugs corrigés et validés par Judith. Mergé sur `main`. |
+| 1.10 — Nouvelles valeurs visibles dans Edit Resource | ✅ | 2026-06-05 | `updateEditFormCheckboxes()` + `data-taxonomy` sur `.modal-checkbox-group` |
+| 1.11 — Style pills après rebuild | ✅ | 2026-06-05 | `.pill` et `.modal-checkbox-label` déplacés dans `<style is:global>` |
+| 1.12 — Bug D : dropdown ⋮ au scroll | ✅ | 2026-06-05 | Suppression `window.scrollY` erroné + flip-up si overflow viewport |
 
 ### Sprint 2 — UX filtres
 | Étape | Statut | Date | Notes |
@@ -298,7 +301,7 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 | 2.5 — Bouton "Effacer les filtres" | ✅ | 2026-05-25 | Visible seulement si ≥1 filtre actif |
 | 2.6 — Tests visuels desktop + mobile | ✅ | 2026-06-05 | Validé par Judith sur deploy-preview-1 (desktop + mobile) |
 
-**Mis à jour après session de test du 2026-06-05.**
+**Phase 2C complète. Mergée sur `main` le 2026-06-05.**
 
 ---
 

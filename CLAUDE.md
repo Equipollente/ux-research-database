@@ -28,7 +28,7 @@ npm run build  # outputs to dist/
 
 ---
 
-## Project structure (after Phase 2C night run 2026-05-25)
+## Project structure (after Phase 2C completion 2026-06-05)
 
 ```
 /
@@ -65,7 +65,7 @@ npm run build  # outputs to dist/
 │       └── github-api.ts              ← client-side reads from raw.githubusercontent.com
 └── docs/
     ├── CHANGELOG.md
-    ├── PHASE_2_ROADMAP.md             ← original plan (Phase 2C/D/E/F still pending)
+    ├── PHASE_2_ROADMAP.md             ← original plan (Phase 2C ✅ done, Phase 2D/E/F pending)
     ├── PRD-resource-database.md       ← product requirements
     ├── schema.json                    ← JSON schema for resources.json validation
     └── archive/                       ← historical phase logs, do not modify
@@ -79,8 +79,8 @@ Astro's `<style>` block is **automatically scoped** (rewrites selectors to match
 
 In [ResourceTable.astro](src/components/ResourceTable.astro), the table rows are built client-side from a `fetch`. So:
 
-- `<style>` (scoped) contains styles for SSR elements only: filter pills, search bar, table header, pagination shell
-- `<style is:global>` contains styles for dynamic elements: `.tag`, `.tag-list`, `.source-cell a`, `.trust-level`, `.comments`, `.hidden`, `.page-number`, plus all responsive (`@media (max-width: 768px)`) rules that target `.resource-table td[data-label="..."]`
+- `<style>` (scoped) contains styles for SSR elements only: search bar, table header, pagination shell, filter buttons, modal structure
+- `<style is:global>` contains styles for dynamic elements: `.pill`, `.modal-checkbox-label`, `.tag`, `.tag-list`, `.source-cell a`, `.trust-level`, `.comments`, `.hidden`, `.page-number`, `.btn-actions-menu`, `.taxonomy-value-row`, plus all responsive (`@media (max-width: 768px)`) rules that target `.resource-table td[data-label="..."]`
 
 **If you add a new CSS rule that targets a dynamically rendered element, put it in `<style is:global>`. If you forget this, the rule will be silently dead.**
 
