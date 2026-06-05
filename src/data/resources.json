@@ -1,7 +1,7 @@
 {
   "taxonomies": {
     "access_model": [
-      "Free",
+      "Gratuit",
       "Freemium",
       "Paid",
       "Institutional"
@@ -41,8 +41,11 @@
       "Dataset",
       "Trend Report",
       "Book",
-      "Course",
-      "Encyclopedic"
+      "Course - Lesson",
+      "Encyclopedic",
+      "Outil",
+      "Test2",
+      "Test3"
     ],
     "topic": [
       "Cognition",
@@ -64,43 +67,21 @@
       "Interaction",
       "Usability",
       "Research Practice",
-      "Design Process"
+      "Design Process",
+      "Inclusivity",
+      "Test",
+      "Test4"
     ]
   },
   "resources": [
     {
-      "id": "r-001",
-      "source": "https://www.nngroup.com/articles/ten-usability-heuristics/",
-      "access_model": [
-        "Free"
-      ],
-      "origin": [
-        "Industry"
-      ],
-      "publisher_type": [
-        "Organization"
-      ],
-      "domain": [
-        "UX Design",
-        "UX Research"
-      ],
-      "content_type": [
-        "Article",
-        "Framework"
-      ],
-      "topic": [
-        "Usability",
-        "Design Process"
-      ],
-      "trust_level": 5,
-      "comments": "Nielsen Norman Group - Absolute reference for usability heuristics evaluation. Essential reading for anyone doing UX work.",
-      "last_updated": "2026-05-23"
-    },
-    {
       "id": "r-002",
       "source": "https://www.interaction-design.org/",
+      "comments": "Great educational resource with free and premium content on UX fundamentals.",
+      "trust_level": 4,
+      "last_updated": "2026-06-05",
       "access_model": [
-        "Freemium"
+        "Institutional"
       ],
       "origin": [
         "Industry"
@@ -113,46 +94,44 @@
         "Digital Product"
       ],
       "content_type": [
-        "Course",
-        "Encyclopedic",
-        "Article"
+        "Article",
+        "Tool",
+        "Encyclopedic"
       ],
       "topic": [
-        "Design Process",
+        "Perception",
         "Usability",
-        "Research Practice"
-      ],
-      "trust_level": 4,
-      "comments": "Great educational resource with free and premium content on UX fundamentals.",
-      "last_updated": "2026-05-23"
+        "Research Practice",
+        "Design Process"
+      ]
     },
     {
       "id": "r-003",
-      "source": "Thinking, Fast and Slow - Daniel Kahneman",
+      "source": "https://dn790002.ca.archive.org/0/items/DanielKahnemanThinkingFastAndSlow/Daniel%20Kahneman-Thinking%2C%20Fast%20and%20Slow%20%20.pdf",
+      "comments": "Book \nFoundational work on behavioral economics and cognitive biases. Every UX researcher should read this.",
+      "trust_level": 5,
+      "last_updated": "2026-06-05",
       "access_model": [
         "Paid"
       ],
       "origin": [
-        "Academic"
+        "Independent"
       ],
       "publisher_type": [
         "Individual"
       ],
       "domain": [
-        "Psychology",
-        "Behavioral Science"
+        "Behavioral Science",
+        "Psychology"
       ],
       "content_type": [
         "Book"
       ],
       "topic": [
-        "Decision Making",
         "Cognition",
+        "Decision Making",
         "Reasoning"
-      ],
-      "trust_level": 5,
-      "comments": "Foundational work on behavioral economics and cognitive biases. Every UX researcher should read this.",
-      "last_updated": "2026-05-23"
+      ]
     },
     {
       "id": "r-004",
@@ -172,9 +151,9 @@
         "Digital Product"
       ],
       "content_type": [
-        "Tool",
+        "Outil",
         "Template",
-        "Course"
+        "Course - Lesson"
       ],
       "topic": [
         "Design Process",
@@ -191,7 +170,7 @@
       "source": "https://www.cognitivepsychology.com/",
       "comments": "",
       "access_model": [
-        "Free"
+        "Gratuit"
       ],
       "origin": [
         "Academic"
@@ -229,7 +208,7 @@
         "UX Research"
       ],
       "content_type": [
-        "Course"
+        "Course - Lesson"
       ],
       "topic": [
         "Research Practice",
@@ -237,6 +216,98 @@
       ],
       "trust_level": 3,
       "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1779576576165",
+      "source": "https://app.uxcel.com/courses/ux-design-psychology",
+      "comments": "User Psychology\nLearn the psychological principles behind user behavior and decision-making. Master core concepts in user psychology to help you design more engaging products.\n\n1. **Common Laws of the Human Brain**\n2. **Human Memory & Mental Models**\n3. **Human Perception & Trust**",
+      "access_model": [
+        "Paid"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Collective"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research",
+        "Psychology"
+      ],
+      "content_type": [
+        "Course - Lesson"
+      ],
+      "topic": [
+        "Cognition",
+        "Emotion & Affect",
+        "Memory",
+        "Trust"
+      ],
+      "trust_level": 3,
+      "last_updated": "2026-05-23"
+    },
+    {
+      "id": "r-1780616687874",
+      "source": "https://thedecisionlab.com/biases-index",
+      "comments": "Lis of cognitive biases",
+      "access_model": [
+        "Gratuit"
+      ],
+      "origin": [
+        "Industry"
+      ],
+      "publisher_type": [
+        "Organization"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research",
+        "Digital Product",
+        "Behavioral Science",
+        "Psychology"
+      ],
+      "content_type": [
+        "Case Study",
+        "Outil",
+        "Encyclopedic"
+      ],
+      "topic": [
+        "Cognition",
+        "Ethics & Values"
+      ],
+      "trust_level": 5,
+      "last_updated": "2026-06-04"
+    },
+    {
+      "id": "r-1780617498518",
+      "source": "https://apparences-trompeuses.beta.cnil.fr/html/accueil.html",
+      "comments": "Ressource institutionnelle de référence (CNIL/LINC) très fiable et pédagogique sur les dark patterns, adossée aux lignes directrices du CEPD. Idéale comme outil de sensibilisation, mais à visée informative et non juridique.",
+      "access_model": [
+        "Gratuit"
+      ],
+      "origin": [
+        "Institutional"
+      ],
+      "publisher_type": [
+        "Organization"
+      ],
+      "domain": [
+        "UX Design",
+        "Behavioral Science",
+        "Psychology"
+      ],
+      "content_type": [
+        "Article",
+        "Outil"
+      ],
+      "topic": [
+        "Decision Making",
+        "Trust",
+        "Technology & Society"
+      ],
+      "trust_level": 5,
+      "last_updated": "2026-06-04"
     }
   ]
 }
