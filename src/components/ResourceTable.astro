@@ -230,7 +230,7 @@ const taxonomyLabels: Record<string, string> = {
         {Object.entries(data.taxonomies).map(([taxonomyName, values]) => (
           <div class="modal-form-row">
             <label class="modal-label">{taxonomyLabels[taxonomyName] ?? taxonomyName}</label>
-            <div class="modal-checkbox-group">
+            <div class="modal-checkbox-group" data-taxonomy={taxonomyName}>
               {values.map(value => (
                 <label class="modal-checkbox-label">
                   <input type="checkbox" name={taxonomyName} value={value} />
@@ -398,29 +398,6 @@ const taxonomyLabels: Record<string, string> = {
     gap: 0.5rem;
   }
 
-  .pill {
-    display: inline-block;
-    padding: 0.5rem 0.75rem;
-    background-color: white;
-    color: #4b5563;
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .pill:hover {
-    border-color: var(--color-primary);
-    background-color: #f0f4ff;
-  }
-
-  .pill[aria-pressed="true"] {
-    background-color: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
-  }
 
   .resource-table-wrapper {
     overflow-x: auto;
@@ -762,15 +739,6 @@ const taxonomyLabels: Record<string, string> = {
     gap: 0.5rem 1.25rem;
   }
 
-  .modal-checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-weight: normal;
-    font-size: 0.875rem;
-    color: #374151;
-    cursor: pointer;
-  }
 
   .modal-actions-row {
     display: flex;
@@ -837,6 +805,40 @@ const taxonomyLabels: Record<string, string> = {
 <style is:global>
   /* Styles for elements created dynamically via JS (innerHTML / createElement). */
   /* These lose Astro's scope, so they must be global. */
+
+  .pill {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .pill[aria-pressed="true"] {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .modal-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: normal;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+  }
 
   .resource-table td {
     padding: var(--spacing-sm);
@@ -1708,6 +1710,23 @@ const taxonomyLabels: Record<string, string> = {
     });
   }
 
+  function updateEditFormCheckboxes(taxonomyName: string, values: string[]) {
+    const group = editForm.querySelector<HTMLElement>(`.modal-checkbox-group[data-taxonomy="${taxonomyName}"]`);
+    if (!group) return;
+    group.innerHTML = '';
+    values.forEach((value) => {
+      const label = document.createElement('label');
+      label.className = 'modal-checkbox-label';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.name = taxonomyName;
+      cb.value = value;
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' ' + value));
+      group.appendChild(label);
+    });
+  }
+
   function openTaxonomyModal(taxonomyName: string) {
     currentTaxonomyName = taxonomyName;
     const label = categoryLabels[taxonomyName] || taxonomyName;
@@ -1832,8 +1851,9 @@ const taxonomyLabels: Record<string, string> = {
         });
       }
 
-      // Rebuild filter pills and re-render table
+      // Rebuild filter pills, edit form checkboxes, and re-render table
       rebuildPillsForTaxonomy(currentTaxonomyName!, values);
+      updateEditFormCheckboxes(currentTaxonomyName!, values);
       const taxTbody = document.querySelector<HTMLTableSectionElement>('.resource-table tbody')!;
       taxTbody.innerHTML = '';
       allResources.forEach((r) => taxTbody.appendChild(buildRow(r)));
