@@ -125,11 +125,13 @@
         "Psychology"
       ],
       "content_type": [
-        "Book"
+        "Book",
+        "Encyclopedic"
       ],
       "topic": [
         "Cognition",
         "Decision Making",
+        "Problem Solving",
         "Reasoning"
       ]
     },
