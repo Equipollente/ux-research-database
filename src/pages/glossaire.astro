@@ -1,0 +1,433 @@
+---
+import '../styles/tokens.css';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Glossaire — Psychologie cognitive et design d'expérience" />
+    <title>Glossaire — Cognitive psychologie et design d'experience</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <!-- ── Barre de navigation principale (sticky #1) ── -->
+    <header class="nav-header">
+      <p class="nav-title">UX Design &amp; Research</p>
+    </header>
+
+    <!-- ── Hero : titre + sous-titre ── -->
+    <section class="hero">
+      <h1 class="hero-title">Cognitive psychologie et design d'experience</h1>
+      <h2 class="hero-subtitle">Glossaire</h2>
+    </section>
+
+    <!-- ── Barre de sessions (sticky #2, sous le nav-header) ── -->
+    <nav class="session-nav" aria-label="Sessions du glossaire">
+      <div class="session-chips">
+        <a href="#session-1" class="chip chip--active" data-session="session-1">Session 1</a>
+        <a href="#session-2" class="chip" data-session="session-2">Session 2</a>
+        <a href="#session-3" class="chip" data-session="session-3">Session 3</a>
+        <a href="#session-4" class="chip" data-session="session-4">Session 4</a>
+      </div>
+    </nav>
+
+    <!-- ── Contenu ── -->
+    <main class="content-wrapper">
+
+      <!-- Session 1 -->
+      <article id="session-1" class="session-card">
+        <p class="session-label">Session 1 — Ce que le cerveau voit, groupe, rate et comprend</p>
+
+        <p class="subsection-label">Théorie de la Gestalt</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Gestalt (théorie de la)</span>
+            <span class="entry-body">
+              Nous ne percevons pas des sensations isolées : nous percevons des touts organisés (Gestalten). Quand plusieurs éléments apparaissent ensemble, la perception les structure spontanément en groupes, selon des facteurs stables et prévisibles. Principe fondateur : « le tout est différent de la somme de ses parties ».
+              <span class="entry-source">→ Wertheimer, M. (1923). Untersuchungen zur Lehre von der Gestalt II. <em>Psychologische Forschung</em>, 4, 301–350. Trad. anglaise : « Laws of Organization in Perceptual Forms » (1938).</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de proximité</span>
+            <span class="entry-body">
+              Toutes choses égales par ailleurs, les éléments proches dans l'espace sont perçus comme un groupe. La proximité peut même l'emporter sur la couleur ou la forme. En UI : un label collé à son champ, une navigation regroupée spatialement.
+              <span class="entry-source">→ Wertheimer (1923), « Faktor der Nähe ». Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/gestalt-proximity/" target="_blank" rel="noopener">Proximity Principle in Visual Design</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de similarité</span>
+            <span class="entry-body">
+              Toutes choses égales par ailleurs, les éléments qui se ressemblent (couleur, forme, taille, orientation) sont perçus comme un groupe, peu importe leur position. En UI : tous les liens d'une page partagent la même couleur — le cerveau les lit comme une famille.
+              <span class="entry-source">→ Wertheimer (1923), « Faktor der Gleichheit ». Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/gestalt-similarity/" target="_blank" rel="noopener">Similarity Principle in Visual Design</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de continuité</span>
+            <span class="entry-body">
+              Les éléments qui prolongent une ligne ou une courbe fluide sont perçus comme liés. La perception préfère la continuité d'une trajectoire à une rupture brutale. En UI : un stepper aligné sur un axe, un avatar tronqué qui invite au scroll.
+              <span class="entry-source">→ Wertheimer (1923), « Faktor der guten Kurve ». Lecture UX : NN/g, <a href="https://www.nngroup.com/videos/continuation-gestalt/" target="_blank" rel="noopener">Continuation</a>.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de figure-fond</span>
+            <span class="entry-body">
+              La perception sépare le champ visuel en une figure — qui a une forme, un contour, et semble devant — et un fond — sans forme, qui continue derrière. La relation est exclusive : le même contour ne peut pas donner forme aux deux régions en même temps (démonstration du vase et des visages). En UI : le fond assombri derrière une modale.
+              <span class="entry-source">→ Rubin, E. (1915). <em>Synsoplevede Figurer</em>. Thèse, Université de Copenhague. À noter : Rubin n'était pas gestaltiste — son travail a été absorbé par l'école Gestalt, qui le cite dès 1923.</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Loi de région commune</span>
+            <span class="entry-body">
+              Les éléments situés dans une même zone délimitée sont perçus comme un groupe — même s'ils ne se ressemblent pas. Palmer montre que ce facteur peut l'emporter sur la proximité et la similarité. C'est la loi derrière le composant « card ». À noter : ce n'est pas une loi de 1923 — elle date de 1992.
+              <span class="entry-source">→ Palmer, S. E. (1992). « Common region: A new principle of perceptual grouping ». <em>Cognitive Psychology</em>, 24(3), 436–447. Lecture UX : NN/g, <a href="https://www.nngroup.com/articles/common-region/" target="_blank" rel="noopener">Common Region</a>.</span>
+            </span>
+          </li>
+        </ul>
+
+        <p class="subsection-label">Traitement préattentif</p>
+        <ul class="glossary-list">
+          <li class="glossary-entry">
+            <span class="entry-term">Traitement préattentif</span>
+            <span class="entry-body">
+              Le traitement d'un stimulus qui se produit avant — et sans — attention focalisée. Le cerveau enregistre les propriétés visuelles simples (couleur, orientation, taille, mouvement) en parallèle, sur tout le champ visuel, en moins de 250 ms. Le terme vient de Neisser.
+              <span class="entry-source">→ Neisser, U. (1967). <em>Cognitive Psychology</em>. Appleton-Century-Crofts. Opérationnalisé par Treisman &amp; Gelade (1980).</span>
+            </span>
+          </li>
+          <li class="glossary-entry">
+            <span class="entry-term">Feature Integration Theory (théorie de l'intégration des attributs)</span>
+            <span class="entry-body">
+              Théorie de l'attention visuelle en deux étapes. 1 : les attributs simples sont enregistrés automatiquement, en parallèle, sur des cartes séparées (feature maps). 2 : l'attention focalisée est nécessaire pour lier les attributs en objets. Sans attention, le cerveau peut même recombiner les attributs à tort (conjonctions illusoires).
+              <span class="entry-source">→ Treisman, A. M., &amp; Gelade, G. (1980). « A feature-integration theory of attention ». <em>Cognitive Psychology</em>, 12(1), 97–136.</span>
+            </span>
+          </li>
+        </ul>
+      </article>
+
+      <!-- Session 2 -->
+      <article id="session-2" class="session-card session-card--empty">
+        <p class="session-label">Session 2</p>
+        <p class="empty-notice">Contenu à venir</p>
+      </article>
+
+      <!-- Session 3 -->
+      <article id="session-3" class="session-card session-card--empty">
+        <p class="session-label">Session 3</p>
+        <p class="empty-notice">Contenu à venir</p>
+      </article>
+
+      <!-- Session 4 -->
+      <article id="session-4" class="session-card session-card--empty">
+        <p class="session-label">Session 4</p>
+        <p class="empty-notice">Contenu à venir</p>
+      </article>
+
+    </main>
+  </body>
+</html>
+
+<style>
+  /* ── Reset ─────────────────────────────────────────────────────── */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--lavender-mist);
+    color: var(--fg-1);
+    min-height: 100vh;
+  }
+
+  /* ── Sticky heights (shared between CSS and JS via var) ─────────── */
+  :root {
+    --nav-h      : 56px;
+    --session-h  : 56px;
+    --scroll-offset: calc(var(--nav-h) + var(--session-h) + 24px);
+  }
+
+  /* ── Nav header ─────────────────────────────────────────────────── */
+  .nav-header {
+    background-color: var(--bg-default);
+    border-bottom: 1px solid var(--hairline);
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--spacing-6);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .nav-title {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: var(--t-num);
+    color: var(--fg-1);
+    white-space: nowrap;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────────── */
+  .hero {
+    padding: 30px var(--spacing-8) 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: var(--t-display);
+    color: var(--fg-1);
+    line-height: var(--lh-tight);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: var(--t-h2);
+    color: var(--fg-1);
+    line-height: normal;
+  }
+
+  /* ── Session nav (sticky #2) ────────────────────────────────────── */
+  .session-nav {
+    background-color: var(--lavender-mist);
+    border-bottom: 1px solid var(--hairline);
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 10;
+    height: var(--session-h);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-8);
+  }
+
+  .session-chips {
+    display: flex;
+    gap: var(--spacing-2);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .session-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Chip ───────────────────────────────────────────────────────── */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px var(--spacing-3);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: var(--t-label);
+    font-weight: var(--weight-regular);
+    color: var(--fg-1);
+    background-color: var(--lavender);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.18s ease, color 0.18s ease;
+    border: 1.5px solid transparent;
+  }
+
+  .chip:hover {
+    background-color: var(--indigo-300);
+    color: var(--white);
+  }
+
+  .chip--active {
+    background-color: var(--indigo);
+    color: var(--white);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* ── Content wrapper ────────────────────────────────────────────── */
+  .content-wrapper {
+    padding: var(--spacing-6) var(--spacing-8) var(--spacing-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  /* ── Session card ───────────────────────────────────────────────── */
+  .session-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    /* Offset l'ancre sous les deux barres sticky */
+    scroll-margin-top: var(--scroll-offset);
+  }
+
+  .session-card--empty {
+    padding: var(--spacing-8);
+  }
+
+  /* ── Session label (titre de session, indigo) ───────────────────── */
+  .session-label {
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    font-size: var(--t-h3);
+    color: var(--fg-accent);
+    line-height: normal;
+  }
+
+  /* ── Sous-section label ─────────────────────────────────────────── */
+  .subsection-label {
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    font-size: var(--t-label);
+    color: var(--fg-1);
+    line-height: normal;
+    margin-top: var(--spacing-1);
+  }
+
+  /* ── Liste de définitions ───────────────────────────────────────── */
+  .glossary-list {
+    list-style: disc;
+    padding-left: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  /* ── Entrée de glossaire ────────────────────────────────────────── */
+  .glossary-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .entry-term {
+    font-family: var(--font-body);
+    font-weight: var(--weight-bold);
+    font-size: var(--t-body);
+    color: var(--fg-1);
+    line-height: var(--lh-body);
+  }
+
+  .entry-body {
+    font-family: var(--font-body);
+    font-weight: var(--weight-regular);
+    font-size: var(--t-body);
+    color: var(--fg-2);
+    line-height: var(--lh-body);
+  }
+
+  .entry-source {
+    display: block;
+    margin-top: 4px;
+    font-size: var(--t-small);
+    color: var(--slate);
+    line-height: var(--lh-body);
+  }
+
+  .entry-source a {
+    color: var(--fg-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .entry-source a:hover {
+    color: var(--indigo-700);
+  }
+
+  .entry-body em {
+    font-style: italic;
+  }
+
+  /* ── Placeholder sessions ───────────────────────────────────────── */
+  .empty-notice {
+    font-family: var(--font-body);
+    font-size: var(--t-body);
+    color: var(--fg-2);
+    font-style: italic;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .hero {
+      padding: var(--spacing-6) var(--spacing-4) var(--spacing-4);
+    }
+
+    .hero-title {
+      font-size: var(--t-h1);
+    }
+
+    .session-nav {
+      padding: 0 var(--spacing-4);
+    }
+
+    .content-wrapper {
+      padding: var(--spacing-4);
+    }
+
+    .session-card {
+      padding: var(--spacing-6);
+    }
+  }
+</style>
+
+<script>
+  // ── Active chip au scroll ────────────────────────────────────────
+  const chips    = Array.from(document.querySelectorAll('.chip'));
+  const sections = Array.from(document.querySelectorAll('.session-card'));
+
+  const root       = document.documentElement;
+  const navH       = parseInt(getComputedStyle(root).getPropertyValue('--nav-h'))     || 56;
+  const sessionH   = parseInt(getComputedStyle(root).getPropertyValue('--session-h')) || 56;
+  const threshold  = navH + sessionH + 32;
+
+  function setActive(id) {
+    chips.forEach(c => c.classList.toggle('chip--active', c.dataset.session === id));
+  }
+
+  // Détermine quelle section est active en comparant offsetTop au scroll
+  function updateActive() {
+    const scrollY = window.scrollY + threshold;
+    let activeId  = sections[0].id;
+    for (const s of sections) {
+      if (s.offsetTop <= scrollY) activeId = s.id;
+    }
+    setActive(activeId);
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+  // Scroll fluide sur clic (sans modifier l'URL)
+  chips.forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(chip.dataset.session);
+      if (!target) return;
+      const scrollTo = target.getBoundingClientRect().top + window.scrollY - threshold + 8;
+      window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+    });
+  });
+</script>
