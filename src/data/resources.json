@@ -108,7 +108,8 @@
       "trust_level": 5,
       "last_updated": "2026-06-05",
       "access_model": [
-        "Paid"
+        "Paid",
+        "Institutional"
       ],
       "origin": [
         "Independent"
