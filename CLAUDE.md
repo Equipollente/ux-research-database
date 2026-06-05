@@ -109,6 +109,36 @@ In [ResourceTable.astro](src/components/ResourceTable.astro), the table rows are
 
 ---
 
+## Design system (UXProjects)
+
+The UI runs on the **UXProjects** design system. Full reference: [docs/design-system.md](docs/design-system.md).
+
+**Source of truth & sync flow:**
+
+```
+Figma Variables  →  tokens/uxprojects.tokens.json  →  src/styles/tokens.css
+ (design surface)       (canonical token data)          (CSS custom properties)
+```
+
+- `tokens/uxprojects.tokens.json` is the canonical token data (DTCG format). Judith edits the **Figma Variables** as the design surface; the JSON mirrors them.
+- `src/styles/tokens.css` exposes every token as a CSS custom property under `:root`, plus a **compatibility-alias block** mapping legacy names (`--color-*`, `--spacing-xs..xl`) onto real tokens. **Do not delete the aliases** — components still reference them.
+- `tokens.css` is loaded globally via `import '../styles/tokens.css'` in [BaseLayout.astro](src/layouts/BaseLayout.astro) frontmatter. (A raw `<link href="/styles/...">` would NOT resolve to a file under `src/` — that's why it's an `import`.)
+- Inter is self-hosted (`public/fonts/`), Poppins via Google Fonts CDN.
+
+**Rules when touching styles:**
+1. **Never hardcode a hex / rgba / px-radius** — always use a token (`var(--indigo)`, `var(--radius-card)`…). If no token fits, flag it rather than inventing a literal.
+2. **Adding/changing a token**: edit `tokens/uxprojects.tokens.json`, then regenerate the CSS with `npm run tokens` (generator maps JSON → `tokens.css` with deterministic per-collection naming), then mirror it as a Figma Variable.
+3. **Buttons**: use the reusable pattern in [src/styles/buttons.css](src/styles/buttons.css) — `.btn` + `.btn-primary` (filled indigo) / `.btn-secondary` (outline indigo). It matches the Figma `Button` component. Don't write per-component button CSS.
+4. The CSS scoping gotcha still applies — dynamically-rendered elements need their rules in `<style is:global>`.
+
+**Figma → code workflow (how components get built):**
+- Judith designs in the Figma file `ux-research-database` (key `zdUqwncdW4hMuNfTGNlH2S`).
+- The agent reads it live via the **figma-console MCP** (`figma_get_status`, `figma_get_variables`, `figma_get_selection`, `figma_get_component_for_development_deep`). Trigger: Judith selects a node / pastes a node link, or says "regarde ma sélection".
+- Extract structure + bound variables (token names) → translate to Astro/CSS with the matching tokens → **verify in the browser preview** before declaring done.
+- Component status & Figma node IDs are tracked in the inventory table of [docs/design-system.md](docs/design-system.md).
+
+---
+
 ## Known technical debt
 
 ### Form completed (Phase 2B, 2026-05-23)
@@ -162,6 +192,9 @@ To rotate the token: revoke the existing PAT on GitHub, generate a new fine-grai
 | Change table columns | `src/components/ResourceTable.astro` (markup + JS that builds rows from API) |
 | Change form fields | `src/components/AddResourceForm.astro` |
 | Style a dynamic element | `<style is:global>` block in `ResourceTable.astro` (see scoping gotcha above) |
+| Change a design token | `tokens/uxprojects.tokens.json` → `npm run tokens` → mirror in Figma Variables (see Design system above) |
+| Style a button | reuse `.btn` + `.btn-primary` / `.btn-secondary` from `src/styles/buttons.css` |
+| Implement a Figma component | read it via figma-console MCP, translate with tokens; track status in `docs/design-system.md` |
 | Understand the data shape | `docs/schema.json` (JSON Schema) or `src/utils/data-transform.ts` (TS types) |
 | Plan future features | `docs/PHASE_2_ROADMAP.md` (high-level), `PHASE_2C_CRUD_AND_FILTERS.md` (next sprint detailed) |
 | Migrate the token | `PHASE_2B_TOKEN_MIGRATION.md` (done, kept for reference) |
