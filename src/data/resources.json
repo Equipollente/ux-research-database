@@ -32,7 +32,7 @@
       "Blog Post",
       "Case Study",
       "Research Paper",
-      "Tool",
+      "Outil",
       "Template",
       "Framework",
       "Study",
@@ -144,7 +144,7 @@
         "Digital Product"
       ],
       "content_type": [
-        "Tool",
+        "Outil",
         "Template",
         "Course"
       ],
@@ -262,7 +262,7 @@
       ],
       "content_type": [
         "Case Study",
-        "Tool",
+        "Outil",
         "Encyclopedic"
       ],
       "topic": [
@@ -292,7 +292,7 @@
       ],
       "content_type": [
         "Article",
-        "Tool"
+        "Outil"
       ],
       "topic": [
         "Decision Making",
