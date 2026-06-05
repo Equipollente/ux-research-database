@@ -70,7 +70,10 @@
   "resources": [
     {
       "id": "r-002",
-      "source": "https://www.interaction-design.org/",
+      "source": "https://www.interaction-design.org/2",
+      "comments": "Great educational resource with free and premium content on UX fundamentals.",
+      "trust_level": 4,
+      "last_updated": "2026-06-05",
       "access_model": [
         "Freemium"
       ],
@@ -85,18 +88,15 @@
         "Digital Product"
       ],
       "content_type": [
+        "Article",
         "Course",
-        "Encyclopedic",
-        "Article"
+        "Encyclopedic"
       ],
       "topic": [
-        "Design Process",
         "Usability",
-        "Research Practice"
-      ],
-      "trust_level": 4,
-      "comments": "Great educational resource with free and premium content on UX fundamentals.",
-      "last_updated": "2026-05-23"
+        "Research Practice",
+        "Design Process"
+      ]
     },
     {
       "id": "r-003",
