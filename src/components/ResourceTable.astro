@@ -1608,11 +1608,10 @@ const taxonomyLabels: Record<string, string> = {
       showEditError('Trust level must be between 1 and 5'); return;
     }
 
+    const formData = new FormData(editForm);
     const taxonomyValues: Record<string, string[]> = {};
     for (const key of TAXONOMY_KEYS) {
-      taxonomyValues[key] = Array.from(
-        editForm.querySelectorAll<HTMLInputElement>(`input[name="${key}"]:checked`)
-      ).map((cb) => cb.value);
+      taxonomyValues[key] = formData.getAll(key) as string[];
     }
 
     let password = localStorage.getItem(PASSWORD_STORAGE_KEY);

@@ -279,14 +279,14 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 | Étape | Statut | Date | Notes |
 |---|---|---|---|
 | 1.1 — Colonne Actions + menu ⋮ | ✅ | 2026-05-25 | Menu ⋮ dropdown (portal fixe via JS) avec Edit et Delete |
-| 1.2 — Modale Edit Resource | ✅ | 2026-05-25 | Pré-remplie depuis allResources[], submit vers /api/update-resource |
+| 1.2 — Modale Edit Resource | ⚠️ Bug | 2026-05-25 | Ouverture et pré-remplissage OK — mais seul `source` est sauvegardé (voir Bug A) |
 | 1.3 — Confirm Delete | ✅ | 2026-05-24 | `window.confirm()` natif (via dropdown Delete) |
-| 1.4 — Modale Edit Taxonomy | ✅ | 2026-05-25 | Inputs éditables, suivi des renames, + Add value, /api/update-taxonomy |
-| 1.5 — Function `update-resource.ts` | ✅ | 2026-05-25 | Endpoint `/api/update-resource`, body `{id, resource}` |
+| 1.4 — Modale Edit Taxonomy | ⚠️ Bug | 2026-05-25 | Ouverture OK — mais renames non envoyés + état corrompu entre sessions (voir Bug B + C) |
+| 1.5 — Function `update-resource.ts` | ✅ | 2026-05-25 | Endpoint `/api/update-resource`, body `{id, resource}` — backend correct |
 | 1.6 — Function `delete-resource.ts` | ✅ | 2026-05-24 | Endpoint `/api/delete-resource`, body `{id}` |
-| 1.7 — Function `update-taxonomy.ts` | ✅ | 2026-05-25 | Propagation atomique des renames + validation valeurs orphelines |
+| 1.7 — Function `update-taxonomy.ts` | ✅ | 2026-05-25 | Propagation atomique des renames + validation valeurs orphelines — backend correct |
 | 1.8 — Refactor `_lib/github.ts` | ✅ | 2026-05-25 | Extrait dans `netlify/functions/_lib/github.ts` ; add-resource et delete-resource refactorisés |
-| 1.9 — Test end-to-end | 🟡 Partiel | 2026-05-25 | À tester par Judith demain sur la branche phase-2c-night-run |
+| 1.9 — Test end-to-end | ❌ Partiel | 2026-06-05 | Testé par Judith sur deploy-preview-1. Delete ✅, menu ✅, password ✅ — 3 bugs frontend (voir section 9) |
 
 ### Sprint 2 — UX filtres
 | Étape | Statut | Date | Notes |
@@ -296,9 +296,54 @@ Total : ~3-4h, livrables en 1 ou 2 sessions de travail.
 | 2.3 — Compteur `(N)` sur les boutons | ✅ | 2026-05-25 | Texte mis à jour dynamiquement via `updateCategoryButtonState()` |
 | 2.4 — 3 états visuels boutons | ✅ | 2026-05-25 | idle / has-filters / open via `data-state` |
 | 2.5 — Bouton "Effacer les filtres" | ✅ | 2026-05-25 | Visible seulement si ≥1 filtre actif |
-| 2.6 — Tests visuels desktop + mobile | ⬜ | — | À valider par Judith demain |
+| 2.6 — Tests visuels desktop + mobile | ✅ | 2026-06-05 | Validé par Judith sur deploy-preview-1 (desktop + mobile) |
 
-**À mettre à jour au fur et à mesure de l'exécution.**
+**Mis à jour après session de test du 2026-06-05.**
+
+---
+
+## 9. Bugs identifiés — session test 2026-06-05
+
+Testé sur : `https://deploy-preview-1--ux-research-database.netlify.app/`
+
+### Bug A — Edit Resource : seul `source` est sauvegardé
+
+**Symptôme** : après Submit dans la modale Edit Resource, seul le champ `source` (URL) est mis à jour dans le JSON. Les autres champs (`comments`, `trust_level`, taxonomies) reviennent à leur valeur précédente.
+
+**Fichiers concernés** : `src/components/ResourceTable.astro` (JS client uniquement — backend `update-resource.ts` et `_lib/github.ts` sont corrects).
+
+**Piste probable** : le handler `editForm.addEventListener('submit', ...)` (≈ ligne 1598) construit l'objet `updatedResource` en collectant les checkboxes via `editForm.querySelectorAll('input[name="..."):checked')`. **La piste la plus probable est que ces champs existent dans le DOM mais ne sont pas correctement collectés** — soit parce que les checkboxes sont hors du `<form>` dans le DOM réel, soit parce que le querySelectorAll utilise un sélecteur trop strict avec `CSS.escape`. **À vérifier impérativement avec l'onglet Network des DevTools** : inspecter le corps du POST vers `/api/update-resource` pour voir exactement ce qui est envoyé.
+
+**Approche recommandée pour la correction** :
+1. Ouvrir DevTools → Network, faire un Edit, inspecter le payload du POST `/api/update-resource`
+2. Si le payload contient déjà tous les champs → le bug est dans le backend (peu probable : `update-resource.ts` fait un remplacement complet)
+3. Si le payload ne contient que `source` → le bug est dans la collecte des champs côté frontend → corriger la logique de `updatedResource` dans le handler submit
+
+### Bug B — Edit Taxonomy : `renames` jamais envoyé
+
+**Symptôme** : renommer une valeur dans la modale Edit Taxonomy retourne un 400 (`Cannot delete taxonomy values still used by resources: "Outil" (3 resource(s))`). La Function backend `update-taxonomy.ts` reçoit un `renames` vide `{}` et interprète correctement l'ancienne valeur comme une suppression non autorisée.
+
+**Fichiers concernés** : `src/components/ResourceTable.astro`, fonction `openTaxonomyModal` + handler `editTaxonomySave.addEventListener('click', ...)` (≈ lignes 1693–1813).
+
+**Root cause** : le code suit bien les renames via `input.dataset.original` et les collecte dans un objet `renames`. Mais `addTaxonomyValueRow` lit les valeurs depuis les **pills SSR** du panel actif (lignes 1699–1701). Ces pills ont un `data-filter-value` mais pas de `data-original`. Quand les inputs sont construits, `input.dataset.original = value` est positionné. La logique semble correcte, mais les tests confirment que `renames` est vide à l'envoi. **Vérifier avec DevTools Network** le corps du POST vers `/api/update-taxonomy` — est-ce que `renames` est `{}` ou bien rempli ?
+
+**Approche recommandée** : loguer `renames` en console avant le fetch pour isoler si le problème est dans la construction de l'objet ou dans la sérialisation.
+
+### Bug C — État corrompu entre deux ouvertures de la modale Edit Taxonomy
+
+**Symptôme** : après un save échoué (400), rouvrir la modale pour une opération différente (ajouter une valeur) produit la même erreur 400 avec la même valeur orpheline que la tentative précédente.
+
+**Root cause** : `openTaxonomyModal` lit les valeurs depuis les pills SSR (`.pill[data-filter-value]`). Ces pills **ne sont pas mises à jour après un save raté** — elles représentent l'état au moment du premier chargement de la page. Si un save précédent a partiellement modifié les pills dans le DOM (ou si les inputs retiennent une mauvaise liste de valeurs), la ré-ouverture repart d'un état corrompu. La liste `taxonomyValuesList.innerHTML = ''` est bien vidée, mais les pills SSR qu'on lit pour reconstruire les inputs peuvent elles-mêmes être désynchronisées.
+
+**Approche recommandée** : maintenir un objet JS `localTaxonomyValues: Record<string, string[]>` (copy-in des taxonomies au moment du fetch initial), et lire depuis cet objet plutôt que depuis les pills SSR. Mettre à jour cet objet après chaque save réussi.
+
+### Bug D (mineur) — Positionnement dropdown ⋮
+
+**Symptôme** : le menu dropdown ⋮ s'accroche au bas du contenu de la cellule plutôt qu'au bouton ⋮.
+
+**Root cause** : le code `openDropdown` calcule `rect = menuBtn.getBoundingClientRect()`. Si `menuBtn` est un élément inline dans une `<td>` large, `rect.bottom` peut pointer loin en dessous du bouton selon la hauteur du contenu de la cellule.
+
+**Approche recommandée** : vérifier que `menuBtn` est bien sélectionné via `.closest('.btn-actions-menu')` et que `getBoundingClientRect()` retourne les coordonnées du bouton et non celles de son parent. Si le bouton est wrappé dans un container, utiliser directement `menuBtn.getBoundingClientRect()` sans remontée dans le DOM.
 
 ---
 
