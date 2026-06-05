@@ -1,4 +1,7 @@
 ---
+import '../styles/tokens.css';
+import '../styles/buttons.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -17,6 +20,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <header>
@@ -39,20 +45,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </footer>
 
     <style>
-      :root {
-        --spacing-xs: 0.5rem;
-        --spacing-sm: 1rem;
-        --spacing-md: 1.5rem;
-        --spacing-lg: 2rem;
-        --spacing-xl: 3rem;
-
-        --color-bg: #ffffff;
-        --color-text: #1f2937;
-        --color-border: #e5e7eb;
-        --color-primary: #3b82f6;
-        --color-primary-hover: #2563eb;
-      }
-
       * {
         margin: 0;
         padding: 0;
@@ -60,15 +52,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: var(--color-bg);
-        color: var(--color-text);
+        font-family: var(--font-body);
+        background-color: var(--lavender-mist);
+        color: var(--ink);
         line-height: 1.6;
       }
 
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        color: var(--fg-1);
+      }
+
       header {
-        border-bottom: 1px solid var(--color-border);
-        background: var(--color-bg);
+        border-bottom: 1px solid var(--hairline);
+        background: var(--white);
         position: sticky;
         top: 0;
         z-index: 100;
@@ -101,12 +101,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       footer {
-        border-top: 1px solid var(--color-border);
-        background: #f9fafb;
+        border-top: 1px solid var(--hairline);
+        background: var(--lavender-mist);
         padding: var(--spacing-lg);
         text-align: center;
         font-size: 0.875rem;
-        color: #6b7280;
+        color: var(--slate);
       }
 
       @media (max-width: 768px) {

@@ -1,0 +1,99 @@
+/* =========================================================================
+   UXProjects Design System — web tokens
+   Source of truth: tokens/uxprojects.tokens.json
+   Adapted from Design/project/colors_and_type.css for the Astro web app.
+   ========================================================================= */
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-VariableFont_opsz_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---- Brand core palette (raw) ------------------------------------- */
+  --indigo:        #3F2BFF;  /* electric indigo — THE brand color        */
+  --indigo-700:    #2C1ECC;  /* pressed / darker indigo                  */
+  --indigo-300:    #8C7DFF;  /* tints for charts / muted accents         */
+  --lime:          #E1FF91;  /* chartreuse — title & quote backgrounds   */
+  --lavender-mist: #F3F0FF;  /* lightest lavender — calm content bg      */
+  --lavender:      #ECE1FF;  /* light purple — section / principle bg    */
+  --pink:          #FAC7FF;  /* soft pink — decorative dots & markers    */
+  --ink:           #2F2D2E;  /* near-black — primary text                */
+  --slate:         #6A676D;  /* warm gray — secondary text, links        */
+  --white:         #FFFFFF;
+
+  /* ---- Semantic status --------------------------------------------- */
+  --positive:      #48A66B;  /* green — correct / "✓" examples           */
+  --negative:      #D94A4A;  /* red   — wrong / "✗" examples             */
+  --warning:       #F59E0B;  /* amber — medium trust, caution            */
+
+  /* ---- Foreground tokens ------------------------------------------- */
+  --fg-1:          var(--ink);     /* primary text                      */
+  --fg-2:          var(--slate);   /* secondary / captions              */
+  --fg-accent:     var(--indigo);  /* accent text, labels, numerals     */
+  --fg-on-indigo:  var(--white);   /* text on indigo surfaces           */
+  --fg-on-lime:    var(--ink);     /* text on lime surfaces             */
+
+  /* ---- Background / surface tokens --------------------------------- */
+  --bg-default:    var(--white);
+  --bg-calm:       var(--lavender-mist);  /* soft content slides        */
+  --bg-section:    var(--lavender);       /* section dividers / cards   */
+  --bg-feature:    var(--indigo);         /* bold recap / hero panels   */
+  --bg-celebrate:  var(--lime);           /* title & quote slides       */
+  --surface-card:  var(--white);          /* cards on tinted bgs        */
+
+  /* ---- Borders & radii --------------------------------------------- */
+  --hairline:      #E6E1F5;     /* faint lavender divider               */
+  --border-card:   #ECE9F5;
+  --radius-badge:  6px;         /* page-number badge                    */
+  --radius-card:   14px;        /* content cards                        */
+  --radius-pill:   999px;       /* chips, buttons, dots                 */
+  --radius-img:    18px;        /* framed images / screenshots          */
+  --radius-container: 28px;     /* roomy floating text panel            */
+
+  /* ---- Elevation ---------------------------------------------------- */
+  --shadow-card:   0 1px 2px rgba(47,45,46,.04), 0 8px 24px rgba(47,45,46,.06);
+  --shadow-pop:    0 12px 40px rgba(63,43,255,.14);
+  --shadow-float:  0 2px 4px rgba(47,45,46,.04), 0 22px 48px -12px rgba(47,45,46,.16);
+
+  /* ---- Type families ----------------------------------------------- */
+  --font-display:  "Poppins", "Poppins SemiBold", system-ui, sans-serif;
+  --font-body:     "Inter", system-ui, -apple-system, sans-serif;
+
+  /* ---- Type scale (deck-native, in pt → px @ 96dpi reference) ------ */
+  --t-display:     40px;   /* title-slide headline (40pt)               */
+  --t-section:     32px;   /* full-bleed section title (32pt)           */
+  --t-h1:          28px;   /* slide title / quote body (28pt)           */
+  --t-h2:          24px;   /* standard slide title (24pt)               */
+  --t-num:         18px;   /* agenda numerals 01/02 (18pt)              */
+  --t-h3:          16px;   /* card / item heading (16pt)                */
+  --t-label:       14px;   /* eyebrow label, accent caption (14pt)      */
+  --t-body:        13px;   /* body copy (13pt)                          */
+  --t-small:       12px;   /* dense body / table cells (12pt)           */
+  --t-caption:     10.5px; /* timeline / footnote (10.5pt)              */
+  --t-badge:       9px;    /* page-number badge (9pt)                   */
+
+  --lh-tight:      1.08;
+  --lh-snug:       1.25;
+  --lh-body:       1.5;
+
+  --tracking-tight: -0.02em;  /* large display                          */
+  --tracking-label:  0.06em;  /* uppercase eyebrows                     */
+}
+
+/* ── Compatibility aliases — do not remove ───────────────────── */
+:root {
+  --color-primary:       var(--indigo);
+  --color-primary-hover: var(--indigo-700);
+  --color-bg:            var(--white);
+  --color-text:          var(--ink);
+  --color-border:        var(--hairline);
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+}

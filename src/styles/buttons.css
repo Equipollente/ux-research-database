@@ -1,0 +1,53 @@
+/* =========================================================================
+   Button pattern — réutilisable
+   Conforme au composant Figma "Button" (node 9:8) du design system UXProjects.
+   Variantes : Primary / Secondary · États : Default / Hover / Disabled.
+   Classes : .btn (base) + .btn-primary | .btn-secondary
+   ========================================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 10px 20px;                 /* Figma: 10 / 20 */
+  border: 1.5px solid transparent;    /* même boîte que la variante outline */
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: var(--t-label);          /* 14px */
+  font-weight: 600;                   /* Poppins SemiBold */
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+/* ── Primary ─────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--indigo);
+  color: var(--white);
+  border-color: var(--indigo);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--indigo-700);
+  border-color: var(--indigo-700);
+}
+
+/* ── Secondary (outline) ─────────────────────────────────── */
+.btn-secondary {
+  background: transparent;
+  color: var(--indigo);
+  border-color: var(--indigo);
+}
+.btn-secondary:hover:not(:disabled) {  /* hover = comme primary */
+  background: var(--indigo-700);
+  border-color: var(--indigo-700);
+  color: var(--white);
+}
+
+/* ── Disabled ────────────────────────────────────────────── */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
