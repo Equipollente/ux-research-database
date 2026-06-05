@@ -100,7 +100,10 @@
     },
     {
       "id": "r-003",
-      "source": "Thinking, Fast and Slow - Daniel Kahneman",
+      "source": "https://dn790002.ca.archive.org/0/items/DanielKahnemanThinkingFastAndSlow/Daniel%20Kahneman-Thinking%2C%20Fast%20and%20Slow%20%20.pdf",
+      "comments": "Foundational work on behavioral economics and cognitive biases. Every UX researcher should read this.",
+      "trust_level": 5,
+      "last_updated": "2026-06-05",
       "access_model": [
         "Paid"
       ],
@@ -111,20 +114,17 @@
         "Individual"
       ],
       "domain": [
-        "Psychology",
-        "Behavioral Science"
+        "Behavioral Science",
+        "Psychology"
       ],
       "content_type": [
         "Book"
       ],
       "topic": [
-        "Decision Making",
         "Cognition",
+        "Decision Making",
         "Reasoning"
-      ],
-      "trust_level": 5,
-      "comments": "Foundational work on behavioral economics and cognitive biases. Every UX researcher should read this.",
-      "last_updated": "2026-05-23"
+      ]
     },
     {
       "id": "r-004",
