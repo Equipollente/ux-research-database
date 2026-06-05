@@ -41,7 +41,7 @@
       "Dataset",
       "Trend Report",
       "Book",
-      "Course",
+      "Course - Lesson",
       "Encyclopedic",
       "Outil",
       "Test2"
@@ -93,7 +93,7 @@
       ],
       "content_type": [
         "Article",
-        "Course",
+        "Course - Lesson",
         "Encyclopedic"
       ],
       "topic": [
@@ -151,7 +151,7 @@
       "content_type": [
         "Outil",
         "Template",
-        "Course"
+        "Course - Lesson"
       ],
       "topic": [
         "Design Process",
@@ -206,7 +206,7 @@
         "UX Research"
       ],
       "content_type": [
-        "Course"
+        "Course - Lesson"
       ],
       "topic": [
         "Research Practice",
@@ -234,7 +234,7 @@
         "Psychology"
       ],
       "content_type": [
-        "Course"
+        "Course - Lesson"
       ],
       "topic": [
         "Cognition",
