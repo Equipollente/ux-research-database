@@ -14,7 +14,7 @@ const description = "Curated collection of UX research, design resources, and fr
         <h2>Resource Database</h2>
         <p class="intro">Browse curated UX research, design tools, frameworks, and more.</p>
       </div>
-      <button id="openModalBtn" class="btn-add-resource">
+      <button id="openModalBtn" class="btn btn-primary">
         ➕ Add Resource
       </button>
     </div>
@@ -41,13 +41,14 @@ const description = "Curated collection of UX research, design resources, and fr
   <style>
     h2 {
       margin-bottom: var(--spacing-md);
+      font-family: var(--font-display);
       font-size: 1.75rem;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .intro {
       margin-bottom: var(--spacing-lg);
-      color: #6b7280;
+      color: var(--slate);
       font-size: 1rem;
     }
 
@@ -55,24 +56,8 @@ const description = "Curated collection of UX research, design resources, and fr
       margin-top: var(--spacing-lg);
     }
 
-    .btn-add-resource {
-      padding: 0.75rem 1.5rem;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-add-resource:hover {
-      background: #2563eb;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-    }
+    /* Bouton "Add Resource" : pattern global .btn .btn-primary
+       (src/styles/buttons.css, conforme au composant Figma) */
 
     .modal {
       position: fixed;
@@ -98,9 +83,9 @@ const description = "Curated collection of UX research, design resources, and fr
 
     .modal-content {
       position: relative;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      background: var(--white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-float);
       max-width: 700px;
       width: 90%;
       max-height: 90vh;
@@ -124,7 +109,7 @@ const description = "Curated collection of UX research, design resources, and fr
       justify-content: space-between;
       align-items: center;
       padding: 2rem;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--hairline);
     }
 
     .modal-header h2 {
@@ -137,20 +122,20 @@ const description = "Curated collection of UX research, design resources, and fr
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
-      color: #6b7280;
+      color: var(--slate);
       padding: 0;
       width: 2rem;
       height: 2rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 4px;
+      border-radius: var(--radius-badge);
       transition: all 0.2s;
     }
 
     .modal-close:hover {
-      background: #f3f4f6;
-      color: #1f2937;
+      background: var(--lavender-mist);
+      color: var(--ink);
     }
 
     .modal-body {
@@ -178,11 +163,6 @@ const description = "Curated collection of UX research, design resources, and fr
       .modal-header,
       .modal-body {
         padding: 1.5rem;
-      }
-
-      .btn-add-resource {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
       }
     }
   </style>

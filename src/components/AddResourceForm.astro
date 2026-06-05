@@ -161,14 +161,16 @@ const topics = resourceData.taxonomies.topic;
     max-width: 600px;
     margin: 2rem auto;
     padding: 2rem;
-    background: #f9fafb;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
+    background: var(--lavender-mist);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--hairline);
   }
 
   h2 {
     margin-top: 0;
-    color: #1f2937;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--ink);
     margin-bottom: 1.5rem;
   }
 
@@ -178,8 +180,9 @@ const topics = resourceData.taxonomies.topic;
 
   label {
     display: block;
-    font-weight: 500;
-    color: #374151;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
     margin-bottom: 0.5rem;
   }
 
@@ -188,18 +191,18 @@ const topics = resourceData.taxonomies.topic;
   textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-badge);
     font-size: 1rem;
-    font-family: inherit;
+    font-family: var(--font-body);
     box-sizing: border-box;
   }
 
   input[type="url"]:focus,
   textarea:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(63, 43, 255, 0.12);
   }
 
   .checkbox-group {
@@ -226,50 +229,25 @@ const topics = resourceData.taxonomies.topic;
     margin-top: 2rem;
   }
 
-  .btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .btn-primary {
-    background: #3b82f6;
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background: #2563eb;
-  }
-
-  .btn-secondary {
-    background: #e5e7eb;
-    color: #374151;
-  }
-
-  .btn-secondary:hover {
-    background: #d1d5db;
-  }
+  /* Boutons : voir le pattern global src/styles/buttons.css
+     (.btn + .btn-primary / .btn-secondary, conforme au composant Figma) */
 
   .success-message {
     margin-top: 1rem;
     padding: 1rem;
-    background: #d1fae5;
-    color: #065f46;
-    border-radius: 4px;
-    border: 1px solid #6ee7b7;
+    background: rgba(72, 166, 107, 0.12);
+    color: var(--positive);
+    border-radius: var(--radius-badge);
+    border: 1px solid rgba(72, 166, 107, 0.4);
   }
 
   .error-message {
     margin-top: 1rem;
     padding: 1rem;
-    background: #fee2e2;
-    color: #991b1b;
-    border-radius: 4px;
-    border: 1px solid #fca5a5;
+    background: rgba(217, 74, 74, 0.12);
+    color: var(--negative);
+    border-radius: var(--radius-badge);
+    border: 1px solid rgba(217, 74, 74, 0.4);
   }
 
   @media (max-width: 768px) {

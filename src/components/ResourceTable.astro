@@ -241,8 +241,8 @@ const taxonomyLabels: Record<string, string> = {
           </div>
         ))}
         <div class="modal-actions-row">
-          <button type="button" id="editModalCancel" class="modal-btn modal-btn-cancel">Cancel</button>
-          <button type="submit" id="editModalSubmit" class="modal-btn modal-btn-save">Save Changes</button>
+          <button type="button" id="editModalCancel" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="editModalSubmit" class="btn btn-primary">Save Changes</button>
         </div>
       </form>
       <div id="editErrorMsg" class="edit-status-msg" style="display: none;"></div>
@@ -265,8 +265,8 @@ const taxonomyLabels: Record<string, string> = {
       </div>
       <button type="button" id="addTaxonomyValueBtn" class="add-value-btn">+ Add value</button>
       <div class="modal-actions-row">
-        <button type="button" id="editTaxonomyCancel" class="modal-btn modal-btn-cancel">Cancel</button>
-        <button type="button" id="editTaxonomySave" class="modal-btn modal-btn-save">Save</button>
+        <button type="button" id="editTaxonomyCancel" class="btn btn-secondary">Cancel</button>
+        <button type="button" id="editTaxonomySave" class="btn btn-primary">Save</button>
       </div>
       <div id="editTaxonomyErrorMsg" class="edit-status-msg" style="display: none;"></div>
     </div>
@@ -286,14 +286,14 @@ const taxonomyLabels: Record<string, string> = {
     border: 1px solid var(--color-border);
     border-radius: 6px;
     background-color: white;
-    color: #1f2937;
+    color: var(--ink);
     transition: border-color 0.2s;
   }
 
   .search-input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(63, 43, 255, 0.12);
   }
 
   .search-input::placeholder {
@@ -314,9 +314,10 @@ const taxonomyLabels: Record<string, string> = {
   .filter-category-btn {
     padding: 0.5rem 1rem;
     background-color: white;
-    color: #4b5563;
+    color: var(--slate);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -325,13 +326,13 @@ const taxonomyLabels: Record<string, string> = {
 
   .filter-category-btn:hover {
     border-color: var(--color-primary);
-    background-color: #f0f4ff;
+    background-color: var(--lavender-mist);
   }
 
   /* N≥1, tiroir fermé */
   .filter-category-btn[data-state="has-filters"] {
-    background-color: #f3f4f6;
-    color: #1f2937;
+    background-color: var(--lavender-mist);
+    color: var(--ink);
     border-color: var(--color-border);
   }
 
@@ -351,9 +352,10 @@ const taxonomyLabels: Record<string, string> = {
     margin-left: auto;
     padding: 0.5rem 1rem;
     background-color: white;
-    color: #6b7280;
+    color: var(--slate);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -362,9 +364,9 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .clear-filters-btn:hover {
-    border-color: #ef4444;
-    color: #ef4444;
-    background-color: #fef2f2;
+    border-color: var(--negative);
+    color: var(--negative);
+    background-color: rgba(217, 74, 74, 0.1);
   }
 
   .filter-panel-container {
@@ -375,7 +377,7 @@ const taxonomyLabels: Record<string, string> = {
 
   .filter-panel {
     padding: 0.75rem;
-    background-color: #f9fafb;
+    background-color: var(--lavender-mist);
     border: 1px solid var(--color-border);
     border-radius: 6px;
     animation: slideDown 0.2s ease-out;
@@ -402,7 +404,7 @@ const taxonomyLabels: Record<string, string> = {
   .resource-table-wrapper {
     overflow-x: auto;
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: var(--radius-card);
   }
 
   .resource-table {
@@ -412,7 +414,7 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .resource-table thead {
-    background-color: #f3f4f6;
+    background-color: var(--lavender-mist);
     position: sticky;
     top: 0;
   }
@@ -420,7 +422,9 @@ const taxonomyLabels: Record<string, string> = {
   .resource-table th {
     padding: var(--spacing-sm);
     text-align: left;
+    font-family: var(--font-display);
     font-weight: 600;
+    color: var(--fg-2);
     border-bottom: 2px solid var(--color-border);
     white-space: nowrap;
   }
@@ -475,7 +479,7 @@ const taxonomyLabels: Record<string, string> = {
     padding: var(--spacing-md);
     background-color: white;
     border-top: 1px solid var(--color-border);
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
     position: sticky;
     bottom: 0;
     z-index: 10;
@@ -484,9 +488,10 @@ const taxonomyLabels: Record<string, string> = {
   .pagination-btn {
     padding: 0.5rem 1rem;
     background-color: white;
-    color: #4b5563;
+    color: var(--slate);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -495,7 +500,7 @@ const taxonomyLabels: Record<string, string> = {
 
   .pagination-btn:hover:not(:disabled) {
     border-color: var(--color-primary);
-    background-color: #f0f4ff;
+    background-color: var(--lavender-mist);
   }
 
   .pagination-btn:disabled {
@@ -530,7 +535,7 @@ const taxonomyLabels: Record<string, string> = {
   .btn-edit-taxonomy {
     padding: 0.3rem 0.75rem;
     background: white;
-    color: #6b7280;
+    color: var(--slate);
     border: 1px solid var(--color-border);
     border-radius: 4px;
     font-size: 0.75rem;
@@ -542,13 +547,13 @@ const taxonomyLabels: Record<string, string> = {
   .btn-edit-taxonomy:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
-    background: #f0f4ff;
+    background: var(--lavender-mist);
   }
 
   /* ---- Edit Taxonomy modal specifics ---- */
   .taxonomy-edit-hint {
     font-size: 0.8125rem;
-    color: #6b7280;
+    color: var(--slate);
     margin: 0 0 1rem 0;
     line-height: 1.5;
   }
@@ -579,16 +584,16 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .add-value-btn:hover {
-    background: #f0f4ff;
+    background: var(--lavender-mist);
   }
 
   /* ---- Actions dropdown (SSR element, positioned fixed via JS) ---- */
   .actions-dropdown-menu {
     position: fixed;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background: var(--white);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-badge);
+    box-shadow: var(--shadow-card);
     z-index: 500;
     min-width: 130px;
     overflow: hidden;
@@ -604,22 +609,22 @@ const taxonomyLabels: Record<string, string> = {
     border: none;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151;
+    color: var(--ink);
     cursor: pointer;
     text-align: left;
     transition: background 0.15s;
   }
 
   .dropdown-item:hover {
-    background: #f3f4f6;
+    background: var(--lavender-mist);
   }
 
   .dropdown-item-danger {
-    color: #dc2626;
+    color: var(--negative);
   }
 
   .dropdown-item-danger:hover {
-    background: #fef2f2;
+    background: rgba(217, 74, 74, 0.1);
   }
 
   /* ---- Edit Resource Modal ---- */
@@ -635,9 +640,9 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .modal-box {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-float);
     width: 100%;
     max-width: 600px;
     max-height: 90vh;
@@ -650,7 +655,7 @@ const taxonomyLabels: Record<string, string> = {
     align-items: center;
     justify-content: space-between;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--hairline);
     flex-shrink: 0;
   }
 
@@ -658,14 +663,14 @@ const taxonomyLabels: Record<string, string> = {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--ink);
   }
 
   .modal-close-btn {
     background: transparent;
     border: none;
     font-size: 1.25rem;
-    color: #6b7280;
+    color: var(--slate);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     line-height: 1;
@@ -674,8 +679,8 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .modal-close-btn:hover {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--lavender-mist);
+    color: var(--ink);
   }
 
   .modal-body {
@@ -691,7 +696,7 @@ const taxonomyLabels: Record<string, string> = {
   .modal-label {
     display: block;
     font-weight: 500;
-    color: #374151;
+    color: var(--ink);
     margin-bottom: 0.4rem;
     font-size: 0.875rem;
   }
@@ -699,7 +704,7 @@ const taxonomyLabels: Record<string, string> = {
   .modal-input {
     width: 100%;
     padding: 0.6rem 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--hairline);
     border-radius: 4px;
     font-size: 0.9rem;
     font-family: inherit;
@@ -708,8 +713,8 @@ const taxonomyLabels: Record<string, string> = {
 
   .modal-input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(63, 43, 255, 0.12);
   }
 
   .modal-input-narrow {
@@ -719,7 +724,7 @@ const taxonomyLabels: Record<string, string> = {
   .modal-textarea {
     width: 100%;
     padding: 0.6rem 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--hairline);
     border-radius: 4px;
     font-size: 0.9rem;
     font-family: inherit;
@@ -729,8 +734,8 @@ const taxonomyLabels: Record<string, string> = {
 
   .modal-textarea:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(63, 43, 255, 0.12);
   }
 
   .modal-checkbox-group {
@@ -746,41 +751,11 @@ const taxonomyLabels: Record<string, string> = {
     justify-content: flex-end;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--hairline);
   }
 
-  .modal-btn {
-    padding: 0.6rem 1.25rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: background 0.15s;
-  }
-
-  .modal-btn-cancel {
-    background: #e5e7eb;
-    color: #374151;
-  }
-
-  .modal-btn-cancel:hover {
-    background: #d1d5db;
-  }
-
-  .modal-btn-save {
-    background: #3b82f6;
-    color: white;
-  }
-
-  .modal-btn-save:hover {
-    background: #2563eb;
-  }
-
-  .modal-btn-save:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  /* Boutons des modales : pattern global .btn .btn-primary / .btn-secondary
+     (src/styles/buttons.css, conforme au composant Figma) */
 
   .edit-status-msg {
     margin-top: 0.75rem;
@@ -790,15 +765,15 @@ const taxonomyLabels: Record<string, string> = {
   }
 
   .edit-status-msg.is-error {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
+    background: rgba(217, 74, 74, 0.12);
+    color: var(--negative);
+    border: 1px solid rgba(217, 74, 74, 0.4);
   }
 
   .edit-status-msg.is-success {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #6ee7b7;
+    background: rgba(72, 166, 107, 0.12);
+    color: var(--positive);
+    border: 1px solid rgba(72, 166, 107, 0.4);
   }
 </style>
 
@@ -810,9 +785,10 @@ const taxonomyLabels: Record<string, string> = {
     display: inline-block;
     padding: 0.5rem 0.75rem;
     background-color: white;
-    color: #4b5563;
+    color: var(--slate);
     border: 1px solid var(--color-border);
-    border-radius: 20px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -821,7 +797,7 @@ const taxonomyLabels: Record<string, string> = {
 
   .pill:hover {
     border-color: var(--color-primary);
-    background-color: #f0f4ff;
+    background-color: var(--lavender-mist);
   }
 
   .pill[aria-pressed="true"] {
@@ -836,18 +812,19 @@ const taxonomyLabels: Record<string, string> = {
     gap: 0.35rem;
     font-weight: normal;
     font-size: 0.875rem;
-    color: #374151;
+    color: var(--ink);
     cursor: pointer;
   }
 
   .resource-table td {
     padding: var(--spacing-sm);
+    font-family: var(--font-body);
     border-bottom: 1px solid var(--color-border);
     vertical-align: top;
   }
 
   .resource-table tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: var(--lavender-mist);
   }
 
   .source-cell a {
@@ -868,10 +845,11 @@ const taxonomyLabels: Record<string, string> = {
 
   .tag {
     display: inline-block;
-    background-color: #e0e7ff;
-    color: #3730a3;
+    background-color: var(--lavender);
+    color: var(--indigo);
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--radius-badge);
+    font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 500;
   }
@@ -906,7 +884,7 @@ const taxonomyLabels: Record<string, string> = {
   .taxonomy-value-input {
     flex: 1;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--hairline);
     border-radius: 4px;
     font-size: 0.875rem;
     font-family: inherit;
@@ -914,13 +892,13 @@ const taxonomyLabels: Record<string, string> = {
 
   .taxonomy-value-input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(63, 43, 255, 0.12);
   }
 
   .taxonomy-value-input[data-renamed="true"] {
-    border-color: #f59e0b;
-    background: #fffbeb;
+    border-color: var(--warning);
+    background: rgba(245, 158, 11, 0.1);
   }
 
   .btn-actions-menu {
@@ -932,13 +910,13 @@ const taxonomyLabels: Record<string, string> = {
     font-size: 1.25rem;
     line-height: 1;
     transition: all 0.15s ease;
-    color: #6b7280;
+    color: var(--slate);
   }
 
   .btn-actions-menu:hover {
-    background: #f3f4f6;
-    border-color: #e5e7eb;
-    color: #374151;
+    background: var(--lavender-mist);
+    border-color: var(--hairline);
+    color: var(--ink);
   }
 
   .page-number {
@@ -949,7 +927,7 @@ const taxonomyLabels: Record<string, string> = {
     height: 2rem;
     padding: 0 0.25rem;
     background-color: white;
-    color: #4b5563;
+    color: var(--slate);
     border: 1px solid var(--color-border);
     border-radius: 4px;
     font-size: 0.875rem;
@@ -960,7 +938,7 @@ const taxonomyLabels: Record<string, string> = {
 
   .page-number:hover {
     border-color: var(--color-primary);
-    background-color: #f0f4ff;
+    background-color: var(--lavender-mist);
   }
 
   .page-number[data-active="true"] {
@@ -977,7 +955,7 @@ const taxonomyLabels: Record<string, string> = {
       flex-wrap: wrap;
       gap: 0.5rem;
       border: 1px solid var(--color-border);
-      border-radius: 8px;
+      border-radius: var(--radius-card);
       padding: 1rem;
       background-color: white;
     }
@@ -997,7 +975,7 @@ const taxonomyLabels: Record<string, string> = {
     .resource-table td::before {
       content: attr(data-label);
       font-weight: 600;
-      color: #374151;
+      color: var(--ink);
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;

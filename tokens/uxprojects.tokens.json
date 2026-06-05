@@ -1,0 +1,145 @@
+{
+  "$description": "UXProjects Design System — ux-research-database. Source of truth for Figma Variables + web CSS tokens. Edit here, then push to Figma via figma-console and regenerate src/styles/tokens.css.",
+  "$schema": "https://tr.designtokens.org/format/",
+
+  "color": {
+    "$type": "color",
+
+    "brand": {
+      "indigo":        { "$value": "#3F2BFF", "$description": "Electric indigo — THE brand color" },
+      "indigo-700":    { "$value": "#2C1ECC", "$description": "Pressed / darker indigo (hover, active)" },
+      "indigo-300":    { "$value": "#8C7DFF", "$description": "Muted indigo — charts, disabled accents" },
+      "lime":          { "$value": "#E1FF91", "$description": "Chartreuse — title & quote backgrounds" },
+      "lavender-mist": { "$value": "#F3F0FF", "$description": "Lightest lavender — calm content bg" },
+      "lavender":      { "$value": "#ECE1FF", "$description": "Light purple — section / principle bg" },
+      "pink":          { "$value": "#FAC7FF", "$description": "Soft pink — decorative dots & markers only" },
+      "ink":           { "$value": "#2F2D2E", "$description": "Near-black — primary text" },
+      "slate":         { "$value": "#6A676D", "$description": "Warm gray — secondary text, captions" },
+      "white":         { "$value": "#FFFFFF" }
+    },
+
+    "status": {
+      "positive": { "$value": "#48A66B", "$description": "Green ✓ — correct / high trust level" },
+      "negative": { "$value": "#D94A4A", "$description": "Red ✗ — wrong / low trust level" },
+      "warning":  { "$value": "#F59E0B", "$description": "Amber — medium trust, caution" }
+    },
+
+    "semantic": {
+      "$description": "Named by use, not by hue. Update references here if brand palette changes.",
+      "fg-primary":      { "$value": "{color.brand.ink}" },
+      "fg-secondary":    { "$value": "{color.brand.slate}" },
+      "fg-accent":       { "$value": "{color.brand.indigo}" },
+      "fg-on-indigo":    { "$value": "{color.brand.white}" },
+      "fg-on-lime":      { "$value": "{color.brand.ink}" },
+      "bg-default":      { "$value": "{color.brand.white}" },
+      "bg-calm":         { "$value": "{color.brand.lavender-mist}" },
+      "bg-section":      { "$value": "{color.brand.lavender}" },
+      "bg-feature":      { "$value": "{color.brand.indigo}" },
+      "bg-celebrate":    { "$value": "{color.brand.lime}" },
+      "surface-card":    { "$value": "{color.brand.white}" },
+      "border-hairline": { "$value": "#E6E1F5" },
+      "border-card":     { "$value": "#ECE9F5" },
+      "focus-ring":      { "$value": "{color.brand.indigo}" }
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "display": {
+        "$type": "fontFamily",
+        "$value": "Poppins",
+        "$description": "Headings, titles, labels — Bold/SemiBold. CDN: fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700"
+      },
+      "body": {
+        "$type": "fontFamily",
+        "$value": "Inter",
+        "$description": "Body, UI chrome, tables — Inter variable font. Self-hosted in Design/project/fonts/"
+      }
+    },
+
+    "fontSize": {
+      "$type": "dimension",
+      "display": { "$value": "40px", "$description": "Hero headline — page/slide title" },
+      "section":  { "$value": "32px", "$description": "Section divider title" },
+      "h1":       { "$value": "28px", "$description": "Page heading / large quote" },
+      "h2":       { "$value": "24px", "$description": "Card / panel heading" },
+      "h3":       { "$value": "16px", "$description": "Sub-heading, item title" },
+      "num":      { "$value": "18px", "$description": "Numbered accents (01 / 02)" },
+      "label":    { "$value": "14px", "$description": "Eyebrow, filter label, tag" },
+      "body":     { "$value": "13px", "$description": "Body copy" },
+      "small":    { "$value": "12px", "$description": "Dense body, table cells, pills" },
+      "caption":  { "$value": "10.5px", "$description": "Footnote, timestamp, metadata" },
+      "badge":    { "$value": "9px",  "$description": "Page-number badge, tiny chip" }
+    },
+
+    "fontWeight": {
+      "$type": "fontWeight",
+      "regular":  { "$value": 400 },
+      "semibold": { "$value": 600 },
+      "bold":     { "$value": 700 }
+    },
+
+    "lineHeight": {
+      "$type": "number",
+      "tight": { "$value": 1.08, "$description": "Large display" },
+      "snug":  { "$value": 1.25, "$description": "Headings" },
+      "body":  { "$value": 1.5,  "$description": "Body, table cells" }
+    },
+
+    "letterSpacing": {
+      "$type": "dimension",
+      "tight":  { "$value": "-0.02em", "$description": "Large display — compensate for Poppins opticals" },
+      "normal": { "$value": "0em" },
+      "label":  { "$value": "0.06em",  "$description": "Uppercase eyebrow labels only" }
+    }
+  },
+
+  "dimension": {
+    "$type": "dimension",
+
+    "spacing": {
+      "$description": "4px base grid. Use multiples for layout, padding, gap.",
+      "1":  { "$value": "4px" },
+      "2":  { "$value": "8px" },
+      "3":  { "$value": "12px" },
+      "4":  { "$value": "16px" },
+      "5":  { "$value": "20px" },
+      "6":  { "$value": "24px" },
+      "8":  { "$value": "32px" },
+      "10": { "$value": "40px" },
+      "12": { "$value": "48px" },
+      "16": { "$value": "64px" },
+      "18": { "$value": "72px" }
+    },
+
+    "radius": {
+      "badge":     { "$value": "6px",   "$description": "Page badge, small chip" },
+      "card":      { "$value": "14px",  "$description": "Content cards, modals" },
+      "pill":      { "$value": "999px", "$description": "Buttons, filter chips, dots" },
+      "img":       { "$value": "18px",  "$description": "Framed images, screenshots" },
+      "container": { "$value": "28px",  "$description": "Floating text panel" }
+    }
+  },
+
+  "shadow": {
+    "$type": "shadow",
+    "card": {
+      "$value": [
+        { "color": "rgba(47,45,46,0.04)", "offsetX": "0px", "offsetY": "1px",  "blur": "2px",  "spread": "0px" },
+        { "color": "rgba(47,45,46,0.06)", "offsetX": "0px", "offsetY": "8px",  "blur": "24px", "spread": "0px" }
+      ],
+      "$description": "Resting card elevation — default for white cards on tinted surfaces"
+    },
+    "pop": {
+      "$value": { "color": "rgba(63,43,255,0.14)", "offsetX": "0px", "offsetY": "12px", "blur": "40px", "spread": "0px" },
+      "$description": "Indigo glow — single highlighted element per view (hover, focused card)"
+    },
+    "float": {
+      "$value": [
+        { "color": "rgba(47,45,46,0.04)", "offsetX": "0px", "offsetY": "2px",  "blur": "4px",  "spread": "0px" },
+        { "color": "rgba(47,45,46,0.16)", "offsetX": "0px", "offsetY": "22px", "blur": "48px", "spread": "-12px" }
+      ],
+      "$description": "Floating panel (text container, tooltip, dropdown)"
+    }
+  }
+}
