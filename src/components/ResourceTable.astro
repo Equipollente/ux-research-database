@@ -1120,8 +1120,8 @@ const taxonomyLabels: Record<string, string> = {
 <script>
   import { getResourcesFromGitHub, type Resource } from '../utils/github-api';
 
-  // All fetched resources kept in memory for the Edit modal pre-fill
   let allResources: Resource[] = [];
+  let localTaxonomyValues: Record<string, string[]> = {};
 
   function buildRow(resource: Resource): HTMLTableRowElement {
     const tr = document.createElement('tr');
@@ -1148,8 +1148,9 @@ const taxonomyLabels: Record<string, string> = {
   async function loadResourcesFromGitHub() {
     try {
       console.log('Loading resources from GitHub API...');
-      const resources = await getResourcesFromGitHub();
+      const { resources, taxonomies } = await getResourcesFromGitHub();
       allResources = resources;
+      localTaxonomyValues = taxonomies;
       const tbody = document.querySelector('.resource-table tbody');
 
       if (!tbody) {
@@ -1282,7 +1283,7 @@ const taxonomyLabels: Record<string, string> = {
   if (clearFiltersBtn) {
     clearFiltersBtn.addEventListener('click', () => {
       Object.keys(activeFilters).forEach((key) => activeFilters[key].clear());
-      pillButtons.forEach((pill) => pill.setAttribute('aria-pressed', 'false'));
+      document.querySelectorAll<HTMLButtonElement>('.pill').forEach((pill) => pill.setAttribute('aria-pressed', 'false'));
       if (openPanel) closePanelFor(openPanel);
       updateAllButtonStates();
       updateClearButtonVisibility();
@@ -1303,29 +1304,28 @@ const taxonomyLabels: Record<string, string> = {
     });
   });
 
-  // --- Pill click handlers ---
+  // --- Pill click handlers (event delegation — covers SSR pills + dynamically rebuilt pills) ---
 
-  pillButtons.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      const filterType = (pill as HTMLButtonElement).dataset.filterType!;
-      const filterValue = (pill as HTMLButtonElement).dataset.filterValue!;
+  document.querySelector('.filter-panel-container')?.addEventListener('click', (e) => {
+    const pill = (e.target as HTMLElement).closest<HTMLButtonElement>('.pill');
+    if (!pill) return;
+    const filterType = pill.dataset.filterType!;
+    const filterValue = pill.dataset.filterValue!;
 
-      if (activeFilters[filterType].has(filterValue)) {
-        activeFilters[filterType].delete(filterValue);
-        pill.setAttribute('aria-pressed', 'false');
-        // Auto-close: last pill in the open panel was deselected
-        if (activeFilters[filterType].size === 0 && openPanel === filterType) {
-          closePanelFor(filterType);
-        }
-      } else {
-        activeFilters[filterType].add(filterValue);
-        pill.setAttribute('aria-pressed', 'true');
+    if (activeFilters[filterType].has(filterValue)) {
+      activeFilters[filterType].delete(filterValue);
+      pill.setAttribute('aria-pressed', 'false');
+      if (activeFilters[filterType].size === 0 && openPanel === filterType) {
+        closePanelFor(filterType);
       }
+    } else {
+      activeFilters[filterType].add(filterValue);
+      pill.setAttribute('aria-pressed', 'true');
+    }
 
-      updateCategoryButtonState(filterType);
-      updateClearButtonVisibility();
-      applyFiltersAndSearch();
-    });
+    updateCategoryButtonState(filterType);
+    updateClearButtonVisibility();
+    applyFiltersAndSearch();
   });
 
   // Function to check if resource matches filters (AND between taxonomies, OR within)
@@ -1692,15 +1692,28 @@ const taxonomyLabels: Record<string, string> = {
     });
   });
 
+  function rebuildPillsForTaxonomy(taxonomyName: string, values: string[]) {
+    const panel = document.getElementById(`panel-${taxonomyName}`)!;
+    const container = panel.querySelector<HTMLElement>('.pills-container')!;
+    container.innerHTML = '';
+    activeFilters[taxonomyName].clear();
+    values.forEach((value) => {
+      const pill = document.createElement('button');
+      pill.className = 'pill';
+      pill.dataset.filterType = taxonomyName;
+      pill.dataset.filterValue = value;
+      pill.setAttribute('aria-pressed', 'false');
+      pill.textContent = value;
+      container.appendChild(pill);
+    });
+  }
+
   function openTaxonomyModal(taxonomyName: string) {
     currentTaxonomyName = taxonomyName;
     const label = categoryLabels[taxonomyName] || taxonomyName;
     editTaxonomyTitle.textContent = `Edit ${label}`;
 
-    // Read current values from the SSR-rendered pills
-    const panel = document.getElementById(`panel-${taxonomyName}`)!;
-    const pills = panel.querySelectorAll<HTMLButtonElement>('.pill[data-filter-value]');
-    const currentValues = Array.from(pills).map((p) => p.dataset.filterValue || '').filter(Boolean);
+    const currentValues = localTaxonomyValues[taxonomyName] || [];
 
     taxonomyValuesList.innerHTML = '';
     currentValues.forEach((v) => addTaxonomyValueRow(v));
@@ -1805,8 +1818,28 @@ const taxonomyLabels: Record<string, string> = {
       }
 
       localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+
+      // Update local taxonomy state
+      localTaxonomyValues[currentTaxonomyName!] = values;
+
+      // Apply renames to in-memory resources
+      if (Object.keys(renames).length > 0) {
+        const taxKey = currentTaxonomyName!;
+        allResources = allResources.map((r) => {
+          const oldVals = (r[taxKey as keyof Resource] as string[]) || [];
+          const newVals = oldVals.map((v) => renames[v] ?? v);
+          return { ...r, [taxKey]: newVals } as Resource;
+        });
+      }
+
+      // Rebuild filter pills and re-render table
+      rebuildPillsForTaxonomy(currentTaxonomyName!, values);
+      const taxTbody = document.querySelector<HTMLTableSectionElement>('.resource-table tbody')!;
+      taxTbody.innerHTML = '';
+      allResources.forEach((r) => taxTbody.appendChild(buildRow(r)));
+      applyFiltersAndSearch();
+
       closeTaxonomyModal();
-      window.location.reload();
     } catch (error) {
       showTaxonomyError(`Network error: ${(error as Error).message}`);
       editTaxonomySave.textContent = 'Save';

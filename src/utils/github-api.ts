@@ -13,7 +13,10 @@ export type { Resource };
 const RAW_RESOURCES_URL =
   'https://raw.githubusercontent.com/equipollente/ux-research-database/main/src/data/resources.json';
 
-export async function getResourcesFromGitHub(): Promise<Resource[]> {
+export async function getResourcesFromGitHub(): Promise<{
+  resources: Resource[];
+  taxonomies: Record<string, string[]>;
+}> {
   // Cache-buster: raw.githubusercontent.com sets Cache-Control max-age=300,
   // which would otherwise hide new resources for ~5 min after a commit.
   // The query string is ignored by GitHub's server but treated as a unique
@@ -25,9 +28,12 @@ export async function getResourcesFromGitHub(): Promise<Resource[]> {
       throw new Error(`Failed to fetch resources: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    return data.resources || data || [];
+    return {
+      resources: data.resources || [],
+      taxonomies: data.taxonomies || {},
+    };
   } catch (error) {
     console.error('Failed to fetch resources from raw GitHub:', error);
-    return [];
+    return { resources: [], taxonomies: {} };
   }
 }
