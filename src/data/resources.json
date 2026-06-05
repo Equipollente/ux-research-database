@@ -310,6 +310,44 @@
       ],
       "trust_level": 5,
       "last_updated": "2026-06-04"
+    },
+    {
+      "id": "r-1780635004359",
+      "source": "https://www.deceptive.design/",
+      "comments": "Site de référence incontournable fondateur du domaine des \"dark patterns\", combinant expertise UX, recherche académique et analyse légale pour exposer et combattre les pratiques déceptives numériques. La reading list de 318 ressources curatées couvre HCI, psychologie, droit et design éthique",
+      "access_model": [
+        "Gratuit"
+      ],
+      "origin": [
+        "Independent"
+      ],
+      "publisher_type": [
+        "Collective",
+        "Organization"
+      ],
+      "domain": [
+        "UX Design",
+        "UX Research",
+        "Behavioral Science",
+        "Psychology"
+      ],
+      "content_type": [
+        "Article",
+        "Case Study",
+        "Audit",
+        "Encyclopedic"
+      ],
+      "topic": [
+        "Cognition",
+        "Emotion & Affect",
+        "Social Behavior",
+        "Ethics & Values",
+        "Decision Making",
+        "Trust",
+        "Technology & Society"
+      ],
+      "trust_level": 5,
+      "last_updated": "2026-06-05"
     }
   ]
 }
