@@ -138,6 +138,9 @@
     {
       "id": "r-004",
       "source": "https://ixdf.org/",
+      "comments": "Comprehensive UX design and research tools, templates, and educational resources. Excellent library of design and research templates.",
+      "trust_level": 4,
+      "last_updated": "2026-06-05",
       "access_model": [
         "Freemium"
       ],
@@ -153,19 +156,16 @@
         "Digital Product"
       ],
       "content_type": [
-        "Outil",
+        "Tool",
         "Template",
         "Course - Lesson"
       ],
       "topic": [
-        "Design Process",
-        "Research Practice",
         "Interaction",
-        "Usability"
-      ],
-      "trust_level": 4,
-      "comments": "Comprehensive UX design and research tools, templates, and educational resources. Excellent library of design and research templates.",
-      "last_updated": "2026-05-23"
+        "Usability",
+        "Research Practice",
+        "Design Process"
+      ]
     },
     {
       "id": "r-1779574520788",
