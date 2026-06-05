@@ -32,7 +32,7 @@
       "Blog Post",
       "Case Study",
       "Research Paper",
-      "Outil",
+      "Tool",
       "Template",
       "Framework",
       "Study",
@@ -42,7 +42,8 @@
       "Trend Report",
       "Book",
       "Course",
-      "Encyclopedic"
+      "Encyclopedic",
+      "Outil"
     ],
     "topic": [
       "Cognition",
