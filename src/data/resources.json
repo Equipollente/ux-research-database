@@ -70,10 +70,10 @@
   "resources": [
     {
       "id": "r-001",
-      "source": "https://www.nngroup.com/articles/ten-usability-heuristics/",
+      "source": "https://www.nngroup.com/articles/ten-usability-heuristics/yy",
       "comments": "Nielsen Norman Group - Absolute reference for usability heuristics evaluation. Essential reading for anyone doing UX work.",
       "trust_level": 5,
-      "last_updated": "2026-05-23",
+      "last_updated": "2026-06-05",
       "access_model": [
         "Free"
       ],
