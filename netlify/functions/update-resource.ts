@@ -16,15 +16,16 @@ export const handler: Handler = async (event) => {
   const authErr = checkAdminPassword(event);
   if (authErr) return authErr;
 
-  let newResource: Resource;
+  let payload: { id?: string; resource?: Resource };
   try {
-    newResource = JSON.parse(event.body || '{}');
+    payload = JSON.parse(event.body || '{}');
   } catch {
     return { statusCode: 400, body: 'Invalid JSON' };
   }
 
-  if (!newResource.source) {
-    return { statusCode: 400, body: 'Missing required field: source' };
+  const { id, resource } = payload;
+  if (!id || !resource) {
+    return { statusCode: 400, body: 'Missing required fields: id, resource' };
   }
 
   const env = getGitHubEnv();
@@ -35,22 +36,27 @@ export const handler: Handler = async (event) => {
 
   const { data: current, sha } = fileResult;
 
-  const updated = {
-    ...current,
-    resources: [...(current.resources || []), newResource],
-  };
+  const index = current.resources.findIndex((r) => r.id === id);
+  if (index === -1) {
+    return { statusCode: 404, body: `Resource not found: ${id}` };
+  }
+
+  const updatedResources = [...current.resources];
+  updatedResources[index] = { ...resource, id };
+
+  const updated = { ...current, resources: updatedResources };
 
   const commitErr = await commitResourcesFile(
     env,
     updated,
     sha,
-    `Add resource: ${newResource.source}`
+    `Update resource: ${String(resource.source ?? id)}`
   );
   if (commitErr) return commitErr;
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ success: true, id: newResource.id }),
+    body: JSON.stringify({ success: true, id }),
   };
 };

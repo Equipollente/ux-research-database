@@ -4,6 +4,14 @@ import resourceData from '../data/resources.json';
 
 const data: ResourceData = resourceData;
 // Resources will be loaded via GitHub API on client-side
+const taxonomyLabels: Record<string, string> = {
+  access_model: 'Access Model',
+  origin: 'Origin',
+  publisher_type: 'Publisher Type',
+  domain: 'Domain',
+  content_type: 'Content Type',
+  topic: 'Topic',
+};
 ---
 
 <div class="search-section">
@@ -36,10 +44,16 @@ const data: ResourceData = resourceData;
     <button class="filter-category-btn" data-category="topic">
       Topic
     </button>
+    <button id="clearFiltersBtn" class="clear-filters-btn" style="display: none;">
+      Effacer les filtres
+    </button>
   </div>
 
   <div class="filter-panel-container">
     <div class="filter-panel" id="panel-access_model" data-category="access_model" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="access_model">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.access_model.map((value) => (
           <button
@@ -55,6 +69,9 @@ const data: ResourceData = resourceData;
     </div>
 
     <div class="filter-panel" id="panel-origin" data-category="origin" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="origin">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.origin.map((value) => (
           <button
@@ -70,6 +87,9 @@ const data: ResourceData = resourceData;
     </div>
 
     <div class="filter-panel" id="panel-publisher_type" data-category="publisher_type" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="publisher_type">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.publisher_type.map((value) => (
           <button
@@ -85,6 +105,9 @@ const data: ResourceData = resourceData;
     </div>
 
     <div class="filter-panel" id="panel-domain" data-category="domain" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="domain">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.domain.map((value) => (
           <button
@@ -100,6 +123,9 @@ const data: ResourceData = resourceData;
     </div>
 
     <div class="filter-panel" id="panel-content_type" data-category="content_type" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="content_type">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.content_type.map((value) => (
           <button
@@ -115,6 +141,9 @@ const data: ResourceData = resourceData;
     </div>
 
     <div class="filter-panel" id="panel-topic" data-category="topic" style="display: none;">
+      <div class="filter-panel-header">
+        <button class="btn-edit-taxonomy" data-taxonomy="topic">Edit values</button>
+      </div>
       <div class="pills-container">
         {data.taxonomies.topic.map((value) => (
           <button
@@ -167,6 +196,80 @@ const data: ResourceData = resourceData;
     <button id="next-btn" class="pagination-btn" disabled>
       Next →
     </button>
+  </div>
+</div>
+
+<!-- Shared dropdown menu (portal, positioned fixed by JS to avoid overflow-x clipping) -->
+<div id="actionsDropdown" class="actions-dropdown-menu" style="display: none;">
+  <button id="dropdownEditBtn" class="dropdown-item">✏️ Edit</button>
+  <button id="dropdownDeleteBtn" class="dropdown-item dropdown-item-danger">🗑️ Delete</button>
+</div>
+
+<!-- Edit Resource Modal -->
+<div id="editResourceModal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="editModalTitle">Edit Resource</h2>
+      <button id="editModalClose" class="modal-close-btn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="editResourceForm">
+        <input type="hidden" id="editResourceId" />
+        <div class="modal-form-row">
+          <label for="editSource" class="modal-label">Source URL *</label>
+          <input type="url" id="editSource" name="source" required placeholder="https://..." class="modal-input" />
+        </div>
+        <div class="modal-form-row">
+          <label for="editComments" class="modal-label">Comments</label>
+          <textarea id="editComments" name="comments" rows="3" class="modal-textarea" placeholder="Notes about this resource..."></textarea>
+        </div>
+        <div class="modal-form-row">
+          <label for="editTrustLevel" class="modal-label">Trust Level (1-5) *</label>
+          <input type="number" id="editTrustLevel" name="trust_level" min="1" max="5" step="1" required value="3" class="modal-input modal-input-narrow" />
+        </div>
+        {Object.entries(data.taxonomies).map(([taxonomyName, values]) => (
+          <div class="modal-form-row">
+            <label class="modal-label">{taxonomyLabels[taxonomyName] ?? taxonomyName}</label>
+            <div class="modal-checkbox-group" data-taxonomy={taxonomyName}>
+              {values.map(value => (
+                <label class="modal-checkbox-label">
+                  <input type="checkbox" name={taxonomyName} value={value} />
+                  {value}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div class="modal-actions-row">
+          <button type="button" id="editModalCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+          <button type="submit" id="editModalSubmit" class="modal-btn modal-btn-save">Save Changes</button>
+        </div>
+      </form>
+      <div id="editErrorMsg" class="edit-status-msg" style="display: none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Taxonomy Modal -->
+<!-- TODO: validate UX choice — spec says button in filter-bar; implemented as header inside filter panel for simplicity -->
+<div id="editTaxonomyModal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editTaxonomyTitle">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="editTaxonomyTitle">Edit Taxonomy</h2>
+      <button id="editTaxonomyClose" class="modal-close-btn" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="taxonomy-edit-hint">Rename values. Changes propagate to all resources automatically.<br/>Values cannot be deleted (to avoid orphaned resources).</p>
+      <div id="taxonomyValuesList" class="taxonomy-values-list">
+        <!-- Populated by JS -->
+      </div>
+      <button type="button" id="addTaxonomyValueBtn" class="add-value-btn">+ Add value</button>
+      <div class="modal-actions-row">
+        <button type="button" id="editTaxonomyCancel" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button type="button" id="editTaxonomySave" class="modal-btn modal-btn-save">Save</button>
+      </div>
+      <div id="editTaxonomyErrorMsg" class="edit-status-msg" style="display: none;"></div>
+    </div>
   </div>
 </div>
 
@@ -225,10 +328,43 @@ const data: ResourceData = resourceData;
     background-color: #f0f4ff;
   }
 
-  .filter-category-btn[data-active="true"] {
+  /* N≥1, tiroir fermé */
+  .filter-category-btn[data-state="has-filters"] {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    border-color: var(--color-border);
+  }
+
+  /* Tiroir ouvert (prioritaire sur has-filters) */
+  .filter-category-btn[data-state="open"] {
     background-color: var(--color-primary);
     color: white;
     border-color: var(--color-primary);
+  }
+
+  .filter-category-btn[data-state="open"]:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .clear-filters-btn {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #6b7280;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .clear-filters-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
   }
 
   .filter-panel-container {
@@ -262,29 +398,6 @@ const data: ResourceData = resourceData;
     gap: 0.5rem;
   }
 
-  .pill {
-    display: inline-block;
-    padding: 0.5rem 0.75rem;
-    background-color: white;
-    color: #4b5563;
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .pill:hover {
-    border-color: var(--color-primary);
-    background-color: #f0f4ff;
-  }
-
-  .pill[aria-pressed="true"] {
-    background-color: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
-  }
 
   .resource-table-wrapper {
     overflow-x: auto;
@@ -406,11 +519,326 @@ const data: ResourceData = resourceData;
       justify-content: center;
     }
   }
+
+  /* ---- Filter panel header (Edit values button) ---- */
+  .filter-panel-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-edit-taxonomy {
+    padding: 0.3rem 0.75rem;
+    background: white;
+    color: #6b7280;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-edit-taxonomy:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: #f0f4ff;
+  }
+
+  /* ---- Edit Taxonomy modal specifics ---- */
+  .taxonomy-edit-hint {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+  }
+
+  .taxonomy-values-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .add-value-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    background: white;
+    color: var(--color-primary);
+    border: 1px dashed var(--color-primary);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 1rem;
+  }
+
+  .add-value-btn:hover {
+    background: #f0f4ff;
+  }
+
+  /* ---- Actions dropdown (SSR element, positioned fixed via JS) ---- */
+  .actions-dropdown-menu {
+    position: fixed;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 500;
+    min-width: 130px;
+    overflow: hidden;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: transparent;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background: #f3f4f6;
+  }
+
+  .dropdown-item-danger {
+    color: #dc2626;
+  }
+
+  .dropdown-item-danger:hover {
+    background: #fef2f2;
+  }
+
+  /* ---- Edit Resource Modal ---- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+  }
+
+  .modal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+
+  .modal-close-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .modal-form-row {
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-label {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  .modal-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .modal-input-narrow {
+    max-width: 100px;
+  }
+
+  .modal-textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+
+  .modal-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .modal-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+
+  .modal-actions-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .modal-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+  }
+
+  .modal-btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  .modal-btn-cancel:hover {
+    background: #d1d5db;
+  }
+
+  .modal-btn-save {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .modal-btn-save:hover {
+    background: #2563eb;
+  }
+
+  .modal-btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .edit-status-msg {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+
+  .edit-status-msg.is-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+
+  .edit-status-msg.is-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
 </style>
 
 <style is:global>
   /* Styles for elements created dynamically via JS (innerHTML / createElement). */
   /* These lose Astro's scope, so they must be global. */
+
+  .pill {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    color: #4b5563;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pill:hover {
+    border-color: var(--color-primary);
+    background-color: #f0f4ff;
+  }
+
+  .pill[aria-pressed="true"] {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .modal-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: normal;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+  }
 
   .resource-table td {
     padding: var(--spacing-sm);
@@ -468,26 +896,49 @@ const data: ResourceData = resourceData;
     width: 3rem;
   }
 
-  .btn-delete-resource {
+  /* Taxonomy value rows created dynamically inside the edit taxonomy modal */
+  .taxonomy-value-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .taxonomy-value-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+  }
+
+  .taxonomy-value-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .taxonomy-value-input[data-renamed="true"] {
+    border-color: #f59e0b;
+    background: #fffbeb;
+  }
+
+  .btn-actions-menu {
     background: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.25rem;
     line-height: 1;
     transition: all 0.15s ease;
     color: #6b7280;
   }
 
-  .btn-delete-resource:hover:not(:disabled) {
-    background: #fee2e2;
-    border-color: #fca5a5;
-  }
-
-  .btn-delete-resource:disabled {
-    cursor: wait;
-    opacity: 0.6;
+  .btn-actions-menu:hover {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #374151;
   }
 
   .page-number {
@@ -669,13 +1120,39 @@ const data: ResourceData = resourceData;
 </style>
 
 <script>
-  import { getResourcesFromGitHub } from '../utils/github-api';
+  import { getResourcesFromGitHub, type Resource } from '../utils/github-api';
+
+  let allResources: Resource[] = [];
+  let localTaxonomyValues: Record<string, string[]> = {};
+
+  function buildRow(resource: Resource): HTMLTableRowElement {
+    const tr = document.createElement('tr');
+    const sourceHTML = resource.source.startsWith('http')
+      ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
+      : `<span>${resource.source}</span>`;
+    tr.innerHTML = `
+      <td class="source-cell" data-label="Source">${sourceHTML}</td>
+      <td data-label="Access Model"><span class="tag-list">${(resource.access_model || []).map((am) => `<span class="tag">${am}</span>`).join('')}</span></td>
+      <td data-label="Origin"><span class="tag-list">${(resource.origin || []).map((o) => `<span class="tag">${o}</span>`).join('')}</span></td>
+      <td data-label="Publisher Type"><span class="tag-list">${(resource.publisher_type || []).map((pt) => `<span class="tag">${pt}</span>`).join('')}</span></td>
+      <td data-label="Domain"><span class="tag-list">${(resource.domain || []).map((d) => `<span class="tag">${d}</span>`).join('')}</span></td>
+      <td data-label="Content Type"><span class="tag-list">${(resource.content_type || []).map((ct) => `<span class="tag">${ct}</span>`).join('')}</span></td>
+      <td data-label="Topic"><span class="tag-list">${(resource.topic || []).map((t) => `<span class="tag">${t}</span>`).join('')}</span></td>
+      <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
+      <td class="comments" data-label="Comments">${resource.comments || ''}</td>
+      <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
+      <td class="actions-cell" data-label="Actions"><button class="btn-actions-menu" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="More actions" title="More actions">⋮</button></td>
+    `;
+    return tr;
+  }
 
   // Load resources from GitHub API and populate table
   async function loadResourcesFromGitHub() {
     try {
       console.log('Loading resources from GitHub API...');
-      const resources = await getResourcesFromGitHub();
+      const { resources, taxonomies } = await getResourcesFromGitHub();
+      allResources = resources;
+      localTaxonomyValues = taxonomies;
       const tbody = document.querySelector('.resource-table tbody');
 
       if (!tbody) {
@@ -683,31 +1160,8 @@ const data: ResourceData = resourceData;
         return;
       }
 
-      // Clear existing server-side rows
       tbody.innerHTML = '';
-
-      // Render each resource
-      resources.forEach((resource) => {
-        const tr = document.createElement('tr');
-        const sourceHTML = resource.source.startsWith('http')
-          ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
-          : `<span>${resource.source}</span>`;
-
-        tr.innerHTML = `
-          <td class="source-cell" data-label="Source">${sourceHTML}</td>
-          <td data-label="Access Model"><span class="tag-list">${(resource.access_model || []).map((am) => `<span class="tag">${am}</span>`).join('')}</span></td>
-          <td data-label="Origin"><span class="tag-list">${(resource.origin || []).map((o) => `<span class="tag">${o}</span>`).join('')}</span></td>
-          <td data-label="Publisher Type"><span class="tag-list">${(resource.publisher_type || []).map((pt) => `<span class="tag">${pt}</span>`).join('')}</span></td>
-          <td data-label="Domain"><span class="tag-list">${(resource.domain || []).map((d) => `<span class="tag">${d}</span>`).join('')}</span></td>
-          <td data-label="Content Type"><span class="tag-list">${(resource.content_type || []).map((ct) => `<span class="tag">${ct}</span>`).join('')}</span></td>
-          <td data-label="Topic"><span class="tag-list">${(resource.topic || []).map((t) => `<span class="tag">${t}</span>`).join('')}</span></td>
-          <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
-          <td class="comments" data-label="Comments">${resource.comments || ''}</td>
-          <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
-          <td class="actions-cell" data-label="Actions"><button class="btn-delete-resource" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="Delete this resource" title="Delete">🗑️</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      resources.forEach((resource) => tbody.appendChild(buildRow(resource)));
 
       console.log(`Loaded ${resources.length} resources from GitHub`);
     } catch (error) {
@@ -765,49 +1219,115 @@ const data: ResourceData = resourceData;
     topic: new Set(),
   };
 
-  // Track which panels are open
-  const openPanels: Set<string> = new Set();
+  // Exclusive accordion: at most one panel open at a time
+  let openPanel: string | null = null;
 
-  // Attach click handlers to category buttons for accordion toggle
+  // Map data-category → original button label (captured once at startup)
+  const categoryLabels: Record<string, string> = {};
+  categoryButtons.forEach((btn) => {
+    const cat = (btn as HTMLButtonElement).dataset.category!;
+    categoryLabels[cat] = btn.textContent?.trim() || cat;
+  });
+
+  // --- Panel open/close helpers ---
+
+  function closePanelFor(category: string) {
+    const panel = document.getElementById(`panel-${category}`);
+    if (panel) panel.style.display = 'none';
+    if (openPanel === category) openPanel = null;
+    updateCategoryButtonState(category);
+  }
+
+  function openPanelFor(category: string) {
+    if (openPanel && openPanel !== category) {
+      closePanelFor(openPanel);
+    }
+    const panel = document.getElementById(`panel-${category}`);
+    if (panel) panel.style.display = 'block';
+    openPanel = category;
+    updateCategoryButtonState(category);
+  }
+
+  // --- Button state updater ---
+
+  function updateCategoryButtonState(category: string) {
+    const btn = document.querySelector<HTMLButtonElement>(
+      `.filter-category-btn[data-category="${category}"]`
+    );
+    if (!btn) return;
+    const count = activeFilters[category].size;
+    const label = categoryLabels[category] || category;
+    btn.textContent = count > 0 ? `${label} (${count})` : label;
+
+    if (openPanel === category) {
+      btn.setAttribute('data-state', 'open');
+    } else if (count > 0) {
+      btn.setAttribute('data-state', 'has-filters');
+    } else {
+      btn.removeAttribute('data-state');
+    }
+  }
+
+  function updateAllButtonStates() {
+    Object.keys(activeFilters).forEach(updateCategoryButtonState);
+  }
+
+  // --- Clear filters button ---
+
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  function updateClearButtonVisibility() {
+    if (!clearFiltersBtn) return;
+    const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
+    (clearFiltersBtn as HTMLElement).style.display = hasAny ? 'inline-flex' : 'none';
+  }
+
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', () => {
+      Object.keys(activeFilters).forEach((key) => activeFilters[key].clear());
+      document.querySelectorAll<HTMLButtonElement>('.pill').forEach((pill) => pill.setAttribute('aria-pressed', 'false'));
+      if (openPanel) closePanelFor(openPanel);
+      updateAllButtonStates();
+      updateClearButtonVisibility();
+      applyFiltersAndSearch();
+    });
+  }
+
+  // --- Category button click handlers (exclusive accordion) ---
+
   categoryButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const category = btn.dataset.category;
-      const panel = document.getElementById(`panel-${category}`);
-
-      if (!panel) return;
-
-      if (openPanels.has(category)) {
-        // Close the panel
-        openPanels.delete(category);
-        panel.style.display = 'none';
-        btn.setAttribute('data-active', 'false');
+      const category = (btn as HTMLButtonElement).dataset.category!;
+      if (openPanel === category) {
+        closePanelFor(category);
       } else {
-        // Open the panel
-        openPanels.add(category);
-        panel.style.display = 'block';
-        btn.setAttribute('data-active', 'true');
+        openPanelFor(category);
       }
     });
   });
 
-  // Attach click handlers to pills
-  pillButtons.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      const filterType = pill.dataset.filterType;
-      const filterValue = pill.dataset.filterValue;
+  // --- Pill click handlers (event delegation — covers SSR pills + dynamically rebuilt pills) ---
 
-      // Toggle the filter
-      if (activeFilters[filterType].has(filterValue)) {
-        activeFilters[filterType].delete(filterValue);
-        pill.setAttribute('aria-pressed', 'false');
-      } else {
-        activeFilters[filterType].add(filterValue);
-        pill.setAttribute('aria-pressed', 'true');
+  document.querySelector('.filter-panel-container')?.addEventListener('click', (e) => {
+    const pill = (e.target as HTMLElement).closest<HTMLButtonElement>('.pill');
+    if (!pill) return;
+    const filterType = pill.dataset.filterType!;
+    const filterValue = pill.dataset.filterValue!;
+
+    if (activeFilters[filterType].has(filterValue)) {
+      activeFilters[filterType].delete(filterValue);
+      pill.setAttribute('aria-pressed', 'false');
+      if (activeFilters[filterType].size === 0 && openPanel === filterType) {
+        closePanelFor(filterType);
       }
+    } else {
+      activeFilters[filterType].add(filterValue);
+      pill.setAttribute('aria-pressed', 'true');
+    }
 
-      // Refilter table
-      applyFiltersAndSearch();
-    });
+    updateCategoryButtonState(filterType);
+    updateClearButtonVisibility();
+    applyFiltersAndSearch();
   });
 
   // Function to check if resource matches filters (AND between taxonomies, OR within)
@@ -939,20 +1459,354 @@ const data: ResourceData = resourceData;
   renderPagination();
 
   // ------------------------------------------------------------------
-  // Delete a resource — wired via event delegation so it works for rows
-  // added after this script ran (the rows are rendered async from raw).
+  // Shared password key
   // ------------------------------------------------------------------
   const PASSWORD_STORAGE_KEY = 'ux_research_admin_password';
 
-  document.addEventListener('click', async (e) => {
-    const target = (e.target as HTMLElement)?.closest('.btn-delete-resource');
-    if (!target) return;
+  // ------------------------------------------------------------------
+  // Actions dropdown — portal element positioned fixed via JS
+  // ------------------------------------------------------------------
+  const actionsDropdown = document.getElementById('actionsDropdown')!;
+  let currentDropdownId: string | null = null;
+  let currentDropdownSource: string | null = null;
 
-    const id = (target as HTMLElement).dataset.id;
-    const source = (target as HTMLElement).dataset.source || id;
+  function openDropdown(triggerBtn: HTMLButtonElement) {
+    const rect = triggerBtn.getBoundingClientRect();
+    actionsDropdown.style.display = 'block';
+    // position:fixed → viewport coords from getBoundingClientRect, no scrollY needed
+    requestAnimationFrame(() => {
+      const ddWidth = actionsDropdown.offsetWidth;
+      const ddHeight = actionsDropdown.offsetHeight;
+      let left = rect.right - ddWidth;
+      if (left < 8) left = 8;
+      // Flip above if dropdown would overflow the viewport bottom
+      let top = rect.bottom + 4;
+      if (top + ddHeight > window.innerHeight - 8) {
+        top = rect.top - ddHeight - 4;
+      }
+      actionsDropdown.style.top = `${top}px`;
+      actionsDropdown.style.left = `${left}px`;
+    });
+  }
+
+  function closeDropdown() {
+    actionsDropdown.style.display = 'none';
+    currentDropdownId = null;
+    currentDropdownSource = null;
+  }
+
+  // ⋮ button click — event delegation (rows are added async)
+  document.addEventListener('click', (e) => {
+    const menuBtn = (e.target as HTMLElement)?.closest('.btn-actions-menu') as HTMLButtonElement | null;
+    if (menuBtn) {
+      e.stopPropagation();
+      const id = menuBtn.dataset.id!;
+      // Toggle: clicking the same row's button closes the dropdown
+      if (currentDropdownId === id && actionsDropdown.style.display !== 'none') {
+        closeDropdown();
+        return;
+      }
+      currentDropdownId = id;
+      currentDropdownSource = menuBtn.dataset.source || id;
+      openDropdown(menuBtn);
+      return;
+    }
+    // Click outside dropdown → close
+    if (!actionsDropdown.contains(e.target as Node)) {
+      closeDropdown();
+    }
+  });
+
+  // Dropdown — Edit button
+  document.getElementById('dropdownEditBtn')?.addEventListener('click', () => {
+    const id = currentDropdownId;
+    closeDropdown();
     if (!id) return;
+    const resource = allResources.find((r) => r.id === id);
+    if (resource) openEditModal(resource);
+  });
 
-    if (!window.confirm(`Delete resource "${source}" ?\nThis cannot be undone.`)) {
+  // Dropdown — Delete button
+  document.getElementById('dropdownDeleteBtn')?.addEventListener('click', () => {
+    const id = currentDropdownId;
+    const source = currentDropdownSource || id || '';
+    closeDropdown();
+    if (id) deleteResource(id, source);
+  });
+
+  // ------------------------------------------------------------------
+  // Edit Resource modal
+  // ------------------------------------------------------------------
+  const editModal = document.getElementById('editResourceModal')!;
+  const editForm = document.getElementById('editResourceForm') as HTMLFormElement;
+  const editIdInput = document.getElementById('editResourceId') as HTMLInputElement;
+  const editSourceInput = document.getElementById('editSource') as HTMLInputElement;
+  const editCommentsTextarea = document.getElementById('editComments') as HTMLTextAreaElement;
+  const editTrustLevelInput = document.getElementById('editTrustLevel') as HTMLInputElement;
+  const editErrorMsg = document.getElementById('editErrorMsg')!;
+  const editModalSubmit = document.getElementById('editModalSubmit') as HTMLButtonElement;
+
+  const TAXONOMY_KEYS = [
+    'access_model', 'origin', 'publisher_type', 'domain', 'content_type', 'topic',
+  ] as const;
+
+  function openEditModal(resource: Resource) {
+    editIdInput.value = resource.id;
+    editSourceInput.value = resource.source || '';
+    editCommentsTextarea.value = resource.comments || '';
+    editTrustLevelInput.value = String(resource.trust_level ?? 3);
+
+    // Reset all checkboxes
+    editForm.querySelectorAll<HTMLInputElement>('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = false;
+    });
+    // Check current values for each taxonomy
+    for (const key of TAXONOMY_KEYS) {
+      const vals = (resource[key] as string[]) || [];
+      for (const val of vals) {
+        const cb = editForm.querySelector<HTMLInputElement>(
+          `input[name="${key}"][value="${CSS.escape(val)}"]`
+        );
+        // Fallback: linear search if CSS.escape produces no match
+        if (cb) {
+          cb.checked = true;
+        } else {
+          editForm.querySelectorAll<HTMLInputElement>(`input[name="${key}"]`).forEach((el) => {
+            if (el.value === val) el.checked = true;
+          });
+        }
+      }
+    }
+
+    editErrorMsg.style.display = 'none';
+    editErrorMsg.textContent = '';
+    editModalSubmit.textContent = 'Save Changes';
+    editModalSubmit.disabled = false;
+    (editModal as HTMLElement).style.display = 'flex';
+    editSourceInput.focus();
+  }
+
+  function closeEditModal() {
+    (editModal as HTMLElement).style.display = 'none';
+  }
+
+  document.getElementById('editModalClose')?.addEventListener('click', closeEditModal);
+  document.getElementById('editModalCancel')?.addEventListener('click', closeEditModal);
+  editModal.addEventListener('click', (e) => {
+    if (e.target === editModal) closeEditModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && (editModal as HTMLElement).style.display !== 'none') {
+      closeEditModal();
+    }
+  });
+
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = editIdInput.value;
+    const source = editSourceInput.value.trim();
+    const comments = editCommentsTextarea.value.trim();
+    const trustLevel = parseInt(editTrustLevelInput.value, 10);
+
+    if (!source) { showEditError('Source URL is required'); return; }
+    if (!Number.isInteger(trustLevel) || trustLevel < 1 || trustLevel > 5) {
+      showEditError('Trust level must be between 1 and 5'); return;
+    }
+
+    const formData = new FormData(editForm);
+    const taxonomyValues: Record<string, string[]> = {};
+    for (const key of TAXONOMY_KEYS) {
+      taxonomyValues[key] = formData.getAll(key) as string[];
+    }
+
+    let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (!password) {
+      password = prompt('Admin password:');
+      if (!password) return;
+    }
+
+    const updatedResource: Resource = {
+      id,
+      source,
+      comments,
+      trust_level: trustLevel,
+      last_updated: new Date().toISOString().split('T')[0],
+      ...taxonomyValues,
+    } as Resource;
+
+    editModalSubmit.textContent = '⏳ Saving...';
+    editModalSubmit.disabled = true;
+    editErrorMsg.style.display = 'none';
+
+    try {
+      const response = await fetch('/api/update-resource', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+        body: JSON.stringify({ id, resource: updatedResource }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem(PASSWORD_STORAGE_KEY);
+        showEditError('Wrong password. Try again.');
+        editModalSubmit.textContent = 'Save Changes';
+        editModalSubmit.disabled = false;
+        return;
+      }
+      if (!response.ok) {
+        const errText = await response.text();
+        showEditError(`Error ${response.status}: ${errText}`);
+        editModalSubmit.textContent = 'Save Changes';
+        editModalSubmit.disabled = false;
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+      closeEditModal();
+      const editIdx = allResources.findIndex((r) => r.id === id);
+      if (editIdx >= 0) allResources[editIdx] = updatedResource;
+      const editTbody = document.querySelector<HTMLTableSectionElement>('.resource-table tbody')!;
+      editTbody.innerHTML = '';
+      allResources.forEach((r) => editTbody.appendChild(buildRow(r)));
+      applyFiltersAndSearch();
+    } catch (error) {
+      showEditError(`Network error: ${(error as Error).message}`);
+      editModalSubmit.textContent = 'Save Changes';
+      editModalSubmit.disabled = false;
+    }
+  });
+
+  function showEditError(msg: string) {
+    editErrorMsg.textContent = `❌ ${msg}`;
+    editErrorMsg.className = 'edit-status-msg is-error';
+    editErrorMsg.style.display = 'block';
+  }
+
+  // ------------------------------------------------------------------
+  // Edit Taxonomy modal
+  // ------------------------------------------------------------------
+  const editTaxonomyModal = document.getElementById('editTaxonomyModal')!;
+  const editTaxonomyTitle = document.getElementById('editTaxonomyTitle')!;
+  const taxonomyValuesList = document.getElementById('taxonomyValuesList')!;
+  const editTaxonomySave = document.getElementById('editTaxonomySave') as HTMLButtonElement;
+  const editTaxonomyErrorMsg = document.getElementById('editTaxonomyErrorMsg')!;
+
+  let currentTaxonomyName: string | null = null;
+
+  // "Edit values" button — event delegation on filter panels (SSR elements)
+  document.querySelectorAll<HTMLButtonElement>('.btn-edit-taxonomy').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      openTaxonomyModal(btn.dataset.taxonomy!);
+    });
+  });
+
+  function rebuildPillsForTaxonomy(taxonomyName: string, values: string[]) {
+    const panel = document.getElementById(`panel-${taxonomyName}`)!;
+    const container = panel.querySelector<HTMLElement>('.pills-container')!;
+    container.innerHTML = '';
+    activeFilters[taxonomyName].clear();
+    values.forEach((value) => {
+      const pill = document.createElement('button');
+      pill.className = 'pill';
+      pill.dataset.filterType = taxonomyName;
+      pill.dataset.filterValue = value;
+      pill.setAttribute('aria-pressed', 'false');
+      pill.textContent = value;
+      container.appendChild(pill);
+    });
+  }
+
+  function updateEditFormCheckboxes(taxonomyName: string, values: string[]) {
+    const group = editForm.querySelector<HTMLElement>(`.modal-checkbox-group[data-taxonomy="${taxonomyName}"]`);
+    if (!group) return;
+    group.innerHTML = '';
+    values.forEach((value) => {
+      const label = document.createElement('label');
+      label.className = 'modal-checkbox-label';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.name = taxonomyName;
+      cb.value = value;
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' ' + value));
+      group.appendChild(label);
+    });
+  }
+
+  function openTaxonomyModal(taxonomyName: string) {
+    currentTaxonomyName = taxonomyName;
+    const label = categoryLabels[taxonomyName] || taxonomyName;
+    editTaxonomyTitle.textContent = `Edit ${label}`;
+
+    const currentValues = localTaxonomyValues[taxonomyName] || [];
+
+    taxonomyValuesList.innerHTML = '';
+    currentValues.forEach((v) => addTaxonomyValueRow(v));
+
+    editTaxonomyErrorMsg.style.display = 'none';
+    editTaxonomySave.textContent = 'Save';
+    editTaxonomySave.disabled = false;
+    (editTaxonomyModal as HTMLElement).style.display = 'flex';
+  }
+
+  function addTaxonomyValueRow(value: string) {
+    const row = document.createElement('div');
+    row.className = 'taxonomy-value-row';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'taxonomy-value-input';
+    input.value = value;
+    input.dataset.original = value;
+    input.placeholder = 'Value name...';
+    // Highlight renamed values
+    input.addEventListener('input', () => {
+      input.dataset.renamed = input.value !== input.dataset.original ? 'true' : 'false';
+    });
+    row.appendChild(input);
+    taxonomyValuesList.appendChild(row);
+  }
+
+  document.getElementById('addTaxonomyValueBtn')?.addEventListener('click', () => {
+    addTaxonomyValueRow('');
+    const inputs = taxonomyValuesList.querySelectorAll<HTMLInputElement>('.taxonomy-value-input');
+    inputs[inputs.length - 1]?.focus();
+  });
+
+  function closeTaxonomyModal() {
+    (editTaxonomyModal as HTMLElement).style.display = 'none';
+    currentTaxonomyName = null;
+  }
+
+  document.getElementById('editTaxonomyClose')?.addEventListener('click', closeTaxonomyModal);
+  document.getElementById('editTaxonomyCancel')?.addEventListener('click', closeTaxonomyModal);
+  editTaxonomyModal.addEventListener('click', (e) => {
+    if (e.target === editTaxonomyModal) closeTaxonomyModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && (editTaxonomyModal as HTMLElement).style.display !== 'none') {
+      closeTaxonomyModal();
+    }
+  });
+
+  editTaxonomySave?.addEventListener('click', async () => {
+    if (!currentTaxonomyName) return;
+
+    const inputs = taxonomyValuesList.querySelectorAll<HTMLInputElement>('.taxonomy-value-input');
+    const values: string[] = [];
+    const renames: Record<string, string> = {};
+
+    for (const input of inputs) {
+      const newVal = input.value.trim();
+      const origVal = input.dataset.original || '';
+      if (!newVal) continue; // Skip empty
+      values.push(newVal);
+      if (origVal && origVal !== newVal) {
+        renames[origVal] = newVal;
+      }
+    }
+
+    if (values.length === 0) {
+      showTaxonomyError('At least one value is required.');
       return;
     }
 
@@ -962,42 +1816,103 @@ const data: ResourceData = resourceData;
       if (!password) return;
     }
 
-    (target as HTMLButtonElement).disabled = true;
-    (target as HTMLButtonElement).textContent = '⏳';
+    editTaxonomySave.textContent = '⏳ Saving...';
+    editTaxonomySave.disabled = true;
+    editTaxonomyErrorMsg.style.display = 'none';
+
+    try {
+      const response = await fetch('/api/update-taxonomy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+        body: JSON.stringify({ name: currentTaxonomyName, values, renames }),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem(PASSWORD_STORAGE_KEY);
+        showTaxonomyError('Wrong password. Try again.');
+        editTaxonomySave.textContent = 'Save';
+        editTaxonomySave.disabled = false;
+        return;
+      }
+      if (!response.ok) {
+        const errText = await response.text();
+        showTaxonomyError(`Error ${response.status}: ${errText}`);
+        editTaxonomySave.textContent = 'Save';
+        editTaxonomySave.disabled = false;
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+
+      // Update local taxonomy state
+      localTaxonomyValues[currentTaxonomyName!] = values;
+
+      // Apply renames to in-memory resources
+      if (Object.keys(renames).length > 0) {
+        const taxKey = currentTaxonomyName!;
+        allResources = allResources.map((r) => {
+          const oldVals = (r[taxKey as keyof Resource] as string[]) || [];
+          const newVals = oldVals.map((v) => renames[v] ?? v);
+          return { ...r, [taxKey]: newVals } as Resource;
+        });
+      }
+
+      // Rebuild filter pills, edit form checkboxes, and re-render table
+      rebuildPillsForTaxonomy(currentTaxonomyName!, values);
+      updateEditFormCheckboxes(currentTaxonomyName!, values);
+      const taxTbody = document.querySelector<HTMLTableSectionElement>('.resource-table tbody')!;
+      taxTbody.innerHTML = '';
+      allResources.forEach((r) => taxTbody.appendChild(buildRow(r)));
+      applyFiltersAndSearch();
+
+      closeTaxonomyModal();
+    } catch (error) {
+      showTaxonomyError(`Network error: ${(error as Error).message}`);
+      editTaxonomySave.textContent = 'Save';
+      editTaxonomySave.disabled = false;
+    }
+  });
+
+  function showTaxonomyError(msg: string) {
+    editTaxonomyErrorMsg.textContent = `❌ ${msg}`;
+    editTaxonomyErrorMsg.className = 'edit-status-msg is-error';
+    editTaxonomyErrorMsg.style.display = 'block';
+  }
+
+  // ------------------------------------------------------------------
+  // Delete a resource — extracted function, called from dropdown
+  // ------------------------------------------------------------------
+  async function deleteResource(id: string, source: string) {
+    if (!window.confirm(`Delete resource "${source}"?\nThis cannot be undone.`)) return;
+
+    let password = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    if (!password) {
+      password = prompt('Admin password:');
+      if (!password) return;
+    }
 
     try {
       const response = await fetch('/api/delete-resource', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': password,
-        },
+        headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
         body: JSON.stringify({ id }),
       });
 
       if (response.status === 401) {
         localStorage.removeItem(PASSWORD_STORAGE_KEY);
         alert('Wrong password. Try again.');
-        (target as HTMLButtonElement).disabled = false;
-        (target as HTMLButtonElement).textContent = '🗑️';
         return;
       }
-
       if (!response.ok) {
         const errText = await response.text();
         alert(`Failed to delete (${response.status}): ${errText}`);
-        (target as HTMLButtonElement).disabled = false;
-        (target as HTMLButtonElement).textContent = '🗑️';
         return;
       }
 
       localStorage.setItem(PASSWORD_STORAGE_KEY, password);
-      // Reload to refetch the table from raw (cache-buster makes it instant)
       window.location.reload();
     } catch (error) {
       alert(`Network error: ${(error as Error).message}`);
-      (target as HTMLButtonElement).disabled = false;
-      (target as HTMLButtonElement).textContent = '🗑️';
     }
-  });
+  }
 </script>
