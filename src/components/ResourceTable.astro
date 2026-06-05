@@ -1123,6 +1123,27 @@ const taxonomyLabels: Record<string, string> = {
   // All fetched resources kept in memory for the Edit modal pre-fill
   let allResources: Resource[] = [];
 
+  function buildRow(resource: Resource): HTMLTableRowElement {
+    const tr = document.createElement('tr');
+    const sourceHTML = resource.source.startsWith('http')
+      ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
+      : `<span>${resource.source}</span>`;
+    tr.innerHTML = `
+      <td class="source-cell" data-label="Source">${sourceHTML}</td>
+      <td data-label="Access Model"><span class="tag-list">${(resource.access_model || []).map((am) => `<span class="tag">${am}</span>`).join('')}</span></td>
+      <td data-label="Origin"><span class="tag-list">${(resource.origin || []).map((o) => `<span class="tag">${o}</span>`).join('')}</span></td>
+      <td data-label="Publisher Type"><span class="tag-list">${(resource.publisher_type || []).map((pt) => `<span class="tag">${pt}</span>`).join('')}</span></td>
+      <td data-label="Domain"><span class="tag-list">${(resource.domain || []).map((d) => `<span class="tag">${d}</span>`).join('')}</span></td>
+      <td data-label="Content Type"><span class="tag-list">${(resource.content_type || []).map((ct) => `<span class="tag">${ct}</span>`).join('')}</span></td>
+      <td data-label="Topic"><span class="tag-list">${(resource.topic || []).map((t) => `<span class="tag">${t}</span>`).join('')}</span></td>
+      <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
+      <td class="comments" data-label="Comments">${resource.comments || ''}</td>
+      <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
+      <td class="actions-cell" data-label="Actions"><button class="btn-actions-menu" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="More actions" title="More actions">⋮</button></td>
+    `;
+    return tr;
+  }
+
   // Load resources from GitHub API and populate table
   async function loadResourcesFromGitHub() {
     try {
@@ -1136,31 +1157,8 @@ const taxonomyLabels: Record<string, string> = {
         return;
       }
 
-      // Clear existing server-side rows
       tbody.innerHTML = '';
-
-      // Render each resource
-      resources.forEach((resource) => {
-        const tr = document.createElement('tr');
-        const sourceHTML = resource.source.startsWith('http')
-          ? `<a href="${resource.source}" target="_blank" rel="noopener noreferrer">${resource.source}</a>`
-          : `<span>${resource.source}</span>`;
-
-        tr.innerHTML = `
-          <td class="source-cell" data-label="Source">${sourceHTML}</td>
-          <td data-label="Access Model"><span class="tag-list">${(resource.access_model || []).map((am) => `<span class="tag">${am}</span>`).join('')}</span></td>
-          <td data-label="Origin"><span class="tag-list">${(resource.origin || []).map((o) => `<span class="tag">${o}</span>`).join('')}</span></td>
-          <td data-label="Publisher Type"><span class="tag-list">${(resource.publisher_type || []).map((pt) => `<span class="tag">${pt}</span>`).join('')}</span></td>
-          <td data-label="Domain"><span class="tag-list">${(resource.domain || []).map((d) => `<span class="tag">${d}</span>`).join('')}</span></td>
-          <td data-label="Content Type"><span class="tag-list">${(resource.content_type || []).map((ct) => `<span class="tag">${ct}</span>`).join('')}</span></td>
-          <td data-label="Topic"><span class="tag-list">${(resource.topic || []).map((t) => `<span class="tag">${t}</span>`).join('')}</span></td>
-          <td class="trust-level" data-label="Trust Level">${resource.trust_level || 50}/5</td>
-          <td class="comments" data-label="Comments">${resource.comments || ''}</td>
-          <td data-label="Last Updated">${resource.last_updated || new Date().toISOString().split('T')[0]}</td>
-          <td class="actions-cell" data-label="Actions"><button class="btn-actions-menu" data-id="${resource.id}" data-source="${(resource.source || '').replace(/"/g, '&quot;')}" aria-label="More actions" title="More actions">⋮</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      resources.forEach((resource) => tbody.appendChild(buildRow(resource)));
 
       console.log(`Loaded ${resources.length} resources from GitHub`);
     } catch (error) {
@@ -1657,7 +1655,12 @@ const taxonomyLabels: Record<string, string> = {
 
       localStorage.setItem(PASSWORD_STORAGE_KEY, password);
       closeEditModal();
-      window.location.reload();
+      const editIdx = allResources.findIndex((r) => r.id === id);
+      if (editIdx >= 0) allResources[editIdx] = updatedResource;
+      const editTbody = document.querySelector<HTMLTableSectionElement>('.resource-table tbody')!;
+      editTbody.innerHTML = '';
+      allResources.forEach((r) => editTbody.appendChild(buildRow(r)));
+      applyFiltersAndSearch();
     } catch (error) {
       showEditError(`Network error: ${(error as Error).message}`);
       editModalSubmit.textContent = 'Save Changes';
